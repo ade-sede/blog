@@ -17,12 +17,12 @@ clean:
 	rm -f $(OUTPUT_DIR)/*.html
 	rm -f $(TEMPL_DIR)/*templ.go
 
-.PHONY: deps
-deps: gopath
+.PHONY: init
+init: gopath
 	go install github.com/a-h/templ/cmd/templ@latest
 
 .PHONY: deploy
-deploy: clean deps all
+deploy: clean init all
 
 .PHONY: format
 format: gopath
