@@ -8,7 +8,7 @@ export OUTPUT_DIR
 # GOPATH is not set by default, had to set it myself
 # Gotta make sure it is able to find templ's binary
 .PHONY: all
-all:
+all: gopath
 	$(GOPATH)/bin/templ generate -path $(TEMPL_DIR)
 	go run $(TEMPL_DIR)/*.go
 
@@ -18,16 +18,25 @@ clean:
 	rm -f $(TEMPL_DIR)/*templ.go
 
 .PHONY: deps
-deps:
+deps: gopath
 	go install github.com/a-h/templ/cmd/templ@latest
 
 .PHONY: deploy
 deploy: clean deps all
 
 .PHONY: format
-format:
+format: gopath
 	gofmt -w $(TEMPL_DIR)/*.go
 	$(GOPATH)/bin/templ fmt .
+
+.PHONY: gopath
+gopath:
+ifeq ($(GOPATH),)
+	@echo "Error: GOPATH is not set" >&2
+	@exit 1
+else
+	@echo "GOPATH is $(GOPATH)"
+endif
 
 .PHONY: re
 re: clean all
