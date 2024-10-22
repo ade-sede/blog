@@ -24,5 +24,10 @@ deps:
 .PHONY: deploy
 deploy: clean deps all
 
+.PHONY: format
+format:
+	gofmt -w $(TEMPL_DIR)/*.go
+	$(GOPATH)/bin/templ fmt .
+
 .PHONY: re
 re: clean all

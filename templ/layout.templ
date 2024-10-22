@@ -1,53 +1,52 @@
 package main
 
 templ navbar() {
-<nav class="navbar">
-	<div class="navbar-contents">
-		<div class="theme-toggle">
-			<input type="checkbox" id="theme-slider" class="toggle-checkbox" onchange="toggleTheme()" />
-			<label for="theme-slider" class="toggle-label">
-				<span class="toggle-ball"></span>
-			</label>
+	<nav class="navbar">
+		<div class="navbar-contents">
+			<div class="theme-toggle">
+				<input type="checkbox" id="theme-slider" class="toggle-checkbox" onchange="toggleTheme()"/>
+				<label for="theme-slider" class="toggle-label">
+					<span class="toggle-ball"></span>
+				</label>
+			</div>
+			<script> loadThemeFromLocalStorage() </script>
+			<a href="index.html">Home</a>
+			<a href="about.html">About</a>
 		</div>
-		<script> loadThemeFromLocalStorage() </script>
-		<a href="index.html">Home</a>
-		<a href="about.html">About</a>
-	</div>
-</nav>
+	</nav>
 }
 
 templ header(title string, meta map[string]string) {
-
-<head>
-	<title>{ title }</title>
-	<script type="text/javascript" src="scripts/theme.js"> </script>
-	<link rel="stylesheet" href="css/global.css" />
-	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="author" content="Adrien DE SEDE" />
-	for key, value := range meta {
-	<meta name={ key } content={ value } />
-	}
-</head>
+	<head>
+		<title>{ title }</title>
+		<script type="text/javascript" src="scripts/theme.js"> </script>
+		<link rel="stylesheet" href="css/global.css"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="author" content="Adrien DE SEDE"/>
+		for key, value := range meta {
+			<meta name={ key } content={ value }/>
+		}
+	</head>
 }
 
 templ footer() {
-<footer>
-	<hr />
-	<div class="footer-contents">
-		<p>© 2024 Adrien DE SEDE. All Rights Reserved.</p>
-		<div class="footer-contacts">
-			<a href="mailto:adrien.de.sede@gmail.com" title="adrien.de.sede@gmail.com">
-				<i class="fas fa-envelope"></i>
-			</a>
-			<a href="https://github.com/ade-sede" title="github.com/ade-sede">
-				<i class="fab fa-github"></i>
-			</a>
-			<a href="https://www.linkedin.com/in/ade-sede" title="linkedin.com/in/ade-sede">
-				<i class="fab fa-linkedin"></i>
-			</a>
+	<footer>
+		<hr/>
+		<div class="footer-contents">
+			<p>© 2024 Adrien DE SEDE. All Rights Reserved.</p>
+			<div class="footer-contacts">
+				<a href="mailto:adrien.de.sede@gmail.com" title="adrien.de.sede@gmail.com">
+					<i class="fas fa-envelope"></i>
+				</a>
+				<a href="https://github.com/ade-sede" title="github.com/ade-sede">
+					<i class="fab fa-github"></i>
+				</a>
+				<a href="https://www.linkedin.com/in/ade-sede" title="linkedin.com/in/ade-sede">
+					<i class="fab fa-linkedin"></i>
+				</a>
+			</div>
 		</div>
-	</div>
-</footer>
+	</footer>
 }
