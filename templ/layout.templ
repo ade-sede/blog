@@ -17,19 +17,19 @@ templ navbar() {
 }
 
 templ header(title string, meta map[string]string) {
-<header>
+
+<head>
 	<title>{ title }</title>
 	<script type="text/javascript" src="scripts/theme.js"> </script>
 	<link rel="stylesheet" href="css/global.css" />
 	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
-	<link rel="shortcut icon" type="image/png" href="images/favicon-16x16.png" />
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="author" content="Adrien DE SEDE" />
 	for key, value := range meta {
 	<meta name={ key } content={ value } />
 	}
-</header>
+</head>
 }
 
 templ footer() {
