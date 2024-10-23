@@ -67,8 +67,8 @@ func buildSchoolExperience() []ExperienceEntry {
 	}
 
 	fortyTwo.bulletPoints = append(fortyTwo.bulletPoints, "Developed feature rich shell in C.")
-	fortyTwo.bulletPoints = append(fortyTwo.bulletPoints, "Implemented Supervisor-like utility in Rust")
-	fortyTwo.bulletPoints = append(fortyTwo.bulletPoints, "Built a wireless mouse controlled by hand-gesture")
+	fortyTwo.bulletPoints = append(fortyTwo.bulletPoints, "Implemented Supervisor-like utility in Rust.")
+	fortyTwo.bulletPoints = append(fortyTwo.bulletPoints, "Built a wireless mouse controlled by hand gestures.")
 
 	return append(schoolExperiences, fortyTwo)
 }
