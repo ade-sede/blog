@@ -10,15 +10,21 @@ type ExperienceEntry struct {
 	bulletPoints      []string
 }
 
-templ resumeLight(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
+templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
 	@header("Adrien DE SEDE - Resume", make(map[string]string))
 	<script type="text/javascript" src="scripts/print.js"> </script>
 	<body>
 		@resume(workExperience, schoolExperience)
 	</body>
 	<script>
-	setLightTheme()
 	setToPrintableDimensions()
+</script>
+}
+
+templ resumeLight(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
+	@resumePrintReady(workExperience, schoolExperience)
+	<script>
+	setLightTheme()
 </script>
 }
 
@@ -56,6 +62,9 @@ templ resume(workExperience []ExperienceEntry, schoolExperience []ExperienceEntr
 		<div class="resume-actions">
 			<a href="resume-light.html">
 				<i class="fas fa-expand"></i> View fullscreen
+			</a>
+			<a href="pdfs/ade-sede.pdf" download="ade-sede.pdf">
+				<i class="fas fa-download"></i> Download
 			</a>
 		</div>
 		<div class="resume">

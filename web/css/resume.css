@@ -7,7 +7,12 @@
 }
 
 .resume-actions {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+
   padding: 16px;
+  gap: 8px;
   font-weight: bold;
 }
 
