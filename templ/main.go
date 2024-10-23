@@ -15,12 +15,11 @@ func buildWorkExperiences() []ExperienceEntry {
 	workExperiences := make([]ExperienceEntry, 0)
 
 	cubyn := ExperienceEntry{
-		title:        "Senior Software Engineer, Tech Lead",
-		company:      "Cubyn",
-		begin:        "Nov. 2021",
-		end:          "March 2024",
-		description:  "Logistics service provider, specialized in e-commerce with operations all over Europe and a mission to make logistics sustainable and socially responsible. I was recruited after the company closed its 35M Series B with a mission to automate Cubyn's warehouses in order to improve margins, quality and lead time.",
-		bulletPoints: make([]string, 0),
+		title:       "Senior Software Engineer, Tech Lead",
+		company:     "Cubyn",
+		begin:       "Nov. 2021",
+		end:         "March 2024",
+		description: "Logistics service provider, specialized in e-commerce with operations all over Europe and a mission to make logistics sustainable and socially responsible. I was recruited after the company closed its 35M Series B with a mission to automate Cubyn's warehouses in order to improve margins, quality and lead time.", bulletPoints: make([]string, 0),
 	}
 
 	cubyn.bulletPoints = append(cubyn.bulletPoints, "Led 4-person Warehouse Systems & Automation team, overseeing full software lifecycle from ideation to production.")
@@ -76,13 +75,19 @@ func buildSchoolExperience() []ExperienceEntry {
 func main() {
 	outputDir := os.Getenv("OUTPUT_DIR")
 	indexFileName := fmt.Sprintf("%s/index.html", outputDir)
-	aboutFileName := fmt.Sprintf("%s/about.html", outputDir)
 	indexFile, err := os.OpenFile(indexFileName, FLAGS, MODE)
 	if err != nil {
 		log.Fatal("Could not open file: %w", err)
 	}
 
+	aboutFileName := fmt.Sprintf("%s/about.html", outputDir)
 	aboutFile, err := os.OpenFile(aboutFileName, FLAGS, MODE)
+	if err != nil {
+		log.Fatal("Could not open file: %w", err)
+	}
+
+	resumeLightFileName := fmt.Sprintf("%s/resume-light.html", outputDir)
+	resumeLightFile, err := os.OpenFile(resumeLightFileName, FLAGS, MODE)
 	if err != nil {
 		log.Fatal("Could not open file: %w", err)
 	}
@@ -95,4 +100,9 @@ func main() {
 
 	about := about(make(map[string]string), workExperiences, schoolExperiences)
 	about.Render(context.Background(), aboutFile)
+
+	// Print resume to a standalone HTMl file so that we can easily create a PDF from it
+	// Will most likely be removed before serving the content
+	resumeLight := resumeLight(workExperiences, schoolExperiences)
+	resumeLight.Render(context.Background(), resumeLightFile)
 }

@@ -28,9 +28,13 @@ function loadThemeFromLocalStorage() {
   let slider = document.getElementById("theme-slider");
 
   if (themeObject.name === "dark") {
-    slider.checked = true;
+    try {
+      slider.checked = true;
+    } catch (err) {}
   } else if (themeObject.name === "light") {
-    slider.checked = false;
+    try {
+      slider.checked = false;
+    } catch (err) {}
   } else {
     throw new Error(`Unknown theme name: ${themeObject.name}`);
   }
@@ -102,17 +106,23 @@ function setLightTheme() {
  * @returns {Theme}
  */
 function setTheme(themeObject) {
-  const body = document.querySelector("body");
-  body.style.setProperty("background-color", "var(--bg)");
-  body.style.setProperty("color", "var(--fg)");
+  try {
+    const body = document.querySelector("body");
+    body.style.setProperty("background-color", "var(--bg)");
+    body.style.setProperty("color", "var(--fg)");
+  } catch (err) {}
 
-  const navbar = document.querySelector("nav.navbar");
-  navbar.style.setProperty("--track-color", themeObject.trackColor);
-  navbar.style.setProperty("--ball-color", themeObject.ballColor);
+  try {
+    const navbar = document.querySelector("nav.navbar");
+    navbar.style.setProperty("--track-color", themeObject.trackColor);
+    navbar.style.setProperty("--ball-color", themeObject.ballColor);
+  } catch (err) {}
 
-  const root = document.querySelector(":root");
-  root.style.setProperty("--bg", themeObject.bg);
-  root.style.setProperty("--fg", themeObject.fg);
+  try {
+    const root = document.querySelector(":root");
+    root.style.setProperty("--bg", themeObject.bg);
+    root.style.setProperty("--fg", themeObject.fg);
+  } catch (err) {}
 
   return themeObject;
 }

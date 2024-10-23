@@ -1,9 +1,20 @@
-.resume {
+.resume-container {
   display: flex;
   flex-direction: column;
 
   align-self: center;
   width: 1200px;
+}
+
+.resume-actions {
+  padding: 16px;
+  font-weight: bold;
+}
+
+.resume {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
 
   border: 1px solid var(--fg);
 }
@@ -38,11 +49,20 @@
   gap: 32px;
 }
 
-.resume .header-right-container {
+.resume .header .left-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+}
+
+.resume .header .right-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
   justify-content: center;
+  width: 70%;
+  flex: 1;
 }
 
 .resume .info {
@@ -51,10 +71,10 @@
   align-items: flex-end;
 }
 
-.resume .info .name {
+.resume .info h1.name {
   font-weight: bold;
   line-height: 1.3;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .resume .section {
@@ -69,6 +89,14 @@
   font-size: 1.5rem;
   line-height: 1;
   align-self: center;
+}
+
+.resume .section .links {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  gap: 24px;
+  padding: 16px;
 }
 
 .resume .entry {
