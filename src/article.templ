@@ -1,0 +1,14 @@
+package main
+
+import "time"
+
+templ article(title string, date time.Time, stringifiedHTML string) {
+	@header(title)
+	<body>
+		@navbar()
+		<div class="body-main">
+			@templ.Raw(stringifiedHTML)
+		</div>
+		@footer()
+	</body>
+}

@@ -1,17 +1,7 @@
 package main
 
-type ExperienceEntry struct {
-	title             string
-	company           string
-	begin             string
-	end               string
-	description       string
-	bulletPointsIntro string
-	bulletPoints      []string
-}
-
 templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
-	@header("Adrien DE SEDE - Resume", make(map[string]string))
+	@header("Adrien DE SEDE - Resume")
 	<script type="text/javascript" src="scripts/print.js"> </script>
 	<body>
 		@resume(workExperience, schoolExperience)

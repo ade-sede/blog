@@ -17,7 +17,7 @@ templ navbar() {
 	</nav>
 }
 
-templ header(title string, meta map[string]string) {
+templ header(title string) {
 	<head>
 		<title>{ title }</title>
 		<script type="text/javascript" src="scripts/theme.js"> </script>
@@ -27,9 +27,6 @@ templ header(title string, meta map[string]string) {
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<meta name="author" content="Adrien DE SEDE"/>
-		for key, value := range meta {
-			<meta name={ key } content={ value }/>
-		}
 	</head>
 }
 

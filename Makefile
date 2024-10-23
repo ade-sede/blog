@@ -1,8 +1,10 @@
 PWD := $(shell pwd)
 OUTPUT_DIR := $(PWD)/web
-TEMPL_DIR := $(PWD)/templ
+TEMPL_DIR := $(PWD)/src
+ARTICLE_DIR := $(PWD)/articles
 
 export OUTPUT_DIR
+export ARTICLE_DIR
 
 # Deploying via cloudflare pages
 # GOPATH is not set by default, had to set it myself

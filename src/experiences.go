@@ -1,15 +1,14 @@
 package main
 
-import (
-	"context"
-	"fmt"
-	"io/fs"
-	"log"
-	"os"
-)
-
-var FLAGS = os.O_RDWR | os.O_CREATE
-var MODE fs.FileMode = 0644
+type ExperienceEntry struct {
+	title             string
+	company           string
+	begin             string
+	end               string
+	description       string
+	bulletPointsIntro string
+	bulletPoints      []string
+}
 
 func buildWorkExperiences() []ExperienceEntry {
 	workExperiences := make([]ExperienceEntry, 0)
@@ -70,39 +69,4 @@ func buildSchoolExperience() []ExperienceEntry {
 	fortyTwo.bulletPoints = append(fortyTwo.bulletPoints, "Built a wireless mouse controlled by hand gestures.")
 
 	return append(schoolExperiences, fortyTwo)
-}
-
-func main() {
-	outputDir := os.Getenv("OUTPUT_DIR")
-	indexFileName := fmt.Sprintf("%s/index.html", outputDir)
-	indexFile, err := os.OpenFile(indexFileName, FLAGS, MODE)
-	if err != nil {
-		log.Fatal("Could not open file: %w", err)
-	}
-
-	aboutFileName := fmt.Sprintf("%s/about.html", outputDir)
-	aboutFile, err := os.OpenFile(aboutFileName, FLAGS, MODE)
-	if err != nil {
-		log.Fatal("Could not open file: %w", err)
-	}
-
-	resumeLightFileName := fmt.Sprintf("%s/resume-light.html", outputDir)
-	resumeLightFile, err := os.OpenFile(resumeLightFileName, FLAGS, MODE)
-	if err != nil {
-		log.Fatal("Could not open file: %w", err)
-	}
-
-	home := home(make(map[string]string))
-	home.Render(context.Background(), indexFile)
-
-	workExperiences := buildWorkExperiences()
-	schoolExperiences := buildSchoolExperience()
-
-	about := about(make(map[string]string), workExperiences, schoolExperiences)
-	about.Render(context.Background(), aboutFile)
-
-	// Print resume to a standalone HTMl file so that we can easily create a PDF from it
-	// Will most likely be removed before serving the content
-	resumeLight := resumeLight(workExperiences, schoolExperiences)
-	resumeLight.Render(context.Background(), resumeLightFile)
 }
