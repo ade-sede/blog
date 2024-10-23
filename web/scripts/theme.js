@@ -22,7 +22,7 @@ function loadThemeFromLocalStorage() {
       themeObject = setTheme(themeObject);
     }
   } else {
-    themeObject = setDarkTheme();
+    themeObject = setLightTheme();
   }
 
   let slider = document.getElementById("theme-slider");
