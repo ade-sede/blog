@@ -1,6 +1,7 @@
 @import url("./footer.css");
 @import url("./navbar.css");
 @import url("./icons.css");
+@import url("./resume.css");
 
 :root {
   --bg: black;
@@ -24,7 +25,8 @@ body {
 }
 
 body .body-main {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 85%;
   align-self: center;
 }
