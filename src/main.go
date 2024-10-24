@@ -29,14 +29,14 @@ func main() {
 	workExperiences := buildWorkExperiences()
 	schoolExperiences := buildSchoolExperience()
 
-	articles, err := parseArticles(articleDir)
+	allArticles, err := parseArticles(articleDir)
 	if err != nil {
 		log.Fatalf("Error while parsing articles: %v", err)
 	}
 
 	articleGenerators := make([]PageGenerator, 0)
 
-	for _, a := range articles {
+	for _, a := range allArticles {
 		generator := func() templ.Component {
 			return article(a.Manifest.Title, a.Date, a.StringifiedHTML)
 		}
@@ -47,6 +47,10 @@ func main() {
 		})
 	}
 
+	homeGenerator := func() templ.Component {
+		return home(allArticles)
+	}
+
 	aboutGenerator := func() templ.Component {
 		return about(workExperiences, schoolExperiences)
 	}
@@ -55,9 +59,14 @@ func main() {
 		return resume(workExperiences, schoolExperiences)
 	}
 
+	articlePageGenerator := func() templ.Component {
+		return articles(allArticles)
+	}
+
 	pages := []PageGenerator{
-		{filename: "index.html", gen: home},
+		{filename: "index.html", gen: homeGenerator},
 		{filename: "about.html", gen: aboutGenerator},
+		{filename: "articles.html", gen: articlePageGenerator},
 		{filename: "resume-light.html", gen: resumeGenerator},
 	}
 

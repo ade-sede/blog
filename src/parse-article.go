@@ -14,9 +14,10 @@ import (
 )
 
 type ArticleManifest struct {
-	Title        string `json:"name"`
+	Title        string `json:"title"`
 	Date         string `json:"date"`
 	MarkdownFile string `json:"markdownFile"`
+	Description  string `json:"description"`
 }
 
 type Article struct {
@@ -24,7 +25,27 @@ type Article struct {
 	HTMLFilename     string
 	StringifiedHTML  string
 	Date             time.Time
+	FormatedDate     string
 	Manifest         *ArticleManifest
+}
+
+func ordinal(day int) string {
+	if day%10 == 1 && day != 11 {
+		return "st"
+	} else if day%10 == 2 && day != 12 {
+		return "nd"
+	} else if day%10 == 3 && day != 13 {
+		return "rd"
+	}
+	return "th"
+}
+
+func formatDate(date time.Time) string {
+	day := date.Day()
+	month := date.Format("January")
+	year := date.Year()
+
+	return fmt.Sprintf("%s %d%s %d", month, day, ordinal(day), year)
 }
 
 func readArticleManifest(filename string) (*ArticleManifest, error) {
@@ -96,6 +117,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 				ManifestFilename: manifestFilename,
 				HTMLFilename:     htmlFilename,
 				Date:             date,
+				FormatedDate:     formatDate(date),
 				Manifest:         manifest,
 				StringifiedHTML:  stringifieldHTML,
 			}

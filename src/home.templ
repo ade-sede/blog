@@ -1,11 +1,13 @@
 package main
 
-templ home() {
+templ home(articles []Article) {
 	@header("Adrien's blog")
 	<body>
 		@navbar()
 		<div class="body-main">
-			<p>Home !!!</p>
+			<h1>Welcome !</h1>
+			<span>Most recent articles </span>
+			@articleMenu(articles[:3])
 		</div>
 		@footer()
 	</body>
