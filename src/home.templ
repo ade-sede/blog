@@ -2,12 +2,25 @@ package main
 
 templ home(articles []Article) {
 	@header("Adrien's blog")
+	<link rel="stylesheet" href="css/home.css"/>
 	<body>
 		@navbar()
 		<div class="body-main">
-			<h1>Welcome !</h1>
-			<span>Most recent articles </span>
-			@articleMenu(articles[:3])
+			<div class="home">
+				<div class="intro">
+					<img src="images/picture.png"/>
+					<p>
+						I am Adrien, a software engineer living in Lyon, France.
+						<br/>
+						I like building things. From small IoT devices to distributed systems and anything in-between.
+						<br/>
+					</p>
+				</div>
+				<div class="rest">
+					<span>Most recent articles </span>
+					@articleMenu(articles[:3])
+				</div>
+			</div>
 		</div>
 		@footer()
 	</body>
