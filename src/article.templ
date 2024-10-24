@@ -4,10 +4,13 @@ import "time"
 
 templ article(title string, date time.Time, stringifiedHTML string) {
 	@header(title)
+	<link rel="stylesheet" href="css/article.css"/>
 	<body>
 		@navbar()
 		<div class="body-main">
-			@templ.Raw(stringifiedHTML)
+			<div class="article">
+				@templ.Raw(stringifiedHTML)
+			</div>
 		</div>
 		@footer()
 	</body>
