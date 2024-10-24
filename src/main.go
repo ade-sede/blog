@@ -51,11 +51,11 @@ func main() {
 		return home(allArticles)
 	}
 
-	aboutGenerator := func() templ.Component {
-		return about(workExperiences, schoolExperiences)
+	resumeGenerator := func() templ.Component {
+		return resumePage(workExperiences, schoolExperiences)
 	}
 
-	resumeGenerator := func() templ.Component {
+	fullScreenResumeGenerator := func() templ.Component {
 		return resume(workExperiences, schoolExperiences)
 	}
 
@@ -65,9 +65,10 @@ func main() {
 
 	pages := []PageGenerator{
 		{filename: "index.html", gen: homeGenerator},
-		{filename: "about.html", gen: aboutGenerator},
+		{filename: "resume.html", gen: resumeGenerator},
 		{filename: "articles.html", gen: articlePageGenerator},
-		{filename: "resume-light.html", gen: resumeGenerator},
+		// Used for PDF generation
+		{filename: "resume-light.html", gen: fullScreenResumeGenerator},
 	}
 
 	pages = append(pages, articleGenerators...)

@@ -1,59 +1,20 @@
 package main
 
-templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
-	@header("Adrien DE SEDE - Resume")
-	<script type="text/javascript" src="scripts/print.js"> </script>
+templ resumePage(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
+	@header("Adrien's resume")
 	<body>
-		@resume(workExperience, schoolExperience)
+		@navbar()
+		<div class="body-main">
+			@resume(workExperience, schoolExperience)
+		</div>
+		@footer()
 	</body>
-	<script>
-	setToPrintableDimensions()
-</script>
-}
-
-templ resumeLight(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
-	@resumePrintReady(workExperience, schoolExperience)
-	<script>
-	setLightTheme()
-</script>
-}
-
-templ entry(experience ExperienceEntry) {
-	<div class="entry">
-		<div class="header">
-			<div class="position">
-				<span class="company">{ experience.company }</span>
-				<span class="title">{ experience.title }</span>
-			</div>
-			<span class="timeline">{ experience.begin } - { experience.end } </span>
-		</div>
-		<div class="description">
-			{ experience.description }
-		</div>
-		if len(experience.bulletPoints) > 0 {
-			<div class="bullet-points">
-				if experience.bulletPointsIntro != "" {
-					<p class="bullet-intro">
-						{ experience.bulletPointsIntro }:
-					</p>
-				}
-				<ul>
-					for _, bulletPoint := range experience.bulletPoints {
-						<li>{ bulletPoint } </li>
-					}
-				</ul>
-			</div>
-		}
-	</div>
 }
 
 templ resume(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
 	<link rel="stylesheet" href="css/resume.css"/>
 	<div class="resume-container">
 		<div class="resume-actions">
-			// <a href="resume-light.html">
-			// <i class="fas fa-expand"></i> View fullscreen
-			// </a>
 			<a href="pdfs/ade-sede.pdf" download="ade-sede.pdf">
 				<i class="fas fa-download"></i> Download
 			</a>
@@ -115,4 +76,52 @@ templ resume(workExperience []ExperienceEntry, schoolExperience []ExperienceEntr
 			</div>
 		</div>
 	</div>
+}
+
+templ entry(experience ExperienceEntry) {
+	<div class="entry">
+		<div class="header">
+			<div class="position">
+				<span class="company">{ experience.company }</span>
+				<span class="title">{ experience.title }</span>
+			</div>
+			<span class="timeline">{ experience.begin } - { experience.end } </span>
+		</div>
+		<div class="description">
+			{ experience.description }
+		</div>
+		if len(experience.bulletPoints) > 0 {
+			<div class="bullet-points">
+				if experience.bulletPointsIntro != "" {
+					<p class="bullet-intro">
+						{ experience.bulletPointsIntro }:
+					</p>
+				}
+				<ul>
+					for _, bulletPoint := range experience.bulletPoints {
+						<li>{ bulletPoint } </li>
+					}
+				</ul>
+			</div>
+		}
+	</div>
+}
+
+// FUNCTIONS USED FOR PDG GENERATION
+templ resumeLight(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
+	@resumePrintReady(workExperience, schoolExperience)
+	<script>
+	setLightTheme()
+</script>
+}
+
+templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
+	@header("Adrien DE SEDE - Resume")
+	<script type="text/javascript" src="scripts/print.js"> </script>
+	<body>
+		@resume(workExperience, schoolExperience)
+	</body>
+	<script>
+	setToPrintableDimensions()
+</script>
 }
