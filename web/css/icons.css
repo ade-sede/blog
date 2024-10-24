@@ -126,7 +126,7 @@
 	padding-left: 0;
 }
 
-.fa-ul>li {
+.fa-ul > li {
 	position: relative;
 }
 
@@ -140,7 +140,8 @@
 
 .fa-border {
 	border-radius: var(--fa-border-radius, 0.1em);
-	border: var(--fa-border-width, 0.08em) var(--fa-border-style, solid) var(--fa-border-color, #eee);
+	border: var(--fa-border-width, 0.08em) var(--fa-border-style, solid)
+		var(--fa-border-color, #eee);
 	padding: var(--fa-border-padding, 0.2em 0.25em 0.15em);
 }
 
@@ -169,15 +170,19 @@
 	animation-direction: var(--fa-animation-direction, normal);
 	animation-duration: var(--fa-animation-duration, 1s);
 	animation-iteration-count: var(--fa-animation-iteration-count, infinite);
-	animation-timing-function: var(--fa-animation-timing,
-			cubic-bezier(0.28, 0.84, 0.42, 1));
+	animation-timing-function: var(
+		--fa-animation-timing,
+		cubic-bezier(0.28, 0.84, 0.42, 1)
+	);
 }
 
 .fa-fade {
 	animation-name: fa-fade;
 	animation-iteration-count: var(--fa-animation-iteration-count, infinite);
-	animation-timing-function: var(--fa-animation-timing,
-			cubic-bezier(0.4, 0, 0.6, 1));
+	animation-timing-function: var(
+		--fa-animation-timing,
+		cubic-bezier(0.4, 0, 0.6, 1)
+	);
 }
 
 .fa-beat-fade,
@@ -190,8 +195,10 @@
 .fa-beat-fade {
 	animation-name: fa-beat-fade;
 	animation-iteration-count: var(--fa-animation-iteration-count, infinite);
-	animation-timing-function: var(--fa-animation-timing,
-			cubic-bezier(0.4, 0, 0.6, 1));
+	animation-timing-function: var(
+		--fa-animation-timing,
+		cubic-bezier(0.4, 0, 0.6, 1)
+	);
 }
 
 .fa-flip {
@@ -237,7 +244,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
 	.fa-beat,
 	.fa-beat-fade,
 	.fa-bounce,
@@ -256,7 +262,6 @@
 }
 
 @keyframes fa-beat {
-
 	0%,
 	90% {
 		transform: scale(1);
@@ -273,18 +278,27 @@
 	}
 
 	10% {
-		transform: scale(var(--fa-bounce-start-scale-x, 1.1),
-				var(--fa-bounce-start-scale-y, 0.9)) translateY(0);
+		transform: scale(
+				var(--fa-bounce-start-scale-x, 1.1),
+				var(--fa-bounce-start-scale-y, 0.9)
+			)
+			translateY(0);
 	}
 
 	30% {
-		transform: scale(var(--fa-bounce-jump-scale-x, 0.9),
-				var(--fa-bounce-jump-scale-y, 1.1)) translateY(var(--fa-bounce-height, -0.5em));
+		transform: scale(
+				var(--fa-bounce-jump-scale-x, 0.9),
+				var(--fa-bounce-jump-scale-y, 1.1)
+			)
+			translateY(var(--fa-bounce-height, -0.5em));
 	}
 
 	50% {
-		transform: scale(var(--fa-bounce-land-scale-x, 1.05),
-				var(--fa-bounce-land-scale-y, 0.95)) translateY(0);
+		transform: scale(
+				var(--fa-bounce-land-scale-x, 1.05),
+				var(--fa-bounce-land-scale-y, 0.95)
+			)
+			translateY(0);
 	}
 
 	57% {
@@ -307,7 +321,6 @@
 }
 
 @keyframes fa-beat-fade {
-
 	0%,
 	to {
 		opacity: var(--fa-beat-fade-opacity, 0.4);
@@ -322,10 +335,12 @@
 
 @keyframes fa-flip {
 	50% {
-		transform: rotate3d(var(--fa-flip-x, 0),
-				var(--fa-flip-y, 1),
-				var(--fa-flip-z, 0),
-				var(--fa-flip-angle, -180deg));
+		transform: rotate3d(
+			var(--fa-flip-x, 0),
+			var(--fa-flip-y, 1),
+			var(--fa-flip-z, 0),
+			var(--fa-flip-angle, -180deg)
+		);
 	}
 }
 
@@ -6599,8 +6614,7 @@
 	font-style: normal;
 	font-weight: 400;
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-brands-400.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-brands-400.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-brands-400.ttf) format("truetype");
 }
 
@@ -8622,8 +8636,7 @@
 	font-style: normal;
 	font-weight: 400;
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-regular-400.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-regular-400.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-regular-400.ttf) format("truetype");
 }
 
@@ -8643,8 +8656,7 @@
 	font-style: normal;
 	font-weight: 900;
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-solid-900.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-solid-900.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-solid-900.ttf) format("truetype");
 }
 
@@ -8657,8 +8669,7 @@
 	font-family: "Font Awesome 5 Brands";
 	font-display: block;
 	font-weight: 400;
-	src:
-		url(../fonts/fontawesome/fa-brands-400.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-brands-400.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-brands-400.ttf) format("truetype");
 }
 
@@ -8666,8 +8677,7 @@
 	font-family: "Font Awesome 5 Free";
 	font-display: block;
 	font-weight: 900;
-	src:
-		url(../fonts/fontawesome/fa-solid-900.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-solid-900.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-solid-900.ttf) format("truetype");
 }
 
@@ -8675,49 +8685,45 @@
 	font-family: "Font Awesome 5 Free";
 	font-display: block;
 	font-weight: 400;
-	src:
-		url(../fonts/fontawesome/fa-regular-400.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-regular-400.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-regular-400.ttf) format("truetype");
 }
 
 @font-face {
 	font-family: "FontAwesome";
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-solid-900.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-solid-900.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-solid-900.ttf) format("truetype");
 }
 
 @font-face {
 	font-family: "FontAwesome";
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-brands-400.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-brands-400.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-brands-400.ttf) format("truetype");
 }
 
 @font-face {
 	font-family: "FontAwesome";
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-regular-400.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-regular-400.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-regular-400.ttf) format("truetype");
 	unicode-range: u+f003, u+f006, u+f014, u+f016-f017, u+f01a-f01b, u+f01d,
 		u+f022, u+f03e, u+f044, u+f046, u+f05c-f05d, u+f06e, u+f070, u+f087-f088,
 		u+f08a, u+f094, u+f096-f097, u+f09d, u+f0a0, u+f0a2, u+f0a4-f0a7, u+f0c5,
-		u+f0c7, u+f0e5-f0e6, u+f0eb, u+f0f6-f0f8, u+f10c, u+f114-f115, u+f118-f11a,
-		u+f11c-f11d, u+f133, u+f147, u+f14e, u+f150-f152, u+f185-f186, u+f18e,
-		u+f190-f192, u+f196, u+f1c1-f1c9, u+f1d9, u+f1db, u+f1e3, u+f1ea, u+f1f7,
-		u+f1f9, u+f20a, u+f247-f248, u+f24a, u+f24d, u+f255-f25b, u+f25d,
-		u+f271-f274, u+f278, u+f27b, u+f28c, u+f28e, u+f29c, u+f2b5, u+f2b7, u+f2ba,
-		u+f2bc, u+f2be, u+f2c0-f2c1, u+f2c3, u+f2d0, u+f2d2, u+f2d4, u+f2dc;
+		u+f0c7, u+f0e5-f0e6, u+f0eb, u+f0f6-f0f8, u+f10c, u+f114-f115,
+		u+f118-f11a, u+f11c-f11d, u+f133, u+f147, u+f14e, u+f150-f152,
+		u+f185-f186, u+f18e, u+f190-f192, u+f196, u+f1c1-f1c9, u+f1d9, u+f1db,
+		u+f1e3, u+f1ea, u+f1f7, u+f1f9, u+f20a, u+f247-f248, u+f24a, u+f24d,
+		u+f255-f25b, u+f25d, u+f271-f274, u+f278, u+f27b, u+f28c, u+f28e, u+f29c,
+		u+f2b5, u+f2b7, u+f2ba, u+f2bc, u+f2be, u+f2c0-f2c1, u+f2c3, u+f2d0,
+		u+f2d2, u+f2d4, u+f2dc;
 }
 
 @font-face {
 	font-family: "FontAwesome";
 	font-display: block;
-	src:
-		url(../fonts/fontawesome/fa-v4compatibility.woff2) format("woff2"),
+	src: url(../fonts/fontawesome/fa-v4compatibility.woff2) format("woff2"),
 		url(../fonts/fontawesome/fa-v4compatibility.ttf) format("truetype");
 	unicode-range: u+f041, u+f047, u+f065-f066, u+f07d-f07e, u+f080, u+f08b,
 		u+f08e, u+f090, u+f09a, u+f0ac, u+f0ae, u+f0b2, u+f0d0, u+f0d6, u+f0e4,
