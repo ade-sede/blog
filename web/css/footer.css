@@ -15,7 +15,7 @@ footer .footer-contacts {
   display: flex;
   flex-direction: row;
   justify-self: flex-end;
-  gap: 6px;
+  gap: 16px;
 }
 
 footer a {
