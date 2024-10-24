@@ -32,11 +32,12 @@ nav .navbar-contents {
 }
 
 .toggle-label {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 60px;
   height: 30px;
   background-color: var(--track-color);
-
+  padding-left: 6px;
   border-radius: 30px;
   position: relative;
   cursor: pointer;
@@ -47,9 +48,9 @@ nav .navbar-contents {
   content: "☀️";
   position: absolute;
   top: 50%;
-  left: 5px;
+  left: 9px;
   transform: translateY(-50%);
-  font-size: 18px;
+  font-size: 15px;
   z-index: 1;
 }
 
@@ -57,9 +58,9 @@ nav .navbar-contents {
   content: "🌙";
   position: absolute;
   top: 50%;
-  right: 5px;
+  right: 10px;
   transform: translateY(-50%);
-  font-size: 18px;
+  font-size: 13px;
   z-index: 1;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -67,30 +68,26 @@ nav .navbar-contents {
 
 .toggle-ball {
   position: absolute;
-  top: 3px;
-  left: 3px;
   width: 24px;
   height: 24px;
   background-color: var(--ball-color);
   border-radius: 50%;
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.toggle-checkbox:checked+.toggle-label {
+.toggle-checkbox:checked + .toggle-label {
   background-color: var(--track-color);
 }
 
-.toggle-checkbox:checked+.toggle-label:before {
+.toggle-checkbox:checked + .toggle-label:before {
   opacity: 0;
 }
 
-.toggle-checkbox:checked+.toggle-label:after {
+.toggle-checkbox:checked + .toggle-label:after {
   opacity: 1;
 }
 
-.toggle-checkbox:checked+.toggle-label .toggle-ball {
+.toggle-checkbox:checked + .toggle-label .toggle-ball {
   transform: translateX(30px);
   background-color: var(--ball-color);
 }
