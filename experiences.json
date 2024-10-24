@@ -1,0 +1,52 @@
+{
+  "workExperiences": [
+    {
+      "title": "Senior Software Engineer, Tech Lead",
+      "company": "Cubyn",
+      "begin": "Nov. 2021",
+      "end": "March 2024",
+      "description": "Logistics service provider, specialized in e-commerce with operations all over Europe and a mission to make logistics sustainable and socially responsible. I was recruited after the company closed its 35M Series B with a mission to automate Cubyn's warehouses in order to improve margins, quality and lead time.",
+      "bulletPointsIntro": "",
+      "bulletPoints": [
+        "Led 4-person Warehouse Systems & Automation team, overseeing full software lifecycle from ideation to production.",
+        "Mentored 2 direct reports.",
+        "Architected and implemented automated e-commerce fulfillment system integrating AGVs (Automated Guided Vehicles).",
+        "Scaled from 0% to 60% of company-wide order volume.",
+        "Built using Domain-Driven Design, Hexagonal Architecture.",
+        "Tech stack: TypeScript, Vue.js, PostgreSQL, RabbitMQ, Microservices, Kubernetes"
+      ]
+    },
+    {
+      "title": "Lead Embedded Systems Developer",
+      "company": "CityTaps",
+      "begin": "July 2018",
+      "end": "March 2021",
+      "description": "Startup striving to enable fair access to running water in urban homes all over the world, using financial and technical innovation. The company's main product is a water prepayment solution relying on a smart LoRaWAN water meter built to last 10 years on a D size battery, without maintenance. Joined at seed stage with the main mission of scaling from a prototype to a reliable production-ready system.",
+      "bulletPointsIntro": "",
+      "bulletPoints": [
+        "Scaled IoT device firmware from prototype to production, growing deployment from 300 to 10,000 units across 3 countries.",
+        "Developed robust embedded system ecosystem.",
+        "Wrote core firmware in C for STM32 microcontrollers.",
+        "Developed supporting tools and services in Node.js and Python.",
+        "Reviewed and optimized PCB design, BOM.",
+        "Developed custom test bench and test frameworks to guarantee quality.",
+        "Led technical architecture and specification for product iterations."
+      ]
+    }
+  ],
+  "schoolExperiences": [
+    {
+      "title": "Student",
+      "company": "42 Paris",
+      "begin": "Sep. 2016",
+      "end": "July 2018",
+      "description": "A very intensive programming curriculum focused on the C language, organised around successive projects and challenges that each highlight or deepen a particular programming concept. I also spent 6 month at the school's electronics lab learning about PCB design, firmware and embedded systems in general.",
+      "bulletPointsIntro": "Among other things",
+      "bulletPoints": [
+        "Developed feature rich shell in C.",
+        "Implemented Supervisor-like utility in Rust.",
+        "Built a wireless mouse controlled by hand gestures."
+      ]
+    }
+  ]
+}

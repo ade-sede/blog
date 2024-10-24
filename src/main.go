@@ -26,8 +26,13 @@ func main() {
 		log.Fatal("ARTICLE_DIR and OUTPUT_DIR must be set")
 	}
 
-	workExperiences := buildWorkExperiences()
-	schoolExperiences := buildSchoolExperience()
+	experiences, err := loadExperiencesFromJSON("experiences.json")
+	if err != nil {
+		log.Fatalf("Error while generating experiences: %v", err)
+	}
+
+	workExperiences := experiences.WorkExperiences
+	schoolExperiences := experiences.SchoolExperiences
 
 	allArticles, err := parseArticles(articleDir)
 	if err != nil {

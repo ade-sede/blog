@@ -82,23 +82,23 @@ templ entry(experience ExperienceEntry) {
 	<div class="entry">
 		<div class="header">
 			<div class="position">
-				<span class="company">{ experience.company }</span>
-				<span class="title">{ experience.title }</span>
+				<span class="company">{ experience.Company }</span>
+				<span class="title">{ experience.Title }</span>
 			</div>
-			<span class="timeline">{ experience.begin } - { experience.end } </span>
+			<span class="timeline">{ experience.Begin } - { experience.End } </span>
 		</div>
 		<div class="description">
-			{ experience.description }
+			{ experience.Description }
 		</div>
-		if len(experience.bulletPoints) > 0 {
+		if len(experience.BulletPoints) > 0 {
 			<div class="bullet-points">
-				if experience.bulletPointsIntro != "" {
+				if experience.BulletPointsIntro != "" {
 					<p class="bullet-intro">
-						{ experience.bulletPointsIntro }:
+						{ experience.BulletPointsIntro }:
 					</p>
 				}
 				<ul>
-					for _, bulletPoint := range experience.bulletPoints {
+					for _, bulletPoint := range experience.BulletPoints {
 						<li>{ bulletPoint } </li>
 					}
 				</ul>
