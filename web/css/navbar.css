@@ -1,93 +1,93 @@
 nav.navbar {
-  --track-color: #e0e0e0;
-  --ball-color: #ffffff;
+	--track-color: #e0e0e0;
+	--ball-color: #ffffff;
 
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-  justify-content: flex-end;
-  width: 90%;
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+	justify-content: flex-end;
+	width: 90%;
 
-  font-family: "Montserrat", sans-serif;
-  font-size: 1.5rem;
-  font-weight: bold;
+	font-family: "Montserrat", sans-serif;
+	font-size: 1.5rem;
+	font-weight: bold;
 
-  padding: 32px;
+	padding: 32px;
 }
 
 nav .navbar-contents {
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
+	display: flex;
+	flex-direction: row;
+	gap: 32px;
 }
 
 .theme-toggle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .toggle-checkbox {
-  display: none;
+	display: none;
 }
 
 .toggle-label {
-  display: flex;
-  align-items: center;
-  width: 60px;
-  height: 30px;
-  background-color: var(--track-color);
-  padding-left: 6px;
-  border-radius: 30px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+	display: flex;
+	align-items: center;
+	width: 60px;
+	height: 30px;
+	background-color: var(--track-color);
+	padding-left: 6px;
+	border-radius: 30px;
+	position: relative;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .toggle-label:before {
-  content: "☀️";
-  position: absolute;
-  top: 50%;
-  left: 9px;
-  transform: translateY(-50%);
-  font-size: 15px;
-  z-index: 1;
+	content: "☀️";
+	position: absolute;
+	top: 50%;
+	left: 9px;
+	transform: translateY(-50%);
+	font-size: 15px;
+	z-index: 1;
 }
 
 .toggle-label:after {
-  content: "🌙";
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  font-size: 13px;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+	content: "🌙";
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	font-size: 13px;
+	z-index: 1;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
 .toggle-ball {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  background-color: var(--ball-color);
-  border-radius: 50%;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	background-color: var(--ball-color);
+	border-radius: 50%;
+	transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .toggle-checkbox:checked + .toggle-label {
-  background-color: var(--track-color);
+	background-color: var(--track-color);
 }
 
 .toggle-checkbox:checked + .toggle-label:before {
-  opacity: 0;
+	opacity: 0;
 }
 
 .toggle-checkbox:checked + .toggle-label:after {
-  opacity: 1;
+	opacity: 1;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-ball {
-  transform: translateX(30px);
-  background-color: var(--ball-color);
+	transform: translateX(30px);
+	background-color: var(--ball-color);
 }
