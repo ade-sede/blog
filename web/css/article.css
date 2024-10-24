@@ -4,3 +4,37 @@
 .article h4 {
 	line-height: 1;
 }
+
+pre {
+	background-color: var(--bg);
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	overflow: auto;
+	max-width: 100%;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font-family: monospace;
+}
+
+code {
+	color: #d63384;
+	box-shadow: #f8f8f8;
+}
+
+@media (max-width: 480px) {
+	.article {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 10px 20px;
+	}
+
+	pre {
+		overflow: auto;
+		max-width: 100%;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		font-family: monospace;
+	}
+}

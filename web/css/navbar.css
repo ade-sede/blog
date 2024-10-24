@@ -48,7 +48,7 @@ nav .navbar-contents {
 	content: "☀️";
 	position: absolute;
 	top: 50%;
-	left: 9px;
+	left: 8px;
 	transform: translateY(-50%);
 	font-size: 15px;
 	z-index: 1;
@@ -90,4 +90,37 @@ nav .navbar-contents {
 .toggle-checkbox:checked + .toggle-label .toggle-ball {
 	transform: translateX(30px);
 	background-color: var(--ball-color);
+}
+
+@media (max-width: 480px) {
+	nav.navbar {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1rem;
+		padding-top: 15px;
+	}
+
+	.toggle-label {
+		width: 50px;
+		height: 24px;
+
+		&:before {
+			left: 7px;
+			font-size: 14px;
+		}
+		&:after {
+			right: 6px;
+		}
+	}
+
+	.toggle-ball {
+		width: 20px;
+		height: 20px;
+		transform: translateX(0);
+	}
+
+	.toggle-checkbox:checked + .toggle-label .toggle-ball {
+		transform: translateX(26px);
+	}
 }

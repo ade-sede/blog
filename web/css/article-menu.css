@@ -46,3 +46,16 @@
 	border-left: 1px solid var(--fg);
 	padding: 0;
 }
+
+@media (max-width: 480px) {
+	.article-menu .entry .link .description {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-height: 100px;
+		margin-bottom: 10px;
+	}
+}
