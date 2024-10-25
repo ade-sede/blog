@@ -39,7 +39,7 @@ func main() {
 		log.Fatal("ARTICLE_DIR, OUTPUT_DIR and SRC_DIR must be set")
 	}
 
-	experiences, err := loadExperiencesFromJSON("experiences.json")
+	experiences, err := loadExperiencesFromJSON(srcDir + "/experiences.json")
 	if err != nil {
 		log.Fatalf("Error while generating experiences: %v", err)
 	}
