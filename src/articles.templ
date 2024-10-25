@@ -1,7 +1,7 @@
 package main
 
 templ articles(articles []Article, styleTags []string) {
-	@Base("Adrien's articles", styleTags) {
+	@Base("Adrien's articles", "Side projects, hobbies, rants", styleTags) {
 		<h1>Articles </h1>
 		@articleMenu(articles)
 	}

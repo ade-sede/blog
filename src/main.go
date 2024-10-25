@@ -71,9 +71,10 @@ func main() {
 
 	articleHTMLGenerator := func(args ...interface{}) templ.Component {
 		title, _ := args[0].(string)
-		stringifiedHTML, _ := args[1].(string)
-		styleTags, _ := args[2].([]string)
-		return article(title, stringifiedHTML, styleTags)
+		description, _ := args[1].(string)
+		stringifiedHTML, _ := args[2].(string)
+		styleTags, _ := args[3].([]string)
+		return article(title, description, stringifiedHTML, styleTags)
 	}
 
 	articlesHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -103,7 +104,7 @@ func main() {
 			filename:      a.HTMLFilename,
 			HTMLgenerator: articleHTMLGenerator,
 			cssFilename:   []string{"article.css"},
-			arguments:     []interface{}{a.Manifest.Title, a.StringifiedHTML},
+			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML},
 		})
 	}
 

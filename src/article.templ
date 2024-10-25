@@ -1,7 +1,7 @@
 package main
 
-templ article(title string, stringifiedHTML string, styleTags []string) {
-	@Base(title, styleTags) {
+templ article(title string, description string, stringifiedHTML string, styleTags []string) {
+	@Base(title, description, styleTags) {
 		<div class="article">
 			@templ.Raw(stringifiedHTML)
 		</div>
