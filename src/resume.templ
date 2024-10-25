@@ -107,14 +107,7 @@ templ entry(experience ExperienceEntry) {
 	</div>
 }
 
-// FUNCTIONS USED FOR PDG GENERATION
-templ resumeLight(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
-	@resumePrintReady(workExperience, schoolExperience)
-	<script>
-	setLightTheme()
-</script>
-}
-
+// FUNCTIONS USED TO GENERATE A PDF
 templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry) {
 	@header("Adrien DE SEDE - Resume")
 	<script type="text/javascript" src="scripts/print.js"> </script>
@@ -122,6 +115,7 @@ templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []Expe
 		@resume(workExperience, schoolExperience)
 	</body>
 	<script>
+	setLightTheme()
 	setToPrintableDimensions()
 </script>
 }

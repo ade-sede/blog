@@ -61,7 +61,7 @@ func main() {
 	}
 
 	fullScreenResumeGenerator := func() templ.Component {
-		return resume(workExperiences, schoolExperiences)
+		return resumePrintReady(workExperiences, schoolExperiences)
 	}
 
 	articlePageGenerator := func() templ.Component {
@@ -73,7 +73,7 @@ func main() {
 		{filename: "resume.html", gen: resumeGenerator},
 		{filename: "articles.html", gen: articlePageGenerator},
 		// Used for PDF generation
-		{filename: "resume-light.html", gen: fullScreenResumeGenerator},
+		{filename: "resume-printable.html", gen: fullScreenResumeGenerator},
 	}
 
 	pages = append(pages, articleGenerators...)

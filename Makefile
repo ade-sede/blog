@@ -41,14 +41,5 @@ else
 	@echo "GOPATH is $(GOPATH)"
 endif
 
-.PHONY: generate-pdf
-generate-pdf: all
-	mkdir -p $(OUTPUT_DIR)/pdfs
-	wkhtmltopdf \
-		--enable-local-file-access \
-		--enable-javascript \
-		--javascript-delay 1000 \
-		$(OUTPUT_DIR)/resume-light.html $(OUTPUT_DIR)/pdfs/ade-sede.pdf
-
 .PHONY: re
 re: clean all
