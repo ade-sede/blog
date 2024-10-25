@@ -1,27 +1,22 @@
 package main
 
 templ home(articles []Article) {
-	@header("Adrien's blog")
-	<link rel="stylesheet" href="css/home.css"/>
-	<body>
-		@navbar()
-		<div class="body-main">
-			<div class="home">
-				<div class="intro">
-					<img src="images/picture.png"/>
-					<p>
-						I am Adrien, a software engineer living in Lyon, France.
-						<br/>
-						I like building things. From small IoT devices to distributed systems and anything in-between.
-						<br/>
-					</p>
-				</div>
-				<div class="rest">
-					<h2>Most recent articles </h2>
-					@articleMenu(articles[:3])
-				</div>
+	@Base("Adrien's blog") {
+		<link rel="stylesheet" href="css/home.css"/>
+		<div class="home">
+			<div class="intro">
+				<img src="images/picture.png"/>
+				<p>
+					I am Adrien, a software engineer living in Lyon, France.
+					<br/>
+					I like building things. From small IoT devices to distributed systems and anything in-between.
+					<br/>
+				</p>
+			</div>
+			<div class="rest">
+				<h2>Most recent articles </h2>
+				@articleMenu(articles[:3])
 			</div>
 		</div>
-		@footer()
-	</body>
+	}
 }

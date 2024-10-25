@@ -1,15 +1,10 @@
 package main
 
 templ articles(articles []Article) {
-	@header("Adrien's articles")
-	<body>
-		@navbar()
-		<div class="body-main">
-			<h1>Articles </h1>
-			@articleMenu(articles)
-		</div>
-		@footer()
-	</body>
+	@Base("Adrien's articles") {
+		<h1>Articles </h1>
+		@articleMenu(articles)
+	}
 }
 
 templ articleMenu(articles []Article) {

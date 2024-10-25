@@ -1,5 +1,19 @@
 package main
 
+templ Base(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		@header(title)
+		<body>
+			@navbar()
+			<div class="body-main">
+				{ children... }
+			</div>
+			@footer()
+		</body>
+	</html>
+}
+
 templ navbar() {
 	<nav class="navbar">
 		<div class="navbar-contents">
@@ -19,7 +33,6 @@ templ navbar() {
 }
 
 templ header(title string) {
-	<!DOCTYPE html>
 	<head>
 		<title>{ title }</title>
 		<script type="text/javascript" src="scripts/theme.js"> </script>

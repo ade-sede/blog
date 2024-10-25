@@ -3,15 +3,10 @@ package main
 import "time"
 
 templ article(title string, date time.Time, stringifiedHTML string) {
-	@header(title)
-	<link rel="stylesheet" href="css/article.css"/>
-	<body>
-		@navbar()
-		<div class="body-main">
-			<div class="article">
-				@templ.Raw(stringifiedHTML)
-			</div>
+	@Base(title) {
+		<link rel="stylesheet" href="css/article.css"/>
+		<div class="article">
+			@templ.Raw(stringifiedHTML)
 		</div>
-		@footer()
-	</body>
+	}
 }
