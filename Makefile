@@ -11,13 +11,10 @@ export ARTICLE_DIR
 all: gopath
 	mkdir -p $(OUTPUT_DIR)
 	mkdir -p $(OUTPUT_DIR)/css
-	mkdir -p $(OUTPUT_DIR)/fonts
-	mkdir -p $(OUTPUT_DIR)/images
-	mkdir -p $(OUTPUT_DIR)/pdfs
-	mkdir -p $(OUTPUT_DIR)/scripts
 	cp -r $(SRC_DIR)/fonts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/images $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/scripts $(OUTPUT_DIR)/.
+	cp -r $(SRC_DIR)/pdfs $(OUTPUT_DIR)/.
 	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
 	go run $(SRC_DIR)/*.go
 
@@ -29,7 +26,7 @@ clean:
 	rm -rf $(OUTPUT_DIR)/fonts
 	rm -rf $(OUTPUT_DIR)/images
 	rm -rf $(OUTPUT_DIR)/scripts
-	# Note we keep PDFs, its a manual process and I don't want to do it everytime
+	rm -rf $(OUTPUT_DIR)/pdfs
 
 .PHONY: init
 init: gopath
