@@ -1,8 +1,37 @@
 package main
 
+templ homeCSS() {
+	<style>
+	.home {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.home .intro {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		align-self: center;
+		align-items: center;
+		font-size: 1.3rem;
+		gap: 48px;
+		padding-bottom: 64px;
+	}
+
+	.home .intro img {
+		border-radius: 50%;
+	}
+
+	@media (max-width: 480px) {
+		.home .intro {
+			padding-bottom: 10px;
+		}
+	}
+</style>
+}
+
 templ home(articles []Article) {
-	@Base("Adrien's blog") {
-		<link rel="stylesheet" href="css/home.css"/>
+	@Base("Adrien's blog", []templ.Component{homeCSS(), articleMenuCSS()}) {
 		<div class="home">
 			<div class="intro">
 				<img src="images/picture.png"/>

@@ -1,9 +1,9 @@
 package main
 
-templ Base(title string) {
+templ Base(title string, additionalStyles []templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
-		@header(title)
+		@header(title, additionalStyles)
 		<body>
 			@navbar()
 			<div class="body-main">
@@ -32,13 +32,18 @@ templ navbar() {
 	</nav>
 }
 
-templ header(title string) {
+templ header(title string, additionalStyles []templ.Component) {
 	<head>
 		<title>{ title }</title>
 		<script type="text/javascript" src="scripts/theme.js"> </script>
 		<script> loadThemeFromLocalStorage() </script>
 		<link rel="stylesheet" href="css/global.css"/>
 		<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
+		for _, styles := range additionalStyles {
+			if styles != nil {
+				@styles
+			}
+		}
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<meta name="author" content="Adrien DE SEDE"/>
