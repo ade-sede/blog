@@ -94,7 +94,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 
 		if strings.HasSuffix(filename, ".json") {
 			manifestFilename := filename
-			manifestFullPath := fmt.Sprintf("%s/%s", articleDir, manifestFilename)
+			manifestFullPath := articleDir + "/" + manifestFilename
 
 			manifest, err := readArticleManifest(manifestFullPath)
 			if err != nil {
@@ -107,7 +107,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 				return nil, err
 			}
 
-			markdownFullPath := fmt.Sprintf("%s/%s", articleDir, manifest.MarkdownFile)
+			markdownFullPath := articleDir + "/" + manifest.MarkdownFile
 			stringifieldHTML, err := parseArticleMarkdown(markdownFullPath)
 			if err != nil {
 				return nil, err

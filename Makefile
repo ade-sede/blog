@@ -1,23 +1,35 @@
 PWD := $(shell pwd)
 OUTPUT_DIR := $(PWD)/web
-TEMPL_DIR := $(PWD)/src
+SRC_DIR := $(PWD)/src
 ARTICLE_DIR := $(PWD)/articles
 
 export OUTPUT_DIR
+export SRC_DIR
 export ARTICLE_DIR
 
-# Deploying via cloudflare pages
-# GOPATH is not set by default, had to set it myself
-# Gotta make sure it is able to find templ's binary
 .PHONY: all
 all: gopath
-	$(GOPATH)/bin/templ generate -path $(TEMPL_DIR)
-	go run $(TEMPL_DIR)/*.go
+	mkdir -p $(OUTPUT_DIR)
+	mkdir -p $(OUTPUT_DIR)/css
+	mkdir -p $(OUTPUT_DIR)/fonts
+	mkdir -p $(OUTPUT_DIR)/images
+	mkdir -p $(OUTPUT_DIR)/pdfs
+	mkdir -p $(OUTPUT_DIR)/scripts
+	cp -r $(SRC_DIR)/fonts $(OUTPUT_DIR)/.
+	cp -r $(SRC_DIR)/images $(OUTPUT_DIR)/.
+	cp -r $(SRC_DIR)/scripts $(OUTPUT_DIR)/.
+	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
+	go run $(SRC_DIR)/*.go
 
 .PHONY: clean
 clean:
-	rm -f $(OUTPUT_DIR)/*.html
-	rm -f $(TEMPL_DIR)/*templ.go
+	rm -rf $(OUTPUT_DIR)/*.html
+	rm -rf $(SRC_DIR)/*templ.go
+	rm -rf $(OUTPUT_DIR)/css
+	rm -rf $(OUTPUT_DIR)/fonts
+	rm -rf $(OUTPUT_DIR)/images
+	rm -rf $(OUTPUT_DIR)/scripts
+	# Note we keep PDFs, its a manual process and I don't want to do it everytime
 
 .PHONY: init
 init: gopath
@@ -29,9 +41,12 @@ deploy: clean init all
 
 .PHONY: format
 format: gopath
-	gofmt -w $(TEMPL_DIR)/*.go
+	gofmt -w $(SRC_DIR)/*.go
 	$(GOPATH)/bin/templ fmt .
 
+# Deploying via cloudflare pages
+# GOPATH is not set by default, had to set it myself
+# Gotta make sure it is able to find templ's binary
 .PHONY: gopath
 gopath:
 ifeq ($(GOPATH),)

@@ -1,2 +1,3 @@
 src/*templ.go
-web/*.html
+!web/pdfs
+web/*
