@@ -1,8 +1,4 @@
 User-agent: *
-Allow: /
-Allow: /*.html$
-Allow: /pdfs/*.pdf$
-Allow: /css/
 Disallow: /fonts/
 Disallow: /images/
 Disallow: /scripts/
