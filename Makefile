@@ -15,18 +15,14 @@ all: gopath
 	cp -r $(SRC_DIR)/images $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/scripts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/pdfs $(OUTPUT_DIR)/.
+	cp $(SRC_DIR)/robot.txt $(OUTPUT_DIR)/.
 	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
 	go run $(SRC_DIR)/*.go
 
 .PHONY: clean
 clean:
-	rm -rf $(OUTPUT_DIR)/*.html
 	rm -rf $(SRC_DIR)/*templ.go
-	rm -rf $(OUTPUT_DIR)/css
-	rm -rf $(OUTPUT_DIR)/fonts
-	rm -rf $(OUTPUT_DIR)/images
-	rm -rf $(OUTPUT_DIR)/scripts
-	rm -rf $(OUTPUT_DIR)/pdfs
+	rm -rf $(OUTPUT_DIR)/*
 
 .PHONY: init
 init: gopath
