@@ -4542,9 +4542,6 @@
 /* 	content: "\e4b8"; */
 /* } */
 /**/
-/* .fa-download:before { */
-/* 	content: "\f019"; */
-/* } */
 /**/
 /* .fa-face-grin:before, */
 /* .fa-grin:before { */
@@ -8635,6 +8632,10 @@
 
 .fa-globe:before {
 	content: "\f0ac";
+}
+
+.fa-download:before {
+	content: "\f019";
 }
 
 :host,
