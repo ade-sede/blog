@@ -1,7 +1,7 @@
 function setToPrintableDimensions() {
   const resumeContainer = document.querySelector(".resume-container");
   resumeContainer.style.setProperty("width", "800px");
-  resumeContainer.style.setProperty("font-size", "8pt");
+  resumeContainer.style.setProperty("font-size", "7pt");
 
   const resumeActions = document.querySelector(".resume-actions");
   resumeActions.remove();

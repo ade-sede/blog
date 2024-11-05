@@ -1,6 +1,15 @@
 {
   "workExperiences": [
     {
+      "title": "Software Engineer",
+      "company": "Alan",
+      "begin": "Nov. 2024",
+      "end": "Present",
+      "description": "Reinventing healthcare.",
+      "bulletPointsIntro": "",
+      "bulletPoints": []
+    },
+    {
       "title": "Senior Software Engineer, Tech Lead",
       "company": "Cubyn",
       "begin": "Nov. 2021",
