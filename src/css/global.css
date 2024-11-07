@@ -15,7 +15,6 @@ body {
 	font-family: "Montserrat", sans-serif;
 	line-height: 1.6;
 	margin: 0;
-	padding: 16px;
 	transition: background-color 0.3s;
 }
 
@@ -24,6 +23,7 @@ body .body-main {
 	flex-direction: column;
 	min-width: 80%;
 	max-width: 1400px;
+	min-height: 80vh;
 	align-self: center;
 }
 
