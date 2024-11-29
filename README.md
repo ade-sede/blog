@@ -44,7 +44,7 @@ Everything static, very efficiently cached.
 
 ## Deployment
 
-Currently deployed to Cloudfare Pages: [blog.ade-sede.com](https://blog.ade-sede.com)  
+Currently deployed to Cloudfare Pages: [blog.ade-sede.dev](https://blog.ade-sede.dev)  
 ⚠️ Cloudflare Pages runners do not set the `GOPATH` variable by default.
 
 ## PDF Resume generation
