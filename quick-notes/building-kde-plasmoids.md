@@ -200,14 +200,17 @@ For the plasmoid to be available in the widget menu, you probably need to log ou
 
 ## Testing your plasmoid
 
-`plasmoidviewer -a ./package/` will launch a miniature version of the plasma shell where your plasmoid is open in its full representation.
+Use `plasmoidviewer`
+
+To test the full representation (as it would appear while expanding or pinned to a desktop), use:
+```
+plasmoidviewer -a ./package/
+```
 
 To test the compact representation (as it would appear in a taskbar), use:
 ```
 plasmoidviewer -f horizontal -a ./package/
 ```
-
-The `-f` (--formfactor) parameter with "horizontal" simulates a panel environment where the compact representation would be used.
 
 You can also create a test panel with:
 ```
@@ -218,5 +221,5 @@ This creates a panel container where your plasmoid will default to its compact r
 
 ## Learning QML syntax, patterns, etc.
 
-Reading through some parts of the [plasma-applet-eventcalendar](https://github.com/Zren/plasma-applet-eventcalendar) was useful.
+Reading through some parts of the [plasma-applet-eventcalendar](https://github.com/Zren/plasma-applet-eventcalendar) was very useful.
 I've also found asking LLMs for basic examples to be quite effective.
