@@ -31,12 +31,13 @@ var FLAGS = os.O_RDWR | os.O_CREATE
 var MODE fs.FileMode = 0644
 
 func main() {
+	quickNoteDir := os.Getenv("QUICK_NOTE_DIR")
 	articleDir := os.Getenv("ARTICLE_DIR")
 	outputDir := os.Getenv("OUTPUT_DIR")
 	srcDir := os.Getenv("SRC_DIR")
 
-	if articleDir == "" || outputDir == "" || srcDir == "" {
-		log.Fatal("ARTICLE_DIR, OUTPUT_DIR and SRC_DIR must be set")
+	if articleDir == "" || outputDir == "" || srcDir == "" || quickNoteDir == "" {
+		log.Fatal("ARTICLE_DIR, QUICK_NOTE_DIR, OUTPUT_DIR and SRC_DIR must be set")
 	}
 
 	experiences, err := loadExperiencesFromJSON(srcDir + "/experiences.json")
@@ -62,11 +63,25 @@ func main() {
 		log.Fatalf("Error while parsing articles: %v", err)
 	}
 
+	allQuickNotes, err := parseArticles(quickNoteDir)
+	if err != nil {
+		log.Fatalf("Error while parsing quick notes: %v", err)
+	}
+
 	homeHTMLGenerator := func(args ...interface{}) templ.Component {
 		allArticles, _ := args[0].([]Article)
-		styleTags, _ := args[1].([]string)
+		allQuickNotes, _ := args[1].([]Article)
+		styleTags, _ := args[2].([]string)
 
-		return home(allArticles, styleTags)
+		if len(allQuickNotes) > 2 {
+			allQuickNotes = allQuickNotes[:2]
+		}
+
+		if len(allArticles) > 2 {
+			allArticles = allArticles[:2]
+		}
+
+		return home(allArticles, allQuickNotes, styleTags)
 	}
 
 	articleHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -77,10 +92,24 @@ func main() {
 		return article(title, description, stringifiedHTML, styleTags)
 	}
 
+	quickNoteHTMLGenerator := func(args ...interface{}) templ.Component {
+		title, _ := args[0].(string)
+		description, _ := args[1].(string)
+		stringifiedHTML, _ := args[2].(string)
+		styleTags, _ := args[3].([]string)
+		return quickNote(title, description, stringifiedHTML, styleTags)
+	}
+
 	articlesHTMLGenerator := func(args ...interface{}) templ.Component {
 		allArticles, _ := args[0].([]Article)
 		styleTags, _ := args[1].([]string)
 		return articles(allArticles, styleTags)
+	}
+
+	quickNotesHTMLGenerator := func(args ...interface{}) templ.Component {
+		allQuickNotes, _ := args[0].([]Article)
+		styleTags, _ := args[1].([]string)
+		return quickNotes(allQuickNotes, styleTags)
 	}
 
 	resumePageHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -98,6 +127,7 @@ func main() {
 	}
 
 	allArticlesHTMLGenerators := make([]PageGenerator, 0)
+	allQuickNotesHTMLGenerators := make([]PageGenerator, 0)
 
 	for _, a := range allArticles {
 		allArticlesHTMLGenerators = append(allArticlesHTMLGenerators, PageGenerator{
@@ -108,12 +138,21 @@ func main() {
 		})
 	}
 
+	for _, a := range allQuickNotes {
+		allQuickNotesHTMLGenerators = append(allQuickNotesHTMLGenerators, PageGenerator{
+			filename:      a.HTMLFilename,
+			HTMLgenerator: quickNoteHTMLGenerator,
+			cssFilename:   []string{"article.css"},
+			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML},
+		})
+	}
+
 	pages := []PageGenerator{
 		{
 			filename:      "index.html",
 			HTMLgenerator: homeHTMLGenerator,
 			cssFilename:   []string{"home.css", "articles.css"},
-			arguments:     []interface{}{allArticles},
+			arguments:     []interface{}{allArticles, allQuickNotes},
 		},
 		{
 			filename:      "resume.html",
@@ -127,6 +166,12 @@ func main() {
 			cssFilename:   []string{"articles.css"},
 			arguments:     []interface{}{allArticles},
 		},
+		{
+			filename:      "quick-notes.html",
+			HTMLgenerator: quickNotesHTMLGenerator,
+			cssFilename:   []string{"articles.css"},
+			arguments:     []interface{}{allQuickNotes},
+		},
 		// Used for PDF generation
 		{
 			filename:      "resume-printable.html",
@@ -137,6 +182,7 @@ func main() {
 	}
 
 	pages = append(pages, allArticlesHTMLGenerators...)
+	pages = append(pages, allQuickNotesHTMLGenerators...)
 
 	for _, page := range pages {
 		filename := outputDir + "/" + page.filename

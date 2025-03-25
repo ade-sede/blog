@@ -1,0 +1,27 @@
+package main
+
+templ quickNotes(articles []Article, styleTags []string) {
+	@Base("Adrien's quick-notes", "Small pieces of documentation to make sure I don't forget", styleTags) {
+		<h1>Quick notes </h1>
+		@quickNoteMenu(articles)
+	}
+}
+
+templ quickNoteMenu(articles []Article) {
+	<div class="article-menu">
+		for _, article := range articles {
+			@articleMenuEntry(article)
+		}
+	</div>
+}
+
+templ quickNoteEntry(article Article) {
+	<div class="entry">
+		<hr/>
+		<a class="link" href={ templ.URL(article.HTMLFilename) }>
+			<span class="date">{ article.FormatedDate }</span>
+			<span class="name">{ article.Manifest.Title } </span>
+			<span class="description">{ article.Manifest.Description }</span>
+		</a>
+	</div>
+}

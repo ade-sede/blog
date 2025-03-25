@@ -1,6 +1,6 @@
 package main
 
-templ home(articles []Article, styleTags []string) {
+templ home(articles []Article, quickNotes []Article, styleTags []string) {
 	@Base("Adrien's blog", "Hobbies, maybe even rants and opinions", styleTags) {
 		<div class="home">
 			<div class="intro">
@@ -13,8 +13,14 @@ templ home(articles []Article, styleTags []string) {
 				</p>
 			</div>
 			<div class="rest">
-				<h2>Most recent articles </h2>
-				@articleMenu(articles[:3])
+				<div>
+					<h2>Most recent articles </h2>
+					@articleMenu(articles)
+				</div>
+				<div>
+					<h2>Most recent quick notes </h2>
+					@quickNoteMenu(quickNotes)
+				</div>
 			</div>
 		</div>
 	}

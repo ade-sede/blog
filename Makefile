@@ -2,10 +2,12 @@ PWD := $(shell pwd)
 OUTPUT_DIR := $(PWD)/web
 SRC_DIR := $(PWD)/src
 ARTICLE_DIR := $(PWD)/articles
+QUICK_NOTE_DIR := $(PWD)/quick-notes
 
 export OUTPUT_DIR
 export SRC_DIR
 export ARTICLE_DIR
+export QUICK_NOTE_DIR
 
 .PHONY: all
 all: gopath

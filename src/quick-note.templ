@@ -1,0 +1,9 @@
+package main
+
+templ quickNote(title string, description string, stringifiedHTML string, styleTags []string) {
+	@Base(title, description, styleTags) {
+		<div class="article">
+			@templ.Raw(stringifiedHTML)
+		</div>
+	}
+}
