@@ -25,6 +25,7 @@ var CSSFiles []string = []string{
 	"footer.css",
 	"icons.css",
 	"navbar.css",
+	"syntax-highlighting.css",
 }
 
 var FLAGS = os.O_RDWR | os.O_CREATE
@@ -133,7 +134,7 @@ func main() {
 		allArticlesHTMLGenerators = append(allArticlesHTMLGenerators, PageGenerator{
 			filename:      a.HTMLFilename,
 			HTMLgenerator: articleHTMLGenerator,
-			cssFilename:   []string{"article.css"},
+			cssFilename:   []string{"article.css", "syntax-highlighting.css"},
 			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML},
 		})
 	}
@@ -142,7 +143,7 @@ func main() {
 		allQuickNotesHTMLGenerators = append(allQuickNotesHTMLGenerators, PageGenerator{
 			filename:      a.HTMLFilename,
 			HTMLgenerator: quickNoteHTMLGenerator,
-			cssFilename:   []string{"article.css"},
+			cssFilename:   []string{"article.css", "syntax-highlighting.css"},
 			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML},
 		})
 	}

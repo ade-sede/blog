@@ -1,6 +1,25 @@
+:root[data-theme="dark"] {
+	--bg: black;
+	--fg: white;
+	--code-bg: #282c34;
+	--code-fg: #abb2bf;
+	--code-border: #444;
+}
+
+:root[data-theme="light"] {
+	--bg: white;
+	--fg: black;
+	--code-bg: #f6f8fa;
+	--code-fg: #24292e;
+	--code-border: #ddd;
+}
+
 :root {
 	--bg: black;
 	--fg: white;
+	--code-bg: #282c34;
+	--code-fg: #abb2bf;
+	--code-border: #444;
 }
 
 body,

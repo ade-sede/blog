@@ -10,7 +10,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/alecthomas/chroma"
+	chromahtml "github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer"
+	"github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/text"
+	"github.com/yuin/goldmark/util"
 )
 
 type ArticleManifest struct {
@@ -29,6 +40,111 @@ type Article struct {
 	Manifest         *ArticleManifest
 }
 
+type filenameTitleTransformer struct{}
+
+func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
+	ast.Walk(node, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+		if !entering {
+			return ast.WalkContinue, nil
+		}
+
+		if cb, ok := n.(*ast.FencedCodeBlock); ok {
+			language := string(cb.Language(reader.Source()))
+			parts := strings.Split(language, ":")
+
+			if len(parts) == 1 {
+				cb.SetAttribute([]byte("language"), []byte(parts[0]))
+			}
+
+			if len(parts) == 2 {
+				cb.SetAttribute([]byte("language"), []byte(parts[0]))
+				cb.SetAttribute([]byte("filename"), []byte(parts[1]))
+			}
+		}
+		return ast.WalkContinue, nil
+	})
+}
+
+type codeBlockRenderer struct {
+	html.Config
+}
+
+func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindFencedCodeBlock, r.renderCodeBlock)
+}
+
+func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.FencedCodeBlock)
+
+	if entering {
+		filenameAttr, hasFilename := n.AttributeString("filename")
+		languageAttr, hasLanguage := n.AttributeString("language")
+
+		w.WriteString("<div class=\"code-block\">")
+
+		if hasFilename {
+			w.WriteString("<div class=\"code-filename\">")
+			w.WriteString(string(filenameAttr.([]byte)))
+			w.WriteString("</div>")
+		}
+
+		var code strings.Builder
+		lines := n.Lines()
+		for i := 0; i < lines.Len(); i++ {
+			line := lines.At(i)
+			code.Write(line.Value(source))
+		}
+
+		var lang string
+		if hasLanguage {
+			lang = string(languageAttr.([]byte))
+		} else if language := n.Language(source); language != nil {
+			lang = string(language)
+		}
+
+		lexer := lexers.Get(lang)
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
+		lexer = chroma.Coalesce(lexer)
+
+		theme := "monokai"
+		themeString, err := os.ReadFile(".current-theme")
+		if err == nil {
+			currentTheme := string(themeString)
+			if strings.TrimSpace(currentTheme) == "light" {
+				theme = "github"
+			}
+		}
+		style := styles.Get(theme)
+		if style == nil {
+			style = styles.Fallback
+		}
+
+		formatter := chromahtml.New(
+			chromahtml.WithClasses(true),
+			chromahtml.WithLineNumbers(false),
+		)
+
+		iterator, err := lexer.Tokenise(nil, code.String())
+		if err != nil {
+			w.WriteString("<pre><code>")
+			w.WriteString(code.String())
+			w.WriteString("</code></pre>")
+		} else {
+			w.WriteString("<div class=\"highlight\">")
+			err = formatter.Format(w, style, iterator)
+			w.WriteString("</div>")
+		}
+
+		w.WriteString("</div>")
+
+		return ast.WalkSkipChildren, nil
+	}
+
+	return ast.WalkContinue, nil
+}
+
 func ordinal(day int) string {
 	if day%10 == 1 && day != 11 {
 		return "st"
@@ -44,7 +160,6 @@ func formatDate(date time.Time) string {
 	day := date.Day()
 	month := date.Format("January")
 	year := date.Year()
-
 	return fmt.Sprintf("%s %d%s %d", month, day, ordinal(day), year)
 }
 
@@ -54,30 +169,48 @@ func readArticleManifest(filename string) (*ArticleManifest, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	err = json.Unmarshal(content, &manifest)
 	if err != nil {
 		return nil, err
 	}
-
 	return &manifest, nil
 }
 
 func parseArticleMarkdown(filename string) (string, error) {
 	var buf bytes.Buffer
-
 	input, err := os.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
 
-	md := goldmark.New()
+	htmlRenderer := renderer.NewRenderer(
+		renderer.WithNodeRenderers(
+			util.Prioritized(html.NewRenderer(
+				html.WithHardWraps(),
+				html.WithXHTML(),
+				html.WithUnsafe(),
+			), 100),
+			util.Prioritized(&codeBlockRenderer{}, 80),
+		),
+	)
 
-	err = md.Convert(input, &buf)
+	p := goldmark.New(
+		goldmark.WithRenderer(htmlRenderer),
+		goldmark.WithExtensions(
+			extension.GFM,
+		),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+			parser.WithASTTransformers(
+				util.Prioritized(&filenameTitleTransformer{}, 100),
+			),
+		),
+	)
+
+	err = p.Convert(input, &buf)
 	if err != nil {
 		return "", err
 	}
-
 	return buf.String(), nil
 }
 
@@ -86,33 +219,26 @@ func parseArticles(articleDir string) ([]Article, error) {
 	if err != nil {
 		log.Fatalf("Error while opening directory '%s': '%v'", articleDir, err)
 	}
-
 	articles := make([]Article, 0)
-
 	for _, file := range files {
 		filename := file.Name()
-
 		if strings.HasSuffix(filename, ".json") {
 			manifestFilename := filename
 			manifestFullPath := articleDir + "/" + manifestFilename
-
 			manifest, err := readArticleManifest(manifestFullPath)
 			if err != nil {
 				return nil, err
 			}
-
 			htmlFilename := strings.TrimSuffix(manifest.MarkdownFile, ".md") + ".html"
 			date, err := time.Parse(time.DateOnly, manifest.Date)
 			if err != nil {
 				return nil, err
 			}
-
 			markdownFullPath := articleDir + "/" + manifest.MarkdownFile
 			stringifieldHTML, err := parseArticleMarkdown(markdownFullPath)
 			if err != nil {
 				return nil, err
 			}
-
 			article := Article{
 				ManifestFilename: manifestFilename,
 				HTMLFilename:     htmlFilename,
@@ -121,15 +247,11 @@ func parseArticles(articleDir string) ([]Article, error) {
 				Manifest:         manifest,
 				StringifiedHTML:  stringifieldHTML,
 			}
-
 			articles = append(articles, article)
 		}
 	}
-
-	// Newest articles first
 	sort.Slice(articles, func(i, j int) bool {
 		return articles[i].Date.After(articles[j].Date)
 	})
-
 	return articles, nil
 }

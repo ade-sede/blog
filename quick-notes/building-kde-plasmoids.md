@@ -4,9 +4,11 @@
 
 'Plasmoid' is a fancy name to describe a KDE Plasma widget.
 System tray, system clock, launch menu, attached to either the desktop or a taskbar... All of these are plasmoids shipped with Plasma!   
-
 But what if you need to write one yourself? How does it work?  
-I recently decided to write one and was stuck on the [official get started documentation](https://develop.kde.org/docs/plasma/widget/setup/) for quite a while. There is a lot of implicit behavior and things are not as obvious as I would like. I probably won't need to write another one for a while, and by that time, it's very likely I will need to start over entirely...
+
+I recently decided to write one and was stuck on the [official get started documentation](https://develop.kde.org/docs/plasma/widget/setup/) for quite a while.  
+There is a lot of implicit behavior and things are not as obvious as I would like.  
+I probably won't need to write another one for a while, and by that time, it's very likely I will need to start over entirely...
 Therefore, I decided to write my own guide, including information I did not see in the documentation, to make sure I don't get stuck as long the next time around!
 
 ## File structure
@@ -33,7 +35,7 @@ The file structure described in the documentation is not a suggestion. There are
 Every plasmoid requires a `metadata.json` file.
 The `metadata.desktop` that can still be found in many apps and plasmoids has been deprecated, and the JSON version should now be preferred.
 
-```json
+```json:metadata.json
 {
 	"KPlugin": {
 		"Authors": [
@@ -127,7 +129,7 @@ The connection between containers, views, and the plasmoid structure is importan
 Your plasmoid may need to store some state related to configuration.
 You can define 'fields' that are part of this configuration in `config/main.xml`.
 
-```xml
+```xml:main.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -182,7 +184,7 @@ Setting that property 'auto-magically' updates the `serverUrl` property that we 
 
 The configuration data is actually stored in `~/.config/plasma-org.kde.plasma.desktop-appletsrc`, with your plasmoid's settings in a section named after your plasmoid's ID. For example:
 
-```
+```ini
 [Containments][XX][Applets][YY][Configuration]
 serverUrl=https://some-domain-name.com
 username=some-username
@@ -203,17 +205,17 @@ For the plasmoid to be available in the widget menu, you probably need to log ou
 Use `plasmoidviewer`
 
 To test the full representation (as it would appear while expanding or pinned to a desktop), use:
-```
+```fish
 plasmoidviewer -a ./package/
 ```
 
 To test the compact representation (as it would appear in a taskbar), use:
-```
+```fish
 plasmoidviewer -f horizontal -a ./package/
 ```
 
 You can also create a test panel with:
-```
+```fish
 plasmoidviewer -c org.kde.panel -a ./package/
 ```
 

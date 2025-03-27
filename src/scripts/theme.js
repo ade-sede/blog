@@ -106,6 +106,9 @@ function setDarkTheme() {
     fg: "white",
     trackColor: "#333333",
     ballColor: "#000000",
+    codeBg: "#272822",
+    codeFg: "#f8f8f2",
+    codeBorder: "#444",
   };
   setTheme(themeObject);
   safeStorage.setItem("theme", JSON.stringify(themeObject));
@@ -123,6 +126,9 @@ function setLightTheme() {
     fg: "black",
     trackColor: "#e0e0e0",
     ballColor: "#ffffff",
+    codeBg: "#f8f8f8",
+    codeFg: "#333333",
+    codeBorder: "#ddd",
   };
   setTheme(themeObject);
   safeStorage.setItem("theme", JSON.stringify(themeObject));
@@ -151,8 +157,14 @@ function setTheme(themeObject) {
   } catch (err) {}
   try {
     const root = document.querySelector(":root");
+    root.setAttribute("data-theme", themeObject.name);
+    
+    // We also set variables directly for compatibility
     root.style.setProperty("--bg", themeObject.bg);
     root.style.setProperty("--fg", themeObject.fg);
+    root.style.setProperty("--code-bg", themeObject.codeBg);
+    root.style.setProperty("--code-fg", themeObject.codeFg);
+    root.style.setProperty("--code-border", themeObject.codeBorder);
   } catch (err) {}
   return themeObject;
 }
