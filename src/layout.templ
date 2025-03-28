@@ -12,7 +12,7 @@ templ Base(title string, description string, styleTags []string) {
 			<footer>
 				<hr/>
 				<div class="footer-contents">
-					<p>© 2024 Adrien DE SEDE. All Rights Reserved.</p>
+					<p>© 2025 Adrien DE SEDE. All Rights Reserved.</p>
 					<div class="footer-contacts">
 						<a href="mailto:contact@ade-sede.dev" title="contact@ade-sede.dev">
 							<i class="fas fa-envelope"></i>
@@ -55,19 +55,19 @@ templ header(title string, description string, styleTags []string) {
 		<meta name="description" content={ description }/>
 		<script type="text/javascript" src="scripts/theme.js"> </script>
 		<script>
-			// Apply theme immediately to prevent flash of unstyled content
-			(function() {
-				try {
-					const storedTheme = localStorage.getItem("theme");
-					if (storedTheme) {
-						const theme = JSON.parse(storedTheme);
-						document.documentElement.setAttribute("data-theme", theme.name);
-						document.documentElement.style.setProperty("--bg", theme.bg);
-						document.documentElement.style.setProperty("--fg", theme.fg);
-					}
-				} catch(e) {}
-			})();
-		</script>
+		// Apply theme immediately to prevent flash of unstyled content
+		(function () {
+			try {
+				const storedTheme = localStorage.getItem("theme");
+				if (storedTheme) {
+					const theme = JSON.parse(storedTheme);
+					document.documentElement.setAttribute("data-theme", theme.name);
+					document.documentElement.style.setProperty("--bg", theme.bg);
+					document.documentElement.style.setProperty("--fg", theme.fg);
+				}
+			} catch (e) { }
+		})();
+	</script>
 		<link rel="stylesheet" href="css/global.css"/>
 		<link rel="stylesheet" href="css/footer.css"/>
 		<link rel="stylesheet" href="css/navbar.css"/>
