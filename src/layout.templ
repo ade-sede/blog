@@ -9,7 +9,23 @@ templ Base(title string, description string, styleTags []string) {
 			<div class="body-main">
 				{ children... }
 			</div>
-			@footer()
+			<footer>
+				<hr/>
+				<div class="footer-contents">
+					<p>© 2024 Adrien DE SEDE. All Rights Reserved.</p>
+					<div class="footer-contacts">
+						<a href="mailto:contact@ade-sede.dev" title="contact@ade-sede.dev">
+							<i class="fas fa-envelope"></i>
+						</a>
+						<a href="https://github.com/ade-sede" title="github.com/ade-sede">
+							<i class="fab fa-github"></i>
+						</a>
+						<a href="https://www.linkedin.com/in/ade-sede" title="linkedin.com/in/ade-sede">
+							<i class="fab fa-linkedin"></i>
+						</a>
+					</div>
+				</div>
+			</footer>
 		</body>
 	</html>
 }
@@ -17,18 +33,15 @@ templ Base(title string, description string, styleTags []string) {
 templ navbar() {
 	<nav class="navbar">
 		<div class="navbar-contents">
-			<div class="theme-toggle">
-				<input type="checkbox" id="theme-slider" class="toggle-checkbox" onchange="toggleTheme()"/>
-				<label for="theme-slider" class="toggle-label">
-					<span class="toggle-ball"></span>
-				</label>
+			<div class="navbar-links">
+				<a href="index.html">Home</a>
+				<a href="articles.html">Articles</a>
+				<a href="quick-notes.html">Quick Notes</a>
+				<a href="resume.html">Resume</a>
 			</div>
-			// Reload theme to make sure theme slider in navbar is properly set
-			<script> loadThemeFromLocalStorage() </script>
-			<a href="index.html">Home</a>
-			<a href="articles.html">Articles</a>
-			<a href="quick-notes.html">Quick Notes</a>
-			<a href="resume.html">Resume</a>
+			<div class="theme-toggle">
+				<!-- Theme selector dropdown will be injected by JavaScript -->
+			</div>
 		</div>
 	</nav>
 }
@@ -36,40 +49,33 @@ templ navbar() {
 templ header(title string, description string, styleTags []string) {
 	<head>
 		<title>{ title }</title>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="author" content="Adrien DE SEDE"/>
+		<meta name="description" content={ description }/>
 		<script type="text/javascript" src="scripts/theme.js"> </script>
-		<script> loadThemeFromLocalStorage() </script>
+		<script>
+			// Apply theme immediately to prevent flash of unstyled content
+			(function() {
+				try {
+					const storedTheme = localStorage.getItem("theme");
+					if (storedTheme) {
+						const theme = JSON.parse(storedTheme);
+						document.documentElement.setAttribute("data-theme", theme.name);
+						document.documentElement.style.setProperty("--bg", theme.bg);
+						document.documentElement.style.setProperty("--fg", theme.fg);
+					}
+				} catch(e) {}
+			})();
+		</script>
 		<link rel="stylesheet" href="css/global.css"/>
 		<link rel="stylesheet" href="css/footer.css"/>
 		<link rel="stylesheet" href="css/navbar.css"/>
 		<link rel="stylesheet" href="css/icons.css"/>
 		<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
 		<link rel="icon" type="image/webp" sizes="16x16" href="images/favicon-16x16.webp"/>
-		<meta name="description" content={ description }/>
 		for _, styleTag := range styleTags {
 			@templ.Raw(styleTag)
 		}
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<meta name="author" content="Adrien DE SEDE"/>
 	</head>
-}
-
-templ footer() {
-	<footer>
-		<hr/>
-		<div class="footer-contents">
-			<p>© 2024 Adrien DE SEDE. All Rights Reserved.</p>
-			<div class="footer-contacts">
-				<a href="mailto:contact@ade-sede.dev" title="contact@ade-sede.dev">
-					<i class="fas fa-envelope"></i>
-				</a>
-				<a href="https://github.com/ade-sede" title="github.com/ade-sede">
-					<i class="fab fa-github"></i>
-				</a>
-				<a href="https://www.linkedin.com/in/ade-sede" title="linkedin.com/in/ade-sede">
-					<i class="fab fa-linkedin"></i>
-				</a>
-			</div>
-		</div>
-	</footer>
 }

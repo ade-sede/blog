@@ -5,7 +5,6 @@ nav.navbar {
 	display: flex;
 	flex-direction: row;
 	align-self: center;
-	justify-content: flex-end;
 	width: 90%;
 
 	font-family: "Montserrat", sans-serif;
@@ -18,109 +17,226 @@ nav.navbar {
 nav .navbar-contents {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+nav .navbar-links {
+	display: flex;
+	flex-direction: row;
 	gap: 32px;
+}
+
+nav .navbar-links a {
+	color: var(--fg);
+	font-weight: bold;
+	position: relative;
+}
+
+nav .navbar-links a:hover {
+	color: var(--primary);
+}
+
+nav .navbar-links a::after {
+	background-color: var(--primary);
 }
 
 .theme-toggle {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	gap: 10px;
 }
 
-.toggle-checkbox {
-	display: none;
+/* Theme Picker */
+.theme-toggle {
+	position: relative;
 }
 
-.toggle-label {
+.theme-button {
 	display: flex;
 	align-items: center;
-	width: 60px;
-	height: 30px;
-	background-color: var(--track-color);
-	padding-left: 6px;
-	border-radius: 30px;
-	position: relative;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background-color: var(--primary);
+	color: var(--bg);
+	border: 2px solid var(--primary);
 	cursor: pointer;
-	transition: background-color 0.3s ease;
+	transition: all 0.3s ease;
+	padding: 0;
+	font-size: 16px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+	position: relative;
+	overflow: hidden;
 }
 
-.toggle-label:before {
-	content: "☀️";
-	position: absolute;
-	top: 50%;
-	left: 8px;
-	transform: translateY(-50%);
-	font-size: 15px;
-	z-index: 1;
+.theme-button:hover {
+	transform: scale(1.1);
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
-.toggle-label:after {
-	content: "🌙";
+.theme-button:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--accent, #888), 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.theme-button:after {
+	content: "";
 	position: absolute;
-	top: 50%;
-	right: 10px;
-	transform: translateY(-50%);
-	font-size: 13px;
-	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
 	opacity: 0;
 	transition: opacity 0.3s ease;
 }
 
-.toggle-ball {
-	position: absolute;
-	width: 24px;
-	height: 24px;
-	background-color: var(--ball-color);
-	border-radius: 50%;
-	transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.toggle-checkbox:checked + .toggle-label {
-	background-color: var(--track-color);
-}
-
-.toggle-checkbox:checked + .toggle-label:before {
-	opacity: 0;
-}
-
-.toggle-checkbox:checked + .toggle-label:after {
+.theme-button:hover:after {
 	opacity: 1;
 }
 
-.toggle-checkbox:checked + .toggle-label .toggle-ball {
-	transform: translateX(30px);
-	background-color: var(--ball-color);
+.theme-menu {
+	position: absolute;
+	top: 40px;
+	right: 0;
+	width: 240px;
+	background-color: var(--bg);
+	border: 1px solid var(--code-border);
+	border-radius: 8px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	padding: 10px 5px;
+	z-index: 100;
+	display: none;
+	flex-wrap: wrap;
+	transition: all 0.3s ease;
+	justify-content: center;
 }
+
+.theme-menu.open {
+	display: flex;
+}
+
+.theme-option {
+	width: 50px;
+	height: 50px;
+	border-radius: 8px;
+	cursor: pointer;
+	border: 2px solid transparent;
+	position: relative;
+	overflow: hidden;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+	flex: 0 0 50px; /* Ensure fixed width */
+	margin: 5px; /* Even margin around all theme options */
+}
+
+.theme-option:hover {
+	transform: scale(1.1);
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.theme-option.active {
+	border-color: var(--accent, #888);
+	box-shadow: 0 0 0 2px var(--accent, #888), 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.theme-option::before {
+	content: "✓";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-size: 16px;
+	font-weight: bold;
+	opacity: 0;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+	z-index: 2;
+	transition: opacity 0.3s ease;
+}
+
+.theme-option.active::before {
+	opacity: 1;
+}
+
+.theme-option::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 15px;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.theme-option-name {
+	position: absolute;
+	bottom: 2px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 9px;
+	color: white;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+	z-index: 1;
+}
+
+/* No longer needed toggle styles removed */
 
 @media (max-width: 480px) {
 	nav.navbar {
-		display: flex;
+		padding: 15px;
+		width: 100%;
+	}
+	
+	nav .navbar-contents {
+		flex-wrap: wrap;
 		justify-content: center;
-		align-items: center;
+		gap: 15px;
+	}
+	
+	nav .navbar-links {
+		flex-wrap: wrap;
+		justify-content: center;
 		font-size: 1rem;
-		padding-top: 15px;
+		gap: 20px;
+		order: 2;
+		width: 100%;
 	}
-
-	.toggle-label {
-		width: 50px;
-		height: 24px;
-
-		&:before {
-			left: 7px;
-			font-size: 14px;
-		}
-		&:after {
-			right: 6px;
-		}
+	
+	.theme-toggle {
+		order: 1;
+		margin-bottom: 5px;
 	}
-
-	.toggle-ball {
-		width: 20px;
-		height: 20px;
-		transform: translateX(0);
+	
+	.theme-button {
+		width: 28px;
+		height: 28px;
+		font-size: 14px;
 	}
-
-	.toggle-checkbox:checked + .toggle-label .toggle-ball {
-		transform: translateX(26px);
+	
+	.theme-menu {
+		position: fixed;
+		top: 50px;
+		right: 10px;
+		width: 280px;
+		max-width: 90vw;
+		padding: 10px 5px;
+		justify-content: center;
+	}
+	
+	.theme-option {
+		width: 40px;
+		height: 40px;
+		flex: 0 0 40px;
+		margin: 5px;
+	}
+	
+	.theme-option-name {
+		font-size: 8px;
 	}
 }

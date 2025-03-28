@@ -20,10 +20,17 @@ footer .footer-contacts {
 }
 
 footer a {
-	color: var(--fg);
+	color: var(--secondary);
 	display: inline-flex;
 	align-items: center;
 }
+
+footer a:hover {
+	color: var(--accent);
+}
+
+footer a::after {
+	display: none; }
 
 footer i {
 	font-size: 1.5rem;
@@ -33,7 +40,7 @@ footer hr {
 	height: 1px;
 	width: 100%;
 	border: 0;
-	border-top: 1px solid var(--fg);
-	margin: 1em 0;
+	background: linear-gradient(to right, transparent, var(--primary), transparent);
+	margin: 1.5em 0;
 	padding: 0;
 }

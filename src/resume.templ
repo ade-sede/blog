@@ -103,13 +103,16 @@ templ entry(experience ExperienceEntry) {
 
 // FUNCTIONS USED TO GENERATE A PDF
 templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry, styleTags []string) {
-	@header("Adrien DE SEDE - Resume", "Senior Software Engineer Resume", styleTags)
-	<script type="text/javascript" src="scripts/print.js"> </script>
-	<body>
-		@resume(workExperience, schoolExperience)
-	</body>
-	<script>
-	setLightTheme()
-	setToPrintableDimensions()
-</script>
+	<!DOCTYPE html>
+	<html lang="en">
+		@header("Adrien DE SEDE - Resume", "Senior Software Engineer Resume", styleTags)
+		<script type="text/javascript" src="scripts/print.js"> </script>
+		<body>
+			@resume(workExperience, schoolExperience)
+			<script>
+				setLightTheme()
+				setToPrintableDimensions()
+			</script>
+		</body>
+	</html>
 }

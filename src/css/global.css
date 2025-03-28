@@ -1,25 +1,105 @@
-:root[data-theme="dark"] {
+/* Theme definitions are now handled by JavaScript */
+/* Default values for fallback */
+:root {
 	--bg: black;
 	--fg: white;
+	--primary: white;
+	--secondary: #ddd;
+	--accent: #aaa;
 	--code-bg: #282c34;
 	--code-fg: #abb2bf;
 	--code-border: #444;
+	--link-hover: white;
+}
+
+/* High contrast themes */
+:root[data-theme="dark"] {
+	--bg: black;
+	--fg: white;
+	--primary: white;
+	--secondary: #ddd;
+	--accent: #aaa;
+	--code-bg: #282c34;
+	--code-fg: #abb2bf;
+	--code-border: #444;
+	--link-hover: white;
 }
 
 :root[data-theme="light"] {
 	--bg: white;
 	--fg: black;
+	--primary: black;
+	--secondary: #333;
+	--accent: #666;
 	--code-bg: #f6f8fa;
 	--code-fg: #24292e;
 	--code-border: #ddd;
+	--link-hover: black;
 }
 
-:root {
-	--bg: black;
-	--fg: white;
-	--code-bg: #282c34;
-	--code-fg: #abb2bf;
-	--code-border: #444;
+/* Nord theme */
+:root[data-theme="nord"] {
+	--bg: #2E3440;
+	--fg: #ECEFF4;
+	--primary: #88C0D0;
+	--secondary: #81A1C1;
+	--accent: #EBCB8B;
+	--code-bg: #3B4252;
+	--code-fg: #E5E9F0;
+	--code-border: #4C566A;
+	--link-hover: #88C0D0;
+}
+
+/* Solarized theme */
+:root[data-theme="solarized"] {
+	--bg: #FDF6E3;
+	--fg: #657B83;
+	--primary: #268BD2;
+	--secondary: #2AA198;
+	--accent: #CB4B16;
+	--code-bg: #EEE8D5;
+	--code-fg: #586E75;
+	--code-border: #D3CAA8;
+	--link-hover: #268BD2;
+}
+
+/* Dracula theme */
+:root[data-theme="dracula"] {
+	--bg: #282A36;
+	--fg: #F8F8F2;
+	--primary: #BD93F9;
+	--secondary: #6272A4;
+	--accent: #FF79C6;
+	--code-bg: #44475A;
+	--code-fg: #F8F8F2;
+	--code-border: #6272A4;
+	--link-hover: #FF79C6;
+}
+
+/* GitHub theme */
+:root[data-theme="github"] {
+	--bg: #ffffff;
+	--fg: #24292e;
+	--primary: #0366d6;
+	--secondary: #586069;
+	--accent: #d73a49;
+	--code-bg: #f6f8fa;
+	--code-fg: #24292e;
+	--code-border: #e1e4e8;
+	--link-hover: #0366d6;
+}
+
+/* Monokai theme */
+:root[data-theme="monokai"] {
+	--bg: #272822;
+	--fg: #F8F8F2;
+	--primary: #F92672;
+	--secondary: #66D9EF;
+	--accent: #A6E22E;
+	--code-bg: #3E3D32;
+	--code-fg: #F8F8F2;
+	--code-border: #75715E;
+	--link-hover: #F92672;
 }
 
 body,
@@ -44,13 +124,46 @@ body .body-main {
 	max-width: 1400px;
 	min-height: 80vh;
 	align-self: center;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--secondary), transparent);
+    margin: 2em 0;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
 }
 
 a {
-	color: var(--fg);
+	color: var(--secondary);
 	cursor: pointer;
 	text-decoration: none;
 	position: relative;
+	transition: color 0.2s ease;
 }
 
 a::after {
@@ -60,15 +173,27 @@ a::after {
 	height: 2px;
 	bottom: 0px;
 	left: 0;
-	background-color: var(--fg);
+	background-color: var(--accent);
 	transform: scaleX(0);
 	transform-origin: bottom right;
 	transition: transform 0.3s ease-out;
 }
 
+a:hover {
+	color: var(--accent);
+}
+
 a:hover::after {
 	transform: scaleX(1);
 	transform-origin: bottom left;
+}
+
+a[class] {
+	color: inherit;
+}
+
+a[class]::after {
+	height: 1px;
 }
 
 .fas,
@@ -91,8 +216,11 @@ a:hover::after {
 	}
 
 	body .body-main {
-		padding: 0 25px;
+		padding: 0 15px;
 		font-size: 1rem;
-		max-width: inherit;
+		max-width: 100%;
+		width: 100%;
+		box-sizing: border-box;
+		overflow-x: hidden;
 	}
 }

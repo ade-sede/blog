@@ -1,42 +1,183 @@
 pre {
-	background-color: var(--bg);
-	border: 1px solid #ccc;
+	background-color: var(--code-bg);
+	color: var(--code-fg);
+	border: 1px solid var(--code-border);
 	border-radius: 5px;
 	padding: 10px;
 	overflow: auto;
 	max-width: 100%;
 	white-space: pre-wrap;
 	word-wrap: break-word;
-	font-family: monospace;
+	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 
 code {
-	color: #d63384;
-	box-shadow: #f8f8f8;
+	color: var(--accent, #d63384);
+	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 
+/* Table styling for articles */
+.article table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 1.5em 0;
+	overflow-x: auto;
+	display: block;
+}
+
+.article th,
+.article td {
+	border: 1px solid var(--secondary);
+	padding: 8px 12px;
+	text-align: left;
+}
+
+.article th {
+	background-color: var(--code-bg);
+	color: var(--primary);
+	font-weight: bold;
+}
+
+.article tr:nth-child(even) {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile styles */
 @media (max-width: 480px) {
 	.article {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 		padding: 10px 20px;
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+		font-size: 0.95rem;
+	}
+
+	.article img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	.article pre, 
+	.article code,
+	.article .code-block,
+	.article table {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		overflow-x: auto;
+	}
+
+	.article table {
+		font-size: 0.85rem;
+	}
+
+	.article th,
+	.article td {
+		padding: 6px 8px;
 	}
 
 	pre {
-		overflow: auto;
+		overflow-x: auto;
 		max-width: 100%;
 		white-space: pre-wrap;
 		word-wrap: break-word;
 		font-family: monospace;
+		font-size: 14px;
+		padding: 8px;
 	}
+
+	.article h1 {
+		font-size: 1.8rem;
+	}
+
+	.article h2 {
+		font-size: 1.5rem;
+	}
+
+	.article h3 {
+		font-size: 1.3rem;
+	}
+
+	.article h4 {
+		font-size: 1.1rem;
+	}
+
+	.article p,
+	.article li {
+		word-break: break-word;
+	}
+}
+
+.article {
+	line-height: 1.6;
+	max-width: 800px;
+	margin: 0 auto;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
 }
 
 .article h1,
 .article h2,
 .article h3,
 .article h4 {
-	line-height: 1;
+	line-height: 1.2;
+	position: relative;
+}
+
+.article h1 {
+	font-size: 2.2rem;
+	margin-bottom: 1rem;
+	color: var(--primary);
+}
+
+.article h2 {
+	font-size: 1.8rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+	color: var(--primary);
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid var(--accent);
+}
+
+.article h3 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+	color: var(--primary);
+}
+
+.article h4 {
+	font-size: 1.3rem;
+	color: var(--secondary);
+}
+
+.article p {
+	margin-bottom: 1.5rem;
+}
+
+.article a {
+	color: var(--accent);
+	text-decoration: none;
+	border-bottom: 1px solid var(--accent);
+	display: inline;
+	transition: color 0.2s ease, border-color 0.2s ease;
+	padding-bottom: 1px;
+	background-image: none;
+}
+
+.article a::before,
+.article a::after {
+	content: none !important;
+	display: none !important;
+}
+
+.article a:hover {
+	color: var(--primary);
+	border-bottom-color: var(--primary);
 }
 
 
@@ -45,6 +186,9 @@ code {
 	border-radius: 6px;
 	overflow: hidden;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	border: 1px solid var(--code-border);
+	max-width: 100%;
+	box-sizing: border-box;
 }
 
 .code-filename {
@@ -54,6 +198,10 @@ code {
 	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 	font-size: 0.9em;
 	border-bottom: 1px solid var(--code-border);
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .code-block pre {
@@ -61,13 +209,41 @@ code {
 	padding: 1em;
 	overflow-x: auto;
 	background-color: var(--code-bg);
+	color: var(--code-fg);
+	border: none;
+	border-radius: 0;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .code-block code {
 	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 	font-size: 0.9em;
 	background: transparent;
+	color: var(--code-fg);
 	padding: 0;
+}
+
+@media (max-width: 480px) {
+	.code-block {
+		margin: 1em 0;
+		border-radius: 4px;
+		width: 100%;
+	}
+	
+	.code-filename {
+		padding: 0.4em 0.8em;
+		font-size: 0.8em;
+	}
+	
+	.code-block pre {
+		padding: 0.8em;
+		font-size: 0.9em;
+	}
+	
+	.code-block code {
+		font-size: 0.85em;
+	}
 }
 
 .chroma {

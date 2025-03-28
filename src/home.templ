@@ -13,14 +13,18 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 				</p>
 			</div>
 			<div class="rest">
-				<div>
-					<h2>Most recent articles </h2>
-					@articleMenu(articles)
-				</div>
-				<div>
-					<h2>Most recent quick notes </h2>
-					@quickNoteMenu(quickNotes)
-				</div>
+				if len(articles) > 0 {
+					<div>
+						<h2>Most recent articles </h2>
+						@articleMenu(articles)
+					</div>
+				}
+				if len(quickNotes) > 0 {
+					<div>
+						<h2>Most recent quick notes </h2>
+						@quickNoteMenu(quickNotes)
+					</div>
+				}
 			</div>
 		</div>
 	}
