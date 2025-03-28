@@ -108,14 +108,10 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 		}
 		lexer = chroma.Coalesce(lexer)
 
+		// We don't actually use monokai colors
+		// Specifying a theme just helps us specify how to format: should classnames have the same color as strings ? etc ...
+		// Colors are handled dynamcally using css + js
 		theme := "monokai"
-		themeString, err := os.ReadFile(".current-theme")
-		if err == nil {
-			currentTheme := string(themeString)
-			if strings.TrimSpace(currentTheme) == "light" {
-				theme = "github"
-			}
-		}
 		style := styles.Get(theme)
 		if style == nil {
 			style = styles.Fallback
