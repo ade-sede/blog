@@ -76,42 +76,133 @@ func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegistere
 
 func getFileIcon(filename string) string {
 	ext := strings.ToLower(filepath.Ext(filename))
+	basename := strings.ToLower(filepath.Base(filename))
 
-	// File type specific icons for all-the-icons font
+	// Check specific filenames first
+	switch basename {
+	case "makefile":
+		return "fas fa-cogs"
+	case "dockerfile":
+		return "fab fa-docker"
+	case "readme.md":
+		return "fas fa-book"
+	case "license", "license.txt", "license.md":
+		return "fas fa-certificate"
+	case "go.mod", "go.sum":
+		return "fab fa-golang"
+	case "package.json", "package-lock.json":
+		return "fab fa-npm"
+	case ".gitignore", ".gitmodules", ".gitattributes":
+		return "fab fa-git-alt"
+	}
+
+	// File type specific icons using FontAwesome
 	switch ext {
-	case ".qml":
-		return "all-icons all-icon-file-code" // QML files
-	case ".json":
-		return "all-icons all-icon-file-code" // JSON files
-	case ".xml":
-		return "all-icons all-icon-file-code" // XML files
-	case ".md":
-		return "all-icons all-icon-file-text" // Markdown files
+	// Programming languages
 	case ".go":
-		return "all-icons all-icon-go" // Go files
+		return "fab fa-golang"
 	case ".js":
-		return "all-icons all-icon-javascript" // JavaScript files
+		return "fab fa-js"
+	case ".ts":
+		return "fab fa-js-square" // TypeScript
 	case ".html", ".htm":
-		return "all-icons all-icon-html5" // HTML files
+		return "fab fa-html5"
 	case ".css":
-		return "all-icons all-icon-css3" // CSS files
+		return "fab fa-css3-alt"
 	case ".py":
-		return "all-icons all-icon-python" // Python files
-	case ".sh", ".bash", ".fish":
-		return "all-icons all-icon-terminal" // Shell scripts
-	case ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg":
-		return "all-icons all-icon-file-image" // Image files
-	case ".pdf":
-		return "all-icons all-icon-file-pdf" // PDF files
-	case ".zip", ".tar", ".gz", ".rar":
-		return "all-icons all-icon-file-archive" // Archive files
+		return "fab fa-python"
+	case ".rb":
+		return "fas fa-gem" // Ruby
+	case ".php":
+		return "fab fa-php"
+	case ".java":
+		return "fab fa-java"
+	case ".rs":
+		return "fas fa-gears" // Rust - using gears which better matches Rust's logo
+	case ".c", ".cpp", ".h", ".hpp":
+		return "fas fa-code"
+	case ".cs":
+		return "fas fa-code" // C#
+	case ".swift":
+		return "fas fa-code"
+	case ".kt", ".kts":
+		return "fas fa-k" // Kotlin
+
+	// Shell and config
+	case ".sh", ".bash", ".fish", ".zsh":
+		return "fas fa-terminal"
+	case ".yml", ".yaml":
+		return "fas fa-file-code"
+	case ".toml":
+		return "fas fa-cog"
+	case ".ini", ".conf", ".config":
+		return "fas fa-sliders-h"
+	case ".env":
+		return "fas fa-key"
+
+	// Data formats
+	case ".json":
+		return "fas fa-file-code" // JSON files
+	case ".xml":
+		return "fas fa-code" // XML files
+	case ".csv":
+		return "fas fa-file-csv" // CSV files with dedicated icon
+	case ".sql":
+		return "fas fa-database" // SQL database icon
+
+	// Documents
+	case ".md", ".markdown":
+		return "fas fa-file-lines" // Markdown files (more modern fa-file-lines icon)
 	case ".txt":
-		return "all-icons all-icon-file-text" // Text files
+		return "fas fa-file-lines" // Text files
+	case ".pdf":
+		return "fas fa-file-pdf"
+	case ".doc", ".docx":
+		return "fas fa-file-word"
+	case ".xls", ".xlsx":
+		return "fas fa-file-excel"
+	case ".ppt", ".pptx":
+		return "fas fa-file-powerpoint"
+
+	// Media
+	case ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp":
+		return "fas fa-file-image"
+	case ".svg":
+		return "fas fa-bezier-curve"
+	case ".mp3", ".wav", ".ogg", ".flac":
+		return "fas fa-file-audio"
+	case ".mp4", ".mov", ".avi", ".mkv", ".webm":
+		return "fas fa-file-video"
+
+	// Archives
+	case ".zip", ".tar", ".gz", ".rar", ".7z":
+		return "fas fa-file-archive"
+
+	// Web development
+	case ".jsx", ".tsx":
+		return "fab fa-react"
+	case ".vue":
+		return "fab fa-vuejs"
+	case ".svelte":
+		return "fas fa-fire" // Svelte uses a flame-like logo
+
+	// Mobile development
+	case ".dart":
+		return "fas fa-mobile-alt"
+	case ".gradle":
+		return "fab fa-android"
+	case ".xcodeproj":
+		return "fab fa-apple"
+
+	// Other
+	case ".qml":
+		return "fas fa-file-code"
+
 	default:
 		if strings.HasPrefix(ext, ".") {
-			return "all-icons all-icon-file" // Other files with extensions
+			return "fas fa-file" // Other files with extensions
 		}
-		return "all-icons all-icon-file" // Default
+		return "fas fa-file" // Default
 	}
 }
 
@@ -183,10 +274,10 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 	renderEntry = func(entry *DirEntry) {
 		for _, child := range entry.Children {
 			if child.IsFolder {
-				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><span class=\"dir-icon all-icons all-icon-folder\"></span> %s</div>", child.Name))
+				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><i class=\"fas fa-folder-open\"></i> %s</div>", child.Name))
 			} else {
 				fileIcon := getFileIcon(child.Name)
-				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><span class=\"dir-icon %s\"></span> %s</div>", fileIcon, child.Name))
+				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><i class=\"%s\"></i> %s</div>", fileIcon, child.Name))
 			}
 
 			if len(child.Children) > 0 {
@@ -232,8 +323,12 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 		w.WriteString("<div class=\"code-block\">")
 
 		if hasFilename {
+			filename := string(filenameAttr.([]byte))
+			fileIcon := getFileIcon(filename)
 			w.WriteString("<div class=\"code-filename\">")
-			w.WriteString(string(filenameAttr.([]byte)))
+			w.WriteString(fmt.Sprintf("<span><i class=\"%s\"></i> %s</span>", fileIcon, filename))
+			// Add copy button with onclick handler to copy the filename to clipboard
+			w.WriteString(fmt.Sprintf("<span class=\"copy-filename\" title=\"Copy filename\" onclick=\"navigator.clipboard.writeText('%s')\"><i class=\"fas fa-copy\"></i></span>", filename))
 			w.WriteString("</div>")
 		}
 
@@ -259,12 +354,18 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 
 		iterator, err := lexer.Tokenise(nil, code.String())
 		if err != nil {
+			w.WriteString("<div class=\"code-content-wrapper\">")
 			w.WriteString("<pre><code>")
 			w.WriteString(code.String())
 			w.WriteString("</code></pre>")
+			// Add copy button for code block
+			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
+			w.WriteString("</div>")
 		} else {
-			w.WriteString("<div class=\"highlight\">")
+			w.WriteString("<div class=\"highlight code-content-wrapper\">")
 			err = formatter.Format(w, style, iterator)
+			// Add copy button for code block
+			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
 			w.WriteString("</div>")
 		}
 

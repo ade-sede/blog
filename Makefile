@@ -14,6 +14,7 @@ all: gopath
 	mkdir -p $(OUTPUT_DIR)
 	mkdir -p $(OUTPUT_DIR)/css
 	cp -r $(SRC_DIR)/fonts $(OUTPUT_DIR)/.
+	cp -r $(SRC_DIR)/webfonts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/images $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/scripts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/pdfs $(OUTPUT_DIR)/.
