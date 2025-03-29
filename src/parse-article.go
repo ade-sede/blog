@@ -78,7 +78,6 @@ func getFileIcon(filename string) string {
 	ext := strings.ToLower(filepath.Ext(filename))
 	basename := strings.ToLower(filepath.Base(filename))
 
-	// Check specific filenames first
 	switch basename {
 	case "makefile":
 		return "fas fa-cogs"
@@ -94,116 +93,87 @@ func getFileIcon(filename string) string {
 		return "fab fa-npm"
 	case ".gitignore", ".gitmodules", ".gitattributes":
 		return "fab fa-git-alt"
-	}
-
-	// File type specific icons using FontAwesome
-	switch ext {
-	// Programming languages
-	case ".go":
-		return "fab fa-golang"
-	case ".js":
-		return "fab fa-js"
-	case ".ts":
-		return "fab fa-js-square" // TypeScript
-	case ".html", ".htm":
-		return "fab fa-html5"
-	case ".css":
-		return "fab fa-css3-alt"
-	case ".py":
-		return "fab fa-python"
-	case ".rb":
-		return "fas fa-gem" // Ruby
-	case ".php":
-		return "fab fa-php"
-	case ".java":
-		return "fab fa-java"
-	case ".rs":
-		return "fas fa-gears" // Rust - using gears which better matches Rust's logo
-	case ".c", ".cpp", ".h", ".hpp":
-		return "fas fa-code"
-	case ".cs":
-		return "fas fa-code" // C#
-	case ".swift":
-		return "fas fa-code"
-	case ".kt", ".kts":
-		return "fas fa-k" // Kotlin
-
-	// Shell and config
-	case ".sh", ".bash", ".fish", ".zsh":
-		return "fas fa-terminal"
-	case ".yml", ".yaml":
-		return "fas fa-file-code"
-	case ".toml":
-		return "fas fa-cog"
-	case ".ini", ".conf", ".config":
-		return "fas fa-sliders-h"
-	case ".env":
-		return "fas fa-key"
-
-	// Data formats
-	case ".json":
-		return "fas fa-file-code" // JSON files
-	case ".xml":
-		return "fas fa-code" // XML files
-	case ".csv":
-		return "fas fa-file-csv" // CSV files with dedicated icon
-	case ".sql":
-		return "fas fa-database" // SQL database icon
-
-	// Documents
-	case ".md", ".markdown":
-		return "fas fa-file-lines" // Markdown files (more modern fa-file-lines icon)
-	case ".txt":
-		return "fas fa-file-lines" // Text files
-	case ".pdf":
-		return "fas fa-file-pdf"
-	case ".doc", ".docx":
-		return "fas fa-file-word"
-	case ".xls", ".xlsx":
-		return "fas fa-file-excel"
-	case ".ppt", ".pptx":
-		return "fas fa-file-powerpoint"
-
-	// Media
-	case ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp":
-		return "fas fa-file-image"
-	case ".svg":
-		return "fas fa-bezier-curve"
-	case ".mp3", ".wav", ".ogg", ".flac":
-		return "fas fa-file-audio"
-	case ".mp4", ".mov", ".avi", ".mkv", ".webm":
-		return "fas fa-file-video"
-
-	// Archives
-	case ".zip", ".tar", ".gz", ".rar", ".7z":
-		return "fas fa-file-archive"
-
-	// Web development
-	case ".jsx", ".tsx":
-		return "fab fa-react"
-	case ".vue":
-		return "fab fa-vuejs"
-	case ".svelte":
-		return "fas fa-fire" // Svelte uses a flame-like logo
-
-	// Mobile development
-	case ".dart":
-		return "fas fa-mobile-alt"
-	case ".gradle":
-		return "fab fa-android"
-	case ".xcodeproj":
-		return "fab fa-apple"
-
-	// Other
-	case ".qml":
-		return "fas fa-file-code"
-
 	default:
-		if strings.HasPrefix(ext, ".") {
-			return "fas fa-file" // Other files with extensions
+		switch ext {
+		case ".qml":
+			return "fas fa-file-code"
+		case ".json":
+			return "fas fa-file-code"
+		case ".go":
+			return "fab fa-golang"
+		case ".js":
+			return "fab fa-js"
+		case ".ts":
+			return "fab fa-js-square"
+		case ".html", ".htm":
+			return "fab fa-html5"
+		case ".css":
+			return "fab fa-css3-alt"
+		case ".py":
+			return "fab fa-python"
+		case ".rb":
+			return "fas fa-gem"
+		case ".php":
+			return "fab fa-php"
+		case ".java":
+			return "fab fa-java"
+		case ".rs":
+			return "fas fa-gears"
+		case ".c", ".cpp", ".h", ".hpp":
+			return "fas fa-code"
+		case ".cs":
+			return "fas fa-code"
+		case ".swift":
+			return "fas fa-code"
+		case ".kt", ".kts":
+			return "fas fa-k"
+		case ".yml", ".yaml":
+			return "fas fa-file-code"
+		case ".toml":
+			return "fas fa-cog"
+		case ".ini", ".conf", ".config":
+			return "fas fa-sliders-h"
+		case ".env":
+			return "fas fa-key"
+		case ".xml":
+			return "fas fa-code"
+		case ".csv":
+			return "fas fa-file-csv"
+		case ".sql":
+			return "fas fa-database"
+		case ".txt":
+			return "fas fa-file-lines"
+		case ".pdf":
+			return "fas fa-file-pdf"
+		case ".doc", ".docx":
+			return "fas fa-file-word"
+		case ".xls", ".xlsx":
+			return "fas fa-file-excel"
+		case ".ppt", ".pptx":
+			return "fas fa-file-powerpoint"
+		case ".svg":
+			return "fas fa-bezier-curve"
+		case ".mp3", ".wav", ".ogg", ".flac":
+			return "fas fa-file-audio"
+		case ".mp4", ".mov", ".avi", ".mkv", ".webm":
+			return "fas fa-file-video"
+		case ".vue":
+			return "fab fa-vuejs"
+		case ".svelte":
+			return "fas fa-fire"
+		case ".gradle":
+			return "fab fa-android"
+		case ".xcodeproj":
+			return "fab fa-apple"
+
+		default:
+			if strings.HasPrefix(ext, ".") {
+				return ""
+			}
 		}
-		return "fas fa-file" // Default
 	}
+
+	return ""
 }
 
 func renderDirectoryStructure(w util.BufWriter, content string) {
@@ -225,13 +195,12 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 		return
 	}
 
-	// Root entry
 	root := &DirEntry{
 		Children: []*DirEntry{},
 	}
 
-	// Build tree
 	var currentParent *DirEntry = root
+
 	var stack []*DirEntry = []*DirEntry{root}
 	var prevIndent int = 0
 
@@ -247,14 +216,12 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 			Children: []*DirEntry{},
 		}
 
-		// Determine parent based on indentation
 		if i > 0 {
+
 			if currentIndent > prevIndent {
-				// This is a child of the previous entry
 				stack = append(stack, currentParent)
 				currentParent = stack[len(stack)-1].Children[len(stack[len(stack)-1].Children)-1]
 			} else if currentIndent < prevIndent {
-				// Go back up the tree
 				for currentIndent < prevIndent && len(stack) > 1 {
 					stack = stack[:len(stack)-1]
 					currentParent = stack[len(stack)-1]
@@ -267,7 +234,6 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 		prevIndent = currentIndent
 	}
 
-	// Render the tree
 	w.WriteString("<div class=\"directory-tree\">")
 
 	var renderEntry func(entry *DirEntry)
@@ -314,7 +280,6 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			lang = string(language)
 		}
 
-		// Handle directory structure special case
 		if lang == "directory-structure" {
 			renderDirectoryStructure(w, code.String())
 			return ast.WalkSkipChildren, nil
@@ -327,7 +292,6 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			fileIcon := getFileIcon(filename)
 			w.WriteString("<div class=\"code-filename\">")
 			w.WriteString(fmt.Sprintf("<span><i class=\"%s\"></i> %s</span>", fileIcon, filename))
-			// Add copy button with onclick handler to copy the filename to clipboard
 			w.WriteString(fmt.Sprintf("<span class=\"copy-filename\" title=\"Copy filename\" onclick=\"navigator.clipboard.writeText('%s')\"><i class=\"fas fa-copy\"></i></span>", filename))
 			w.WriteString("</div>")
 		}
@@ -338,9 +302,6 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 		}
 		lexer = chroma.Coalesce(lexer)
 
-		// We don't actually use monokai colors
-		// Specifying a theme just helps us specify how to format: should classnames have the same color as strings ? etc ...
-		// Colors are handled dynamcally using css + js
 		theme := "monokai"
 		style := styles.Get(theme)
 		if style == nil {
@@ -358,13 +319,11 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			w.WriteString("<pre><code>")
 			w.WriteString(code.String())
 			w.WriteString("</code></pre>")
-			// Add copy button for code block
 			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
 			w.WriteString("</div>")
 		} else {
 			w.WriteString("<div class=\"highlight code-content-wrapper\">")
 			err = formatter.Format(w, style, iterator)
-			// Add copy button for code block
 			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
 			w.WriteString("</div>")
 		}

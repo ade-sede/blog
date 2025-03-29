@@ -173,7 +173,6 @@ func main() {
 			cssFilename:   []string{"articles.css"},
 			arguments:     []interface{}{allQuickNotes},
 		},
-		// Used for PDF generation
 		{
 			filename:      "resume-printable.html",
 			HTMLgenerator: resumePrintReadyHTMLGenerator,

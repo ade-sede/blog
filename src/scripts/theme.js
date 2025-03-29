@@ -59,7 +59,6 @@ const safeStorage = {
  * @type {Object.<string, Theme>}
  */
 const availableThemes = {
-  // Original high contrast themes
   light: {
     name: "light",
     displayName: "Light (High Contrast)",
@@ -94,7 +93,6 @@ const availableThemes = {
     linkHover: "white",
   },
   
-  // Modern themes
   nord: {
     name: "nord",
     displayName: "Nord",
@@ -192,20 +190,12 @@ function loadThemeFromLocalStorage() {
   if (themeString) {
     themeObject = JSON.parse(themeString);
     if (themeObject) {
-      // Handle migration from old theme format to new format
-      if (themeObject.name === "light" || themeObject.name === "dark") {
-        if (!themeObject.displayName) {
-          themeObject = availableThemes[themeObject.name];
-        }
-      }
       themeObject = setTheme(themeObject);
     }
   } else {
     themeObject = setTheme(availableThemes.light);
   }
   
-  // Update theme selector if it exists
-  try {
     const themeSelector = document.getElementById("theme-selector");
     if (themeSelector) {
       themeSelector.value = themeObject.name;
@@ -291,7 +281,6 @@ function setTheme(themeObject) {
     const root = document.querySelector(":root");
     root.setAttribute("data-theme", themeObject.name);
     
-    // Set all theme variables
     root.style.setProperty("--bg", themeObject.bg);
     root.style.setProperty("--fg", themeObject.fg);
     root.style.setProperty("--primary", themeObject.primary);
@@ -304,7 +293,6 @@ function setTheme(themeObject) {
     root.style.setProperty("--link-hover", themeObject.linkHover);
   } catch (err) {}
   
-  // Save to localStorage
   safeStorage.setItem("theme", JSON.stringify(themeObject));
   
   return themeObject;
@@ -317,10 +305,8 @@ function initThemePicker() {
   const themeToggleContainer = document.querySelector('.theme-toggle');
   if (!themeToggleContainer) return;
   
-  // Clear any existing content
   themeToggleContainer.innerHTML = '';
   
-  // Create theme picker button
   const themeButton = document.createElement('button');
   themeButton.id = 'theme-button';
   themeButton.className = 'theme-button';
@@ -328,19 +314,15 @@ function initThemePicker() {
   themeButton.setAttribute('aria-label', 'Change theme');
   themeButton.setAttribute('title', 'Change theme');
   
-  // Create theme menu - Calculate width based on number of themes
   const themeMenu = document.createElement('div');
   themeMenu.id = 'theme-menu';
   themeMenu.className = 'theme-menu';
   
-  // Determine if we need to adjust width based on theme count
   const themeCount = Object.keys(availableThemes).length;
   if (themeCount > 4) {
-    // Make sure we have room for 3 items per row (3*50px + 2*10px gap + padding)
     themeMenu.style.width = '200px';
   }
   
-  // Add theme options to menu
   for (const themeName in availableThemes) {
     const theme = availableThemes[themeName];
     
@@ -350,12 +332,9 @@ function initThemePicker() {
     themeOption.setAttribute('title', theme.displayName);
     themeOption.style.backgroundColor = theme.bg;
     
-    // Create a more visually appealing representation of the theme
     if (themeName === 'light' || themeName === 'dark') {
-      // For high contrast themes, use simple split background
       themeOption.style.background = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg} 50%, ${theme.primary} 50%, ${theme.primary} 100%)`;
     } else {
-      // For other themes, show more colors
       themeOption.style.background = `linear-gradient(135deg, 
         ${theme.bg} 0%, 
         ${theme.bg} 40%, 
@@ -365,13 +344,11 @@ function initThemePicker() {
         ${theme.accent} 100%)`;
     }
     
-    // Theme name
     const themeTitleSpan = document.createElement('span');
     themeTitleSpan.className = 'theme-option-name';
-    themeTitleSpan.textContent = theme.displayName.split(' ')[0]; // First word only
+    themeTitleSpan.textContent = theme.displayName.split(' ')[0];
     themeOption.appendChild(themeTitleSpan);
     
-    // Add event listener
     themeOption.addEventListener('click', function() {
       setThemeByName(themeName);
       updateActiveTheme(themeName);
@@ -381,21 +358,17 @@ function initThemePicker() {
     themeMenu.appendChild(themeOption);
   }
   
-  // Toggle the menu when the button is clicked
   themeButton.addEventListener('click', toggleThemeMenu);
   
-  // Close the menu when clicking outside
   document.addEventListener('click', function(event) {
     if (!themeToggleContainer.contains(event.target)) {
       themeMenu.classList.remove('open');
     }
   });
   
-  // Add elements to the container
   themeToggleContainer.appendChild(themeButton);
   themeToggleContainer.appendChild(themeMenu);
   
-  // Set initial active theme
   const currentTheme = safeStorage.getItem("theme");
   if (currentTheme) {
     const parsedTheme = JSON.parse(currentTheme);
@@ -417,7 +390,6 @@ function updateActiveTheme(themeName) {
     }
   });
   
-  // Also update button color to match theme
   const themeButton = document.getElementById('theme-button');
   if (themeButton && availableThemes[themeName]) {
     themeButton.style.backgroundColor = availableThemes[themeName].primary;
@@ -436,7 +408,6 @@ function toggleThemeMenu() {
   }
 }
 
-// Initialize theme picker when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
   initThemePicker();
   loadThemeFromLocalStorage();
