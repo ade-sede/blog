@@ -61,7 +61,7 @@ code {
 		height: auto;
 	}
 
-	.article pre, 
+	.article pre,
 	.article code,
 	.article .code-block,
 	.article table {
@@ -144,6 +144,7 @@ code {
 	font-size: 2.2rem;
 	margin-bottom: 1rem;
 	color: var(--primary);
+	margin-top: 16px;
 }
 
 .article h2 {
@@ -218,12 +219,13 @@ code {
 	align-items: center;
 }
 
-.code-filename > span:first-child {
+.code-filename>span:first-child {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.copy-filename, .code-copy-button {
+.copy-filename,
+.code-copy-button {
 	margin-left: auto;
 	cursor: pointer;
 	transition: opacity 0.2s ease, transform 0.2s ease;
@@ -237,13 +239,15 @@ code {
 }
 
 .code-filename:hover .copy-filename,
-.copy-filename:hover, .code-copy-button:hover {
+.copy-filename:hover,
+.code-copy-button:hover {
 	opacity: 1;
 	background-color: rgba(255, 255, 255, 0.1);
 	transform: scale(1.1);
 }
 
-.copy-filename:active, .code-copy-button:active {
+.copy-filename:active,
+.code-copy-button:active {
 	transform: scale(0.95);
 }
 
@@ -291,28 +295,28 @@ code {
 		border-radius: 4px;
 		width: 100%;
 	}
-	
+
 	.code-filename {
 		padding: 0.4em 0.8em;
 		font-size: 0.8em;
 	}
-	
-	.code-filename > span:first-child {
+
+	.code-filename>span:first-child {
 		max-width: 75%;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	
+
 	.copy-filename {
 		padding: 3px 4px;
 		font-size: 0.9em;
 	}
-	
+
 	.code-block pre {
 		padding: 0.8em;
 		font-size: 0.9em;
 	}
-	
+
 	.code-block code {
 		font-size: 0.85em;
 	}
@@ -328,7 +332,8 @@ code {
 	background-color: #e3d2d2;
 }
 
-:root[data-theme="dark"] .chroma .err, :root .chroma .err {
+:root[data-theme="dark"] .chroma .err,
+:root .chroma .err {
 	color: #960050;
 	background-color: #1e0010;
 }
