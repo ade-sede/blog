@@ -28,7 +28,7 @@ package/
 
 The `metadata.json` file defines the plasmoid's identity and behavior:
 
-```json:metadata.json
+```json:package/metadata.json
 {
     "KPlugin": {
         "Authors": [
@@ -59,7 +59,7 @@ Things that tripped me up:
 
 QML powers the UI of plasmoids. The main.qml file serves as the entry point:
 
-```qml:main.qml
+```qml:package/contents/ui/main.qml
 import QtQuick 2.0
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -91,7 +91,7 @@ Plasmoids have two display modes: compact (for panels) and full (for expanded vi
 
 For panels, you need a compact representation:
 
-```qml:CompactRepresentation.qml
+```qml:package/contents/ui/CompactRepresentation.qml
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
@@ -122,7 +122,7 @@ Item {
 
 For the expanded view, you use a full representation:
 
-```qml:FullRepresentation.qml
+```qml:package/contents/ui/FullRepresentation.qml
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
@@ -143,7 +143,7 @@ Rectangle {
 
 When splitting these into separate files, the main.qml references them:
 
-```qml:main.qml
+```qml:package/contents/ui/main.qml
 import QtQuick 2.0
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -166,7 +166,7 @@ The configuration system involves three files working together:
 
 The `main.xml` file defines what settings you want to save:
 
-```xml:main.xml
+```xml:package/contents/config/main.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -184,7 +184,7 @@ The `main.xml` file defines what settings you want to save:
 
 The `config.qml` file defines how the settings UI is organized:
 
-```qml:config.qml
+```qml:package/contents/config/config.qml
 import QtQuick 2.0
 import org.kde.plasma.configuration 2.0
 
@@ -201,7 +201,7 @@ Something weird: `source` points to `contents/ui/configGeneral.qml`, not to `con
 
 The `configGeneral.qml` file is the actual settings form:
 
-```qml:configGeneral.qml
+```qml:package/contents/ui/configGeneral.qml
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
