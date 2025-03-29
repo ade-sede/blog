@@ -51,3 +51,8 @@ Currently deployed to Cloudfare Pages: [blog.ade-sede.dev](https://blog.ade-sede
 
 Automation has been removed until I find a better solution.  
 To generate a PDF, open `resume-printable.html` and print to PDF yourself.
+
+## Disclaimer
+
+Lot of AI written stuff in there.
+Once I put the basics in place I have let LLMs take over for a lot of boilerplate. Mostly CSS and self contained features.
