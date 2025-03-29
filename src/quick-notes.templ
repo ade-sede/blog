@@ -3,6 +3,7 @@ package main
 templ quickNotes(articles []Article, styleTags []string) {
 	@Base("Adrien's quick-notes", "Small pieces of documentation to make sure I don't forget", styleTags) {
 		<h1>Quick notes </h1>
+		<p>Small snippets of documentation, mostly for my own usage.</p>
 		@quickNoteMenu(articles)
 	}
 }
