@@ -121,6 +121,17 @@ code {
 	hyphens: auto;
 }
 
+.article-date {
+	margin-bottom: 0.5rem;
+	color: var(--secondary);
+	font-size: 0.95rem;
+	font-style: italic;
+}
+
+.article-date i {
+	margin-right: 0.5rem;
+}
+
 .article h1,
 .article h2,
 .article h3,

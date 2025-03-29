@@ -11,6 +11,33 @@ h1 + .article-menu {
 	gap: 0;
 }
 
+.article-menu:has(.empty-content) {
+	width: 100%;
+	align-items: center;
+}
+
+.empty-content {
+	margin: 2rem 0;
+	padding: 2rem;
+	border: 1px dashed var(--accent);
+	border-radius: 8px;
+	text-align: center;
+	color: var(--secondary);
+	background-color: var(--bg-light);
+	max-width: 600px;
+	width: 80%;
+}
+
+.empty-content p:first-child {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+.empty-content p:last-child {
+	font-style: italic;
+}
+
 .article-menu .entry {
 	display: flex;
 	flex-direction: row;

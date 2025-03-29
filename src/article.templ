@@ -1,8 +1,11 @@
 package main
 
-templ article(title string, description string, stringifiedHTML string, styleTags []string) {
+templ article(title string, description string, stringifiedHTML string, formattedDate string, styleTags []string) {
 	@Base(title, description, styleTags) {
 		<div class="article">
+			<div class="article-date">
+				<i class="far fa-calendar-alt"></i> { formattedDate }
+			</div>
 			@templ.Raw(stringifiedHTML)
 		</div>
 	}

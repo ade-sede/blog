@@ -89,16 +89,18 @@ func main() {
 		title, _ := args[0].(string)
 		description, _ := args[1].(string)
 		stringifiedHTML, _ := args[2].(string)
-		styleTags, _ := args[3].([]string)
-		return article(title, description, stringifiedHTML, styleTags)
+		formattedDate, _ := args[3].(string)
+		styleTags, _ := args[4].([]string)
+		return article(title, description, stringifiedHTML, formattedDate, styleTags)
 	}
 
 	quickNoteHTMLGenerator := func(args ...interface{}) templ.Component {
 		title, _ := args[0].(string)
 		description, _ := args[1].(string)
 		stringifiedHTML, _ := args[2].(string)
-		styleTags, _ := args[3].([]string)
-		return quickNote(title, description, stringifiedHTML, styleTags)
+		formattedDate, _ := args[3].(string)
+		styleTags, _ := args[4].([]string)
+		return quickNote(title, description, stringifiedHTML, formattedDate, styleTags)
 	}
 
 	articlesHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -135,7 +137,7 @@ func main() {
 			filename:      a.HTMLFilename,
 			HTMLgenerator: articleHTMLGenerator,
 			cssFilename:   []string{"article.css", "syntax-highlighting.css"},
-			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML},
+			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
 		})
 	}
 
@@ -144,7 +146,7 @@ func main() {
 			filename:      a.HTMLFilename,
 			HTMLgenerator: quickNoteHTMLGenerator,
 			cssFilename:   []string{"article.css", "syntax-highlighting.css"},
-			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML},
+			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
 		})
 	}
 

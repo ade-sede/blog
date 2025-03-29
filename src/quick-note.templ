@@ -1,8 +1,11 @@
 package main
 
-templ quickNote(title string, description string, stringifiedHTML string, styleTags []string) {
+templ quickNote(title string, description string, stringifiedHTML string, formattedDate string, styleTags []string) {
 	@Base(title, description, styleTags) {
 		<div class="article">
+			<div class="article-date">
+				<i class="far fa-calendar-alt"></i> { formattedDate }
+			</div>
 			@templ.Raw(stringifiedHTML)
 		</div>
 	}

@@ -9,8 +9,15 @@ templ articles(articles []Article, styleTags []string) {
 
 templ articleMenu(articles []Article) {
 	<div class="article-menu">
-		for _, article := range articles {
-			@articleMenuEntry(article)
+		if len(articles) == 0 {
+			<div class="empty-content">
+				<p>📝 Articles are being carefully crafted in the depths of my mind...</p>
+				<p>Check back soon for some hopefully interesting content!</p>
+			</div>
+		} else {
+			for _, article := range articles {
+				@articleMenuEntry(article)
+			}
 		}
 	</div>
 }

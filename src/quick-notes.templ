@@ -10,8 +10,15 @@ templ quickNotes(articles []Article, styleTags []string) {
 
 templ quickNoteMenu(articles []Article) {
 	<div class="article-menu">
-		for _, article := range articles {
-			@articleMenuEntry(article)
+		if len(articles) == 0 {
+			<div class="empty-content">
+				<p>🤔 My brain is currently devoid of quick notes...</p>
+				<p>But don't worry, I'll forget how to do something complicated soon and document it here!</p>
+			</div>
+		} else {
+			for _, article := range articles {
+				@articleMenuEntry(article)
+			}
 		}
 	</div>
 }
