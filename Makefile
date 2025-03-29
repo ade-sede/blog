@@ -13,11 +13,13 @@ export QUICK_NOTE_DIR
 all: gopath
 	mkdir -p $(OUTPUT_DIR)
 	mkdir -p $(OUTPUT_DIR)/css
+	mkdir -p $(OUTPUT_DIR)/libs
 	cp -r $(SRC_DIR)/fonts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/webfonts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/images $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/scripts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/pdfs $(OUTPUT_DIR)/.
+	cp -r $(SRC_DIR)/libs/katex $(OUTPUT_DIR)/libs/.
 	cp $(SRC_DIR)/robots.txt $(OUTPUT_DIR)/.
 	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
 	go run $(SRC_DIR)/*.go

@@ -53,6 +53,7 @@ templ header(title string, description string, styleTags []string) {
 		<meta name="description" content={ description }/>
 		<script type="text/javascript" src="scripts/theme.js"> </script>
 		<script type="text/javascript" src="scripts/copy.js" defer> </script>
+		<script type="text/javascript" src="scripts/latex.js" defer> </script>
 		<script>
 		// Apply theme immediately to prevent flash of unstyled content
 		(function () {
@@ -73,6 +74,10 @@ templ header(title string, description string, styleTags []string) {
 		<link rel="stylesheet" href="css/icons.css"/>
 		<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
 		<link rel="icon" type="image/webp" sizes="16x16" href="images/favicon-16x16.webp"/>
+		<!-- KaTeX for LaTeX rendering -->
+		<link rel="stylesheet" href="libs/katex/katex.min.css"/>
+		<script defer src="libs/katex/katex.min.js"></script>
+		<script defer src="libs/katex/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '\\\\[', right: '\\\\]', display: true}, {left: '\\\\(', right: '\\\\)', display: false}]})"></script>
 		for _, styleTag := range styleTags {
 			@templ.Raw(styleTag)
 		}

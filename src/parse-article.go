@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -367,12 +368,34 @@ func readArticleManifest(filename string) (*ArticleManifest, error) {
 	return &manifest, nil
 }
 
+// processLatexExpressions pre-processes LaTeX expressions before Markdown parsing.
+// Uses regex instead of a custom AST renderer for simplicity and non-invasive integration.
+// A proper goldmark extension would handle LaTeX as first-class nodes in the AST.
+func processLatexExpressions(input string) string {
+	displayMathRegex := regexp.MustCompile(`(?s)\\\\?\[(.*?)\\\\?\]`)
+	inlineMathRegex := regexp.MustCompile(`(?s)\\\\?\((.*?)\\\\?\)`)
+
+	processed := displayMathRegex.ReplaceAllStringFunc(input, func(match string) string {
+		content := displayMathRegex.FindStringSubmatch(match)[1]
+		return fmt.Sprintf("<div class=\"katex-display\" data-latex=\"%s\"></div>", content)
+	})
+
+	processed = inlineMathRegex.ReplaceAllStringFunc(processed, func(match string) string {
+		content := inlineMathRegex.FindStringSubmatch(match)[1]
+		return fmt.Sprintf("<span class=\"katex-inline\" data-latex=\"%s\"></span>", content)
+	})
+
+	return processed
+}
+
 func parseArticleMarkdown(filename string) (string, error) {
 	var buf bytes.Buffer
 	input, err := os.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
+
+	processedInput := processLatexExpressions(string(input))
 
 	htmlRenderer := renderer.NewRenderer(
 		renderer.WithNodeRenderers(
@@ -398,10 +421,11 @@ func parseArticleMarkdown(filename string) (string, error) {
 		),
 	)
 
-	err = p.Convert(input, &buf)
+	err = p.Convert([]byte(processedInput), &buf)
 	if err != nil {
 		return "", err
 	}
+
 	return buf.String(), nil
 }
 
