@@ -307,88 +307,102 @@ function setTheme(themeObject) {
 
 /**
  * Initializes the theme picker UI
+ * @param {string} [selector=".theme-toggle"] - CSS selector for the theme toggle container(s)
  */
-function initThemePicker() {
-  const themeToggleContainer = document.querySelector(".theme-toggle");
-  if (!themeToggleContainer) return;
+function initThemePicker(selector = ".theme-toggle") {
+  // Find all theme toggle containers matching the selector
+  const themeToggleContainers = document.querySelectorAll(selector);
+  if (!themeToggleContainers.length) return;
+  
+  // Counter for unique IDs
+  let instanceCounter = 0;
+  
+  // Process each theme toggle container
+  themeToggleContainers.forEach(container => {
+    // Create a unique ID for this instance
+    const instanceId = `theme-instance-${instanceCounter++}`;
+    container.dataset.themeInstance = instanceId;
+    container.innerHTML = "";
 
-  themeToggleContainer.innerHTML = "";
+    const themeButton = document.createElement("button");
+    themeButton.id = `theme-button-${instanceId}`;
+    themeButton.className = "theme-button";
+    themeButton.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM256 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm0 384c-97.2 0-176-78.8-176-176S158.8 80 256 80s176 78.8 176 176-78.8 176-176 176zm-80-176c0 44.2 35.8 80 80 80s80-35.8 80-80-35.8-80-80-80-80 35.8-80 80z"/></svg>';
+    themeButton.setAttribute("aria-label", "Change theme");
+    themeButton.setAttribute("title", "Change theme");
 
-  const themeButton = document.createElement("button");
-  themeButton.id = "theme-button";
-  themeButton.className = "theme-button";
-  themeButton.innerHTML =
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM256 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm0 384c-97.2 0-176-78.8-176-176S158.8 80 256 80s176 78.8 176 176-78.8 176-176 176zm-80-176c0 44.2 35.8 80 80 80s80-35.8 80-80-35.8-80-80-80-80 35.8-80 80z"/></svg>';
-  themeButton.setAttribute("aria-label", "Change theme");
-  themeButton.setAttribute("title", "Change theme");
+    const themeMenu = document.createElement("div");
+    themeMenu.id = `theme-menu-${instanceId}`;
+    themeMenu.className = "theme-menu";
 
-  const themeMenu = document.createElement("div");
-  themeMenu.id = "theme-menu";
-  themeMenu.className = "theme-menu";
-
-  const themeCount = Object.keys(availableThemes).length;
-  if (themeCount > 4) {
-    themeMenu.style.width = "200px";
-  }
-
-  for (const themeName in availableThemes) {
-    const theme = availableThemes[themeName];
-
-    const themeOption = document.createElement("div");
-    themeOption.className = "theme-option";
-    themeOption.setAttribute("data-theme", themeName);
-    themeOption.setAttribute("title", theme.displayName);
-    themeOption.style.backgroundColor = theme.bg;
-
-    if (themeName === "light" || themeName === "dark") {
-      themeOption.style.background = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg} 50%, ${theme.primary} 50%, ${theme.primary} 100%)`;
-    } else {
-      themeOption.style.background = `linear-gradient(135deg,
-        ${theme.bg} 0%,
-        ${theme.bg} 40%,
-        ${theme.primary} 40%,
-        ${theme.primary} 60%,
-        ${theme.accent} 60%,
-        ${theme.accent} 100%)`;
+    const themeCount = Object.keys(availableThemes).length;
+    if (themeCount > 4) {
+      themeMenu.style.width = "200px";
     }
 
-    const themeTitleSpan = document.createElement("span");
-    themeTitleSpan.className = "theme-option-name";
-    themeTitleSpan.textContent = theme.displayName.split(" ")[0];
-    themeOption.appendChild(themeTitleSpan);
+    for (const themeName in availableThemes) {
+      const theme = availableThemes[themeName];
 
-    themeOption.addEventListener("click", function () {
-      setThemeByName(themeName);
-      updateActiveTheme(themeName);
-      toggleThemeMenu();
+      const themeOption = document.createElement("div");
+      themeOption.className = "theme-option";
+      themeOption.setAttribute("data-theme", themeName);
+      themeOption.setAttribute("title", theme.displayName);
+      themeOption.style.backgroundColor = theme.bg;
+
+      if (themeName === "light" || themeName === "dark") {
+        themeOption.style.background = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg} 50%, ${theme.primary} 50%, ${theme.primary} 100%)`;
+      } else {
+        themeOption.style.background = `linear-gradient(135deg,
+          ${theme.bg} 0%,
+          ${theme.bg} 40%,
+          ${theme.primary} 40%,
+          ${theme.primary} 60%,
+          ${theme.accent} 60%,
+          ${theme.accent} 100%)`;
+      }
+
+      const themeTitleSpan = document.createElement("span");
+      themeTitleSpan.className = "theme-option-name";
+      themeTitleSpan.textContent = theme.displayName.split(" ")[0];
+      themeOption.appendChild(themeTitleSpan);
+
+      themeOption.addEventListener("click", function () {
+        setThemeByName(themeName);
+        updateActiveTheme(themeName);
+        toggleThemeMenu(instanceId);
+      });
+
+      themeMenu.appendChild(themeOption);
+    }
+
+    themeButton.addEventListener("click", function() {
+      toggleThemeMenu(instanceId);
     });
 
-    themeMenu.appendChild(themeOption);
-  }
+    document.addEventListener("click", function (event) {
+      if (!container.contains(event.target)) {
+        themeMenu.classList.remove("open");
+      }
+    });
 
-  themeButton.addEventListener("click", toggleThemeMenu);
+    container.appendChild(themeButton);
+    container.appendChild(themeMenu);
 
-  document.addEventListener("click", function (event) {
-    if (!themeToggleContainer.contains(event.target)) {
-      themeMenu.classList.remove("open");
+    const currentTheme = safeStorage.getItem("theme");
+    if (currentTheme) {
+      const parsedTheme = JSON.parse(currentTheme);
+      updateActiveTheme(parsedTheme.name);
     }
   });
-
-  themeToggleContainer.appendChild(themeButton);
-  themeToggleContainer.appendChild(themeMenu);
-
-  const currentTheme = safeStorage.getItem("theme");
-  if (currentTheme) {
-    const parsedTheme = JSON.parse(currentTheme);
-    updateActiveTheme(parsedTheme.name);
-  }
 }
 
 /**
- * Updates the active theme in the UI
+ * Updates the active theme in the UI for all theme pickers
  * @param {string} themeName - The name of the active theme
  */
 function updateActiveTheme(themeName) {
+  // Update all theme options across all instances
   const themeOptions = document.querySelectorAll(".theme-option");
   themeOptions.forEach((option) => {
     if (option.getAttribute("data-theme") === themeName) {
@@ -398,21 +412,34 @@ function updateActiveTheme(themeName) {
     }
   });
 
-  const themeButton = document.getElementById("theme-button");
-  if (themeButton && availableThemes[themeName]) {
-    themeButton.style.backgroundColor = availableThemes[themeName].primary;
-    themeButton.style.borderColor = availableThemes[themeName].primary;
-    themeButton.style.color = availableThemes[themeName].bg;
+  // Update all theme buttons across all instances
+  const themeButtons = document.querySelectorAll(".theme-button");
+  if (availableThemes[themeName]) {
+    themeButtons.forEach(button => {
+      button.style.backgroundColor = availableThemes[themeName].primary;
+      button.style.borderColor = availableThemes[themeName].primary;
+      button.style.color = availableThemes[themeName].bg;
+    });
   }
 }
 
 /**
  * Toggles the theme menu open/closed
+ * @param {string} [instanceId] - Optional ID of the specific instance to toggle
  */
-function toggleThemeMenu() {
-  const themeMenu = document.getElementById("theme-menu");
-  if (themeMenu) {
-    themeMenu.classList.toggle("open");
+function toggleThemeMenu(instanceId) {
+  if (instanceId) {
+    // Toggle specific instance
+    const themeMenu = document.getElementById(`theme-menu-${instanceId}`);
+    if (themeMenu) {
+      themeMenu.classList.toggle("open");
+    }
+  } else {
+    // Legacy support for the main theme picker
+    const themeMenu = document.getElementById("theme-menu");
+    if (themeMenu) {
+      themeMenu.classList.toggle("open");
+    }
   }
 }
 
