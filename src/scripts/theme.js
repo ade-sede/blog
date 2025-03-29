@@ -43,6 +43,7 @@ const safeStorage = {
  * @property {string} bg - Background color value
  * @property {string} fg - Foreground color value
  * @property {string} primary - Primary color for accents and highlights
+ * @property {string} primaryRgb - Primary color in RGB format (r, g, b)
  * @property {string} secondary - Secondary color for subtle elements
  * @property {string} accent - Accent color for emphasis
  * @property {string} trackColor - Color of theme change track
@@ -65,6 +66,7 @@ const availableThemes = {
     bg: "white",
     fg: "black",
     primary: "black",
+    primaryRgb: "0, 0, 0",
     secondary: "#333",
     accent: "#666",
     trackColor: "#e0e0e0",
@@ -81,6 +83,7 @@ const availableThemes = {
     bg: "black",
     fg: "white",
     primary: "white",
+    primaryRgb: "255, 255, 255",
     secondary: "#ddd",
     accent: "#aaa",
     trackColor: "#333333",
@@ -98,6 +101,7 @@ const availableThemes = {
     bg: "#2E3440",
     fg: "#ECEFF4",
     primary: "#88C0D0",
+    primaryRgb: "136, 192, 208",
     secondary: "#81A1C1",
     accent: "#EBCB8B",
     trackColor: "#4C566A",
@@ -114,6 +118,7 @@ const availableThemes = {
     bg: "#FDF6E3",
     fg: "#657B83",
     primary: "#268BD2",
+    primaryRgb: "38, 139, 210",
     secondary: "#2AA198",
     accent: "#CB4B16",
     trackColor: "#EEE8D5",
@@ -130,6 +135,7 @@ const availableThemes = {
     bg: "#282A36",
     fg: "#F8F8F2",
     primary: "#BD93F9",
+    primaryRgb: "189, 147, 249",
     secondary: "#6272A4",
     accent: "#FF79C6",
     trackColor: "#44475A",
@@ -146,6 +152,7 @@ const availableThemes = {
     bg: "#ffffff",
     fg: "#24292e",
     primary: "#0366d6",
+    primaryRgb: "3, 102, 214",
     secondary: "#586069",
     accent: "#d73a49",
     trackColor: "#e1e4e8",
@@ -162,6 +169,7 @@ const availableThemes = {
     bg: "#272822",
     fg: "#F8F8F2",
     primary: "#F92672",
+    primaryRgb: "249, 38, 114",
     secondary: "#66D9EF",
     accent: "#A6E22E",
     trackColor: "#49483E",
@@ -287,6 +295,7 @@ function setTheme(themeObject) {
     root.style.setProperty("--bg", themeObject.bg);
     root.style.setProperty("--fg", themeObject.fg);
     root.style.setProperty("--primary", themeObject.primary);
+    root.style.setProperty("--primary-rgb", themeObject.primaryRgb);
     root.style.setProperty("--secondary", themeObject.secondary);
     root.style.setProperty("--accent", themeObject.accent);
     root.style.setProperty("--code-bg", themeObject.codeBg);

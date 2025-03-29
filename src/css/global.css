@@ -4,6 +4,7 @@
 	--bg: black;
 	--fg: white;
 	--primary: white;
+	--primary-rgb: 255, 255, 255;
 	--secondary: #ddd;
 	--accent: #aaa;
 	--code-bg: #282c34;
@@ -17,6 +18,7 @@
 	--bg: black;
 	--fg: white;
 	--primary: white;
+	--primary-rgb: 255, 255, 255;
 	--secondary: #ddd;
 	--accent: #aaa;
 	--code-bg: #282c34;
@@ -29,6 +31,7 @@
 	--bg: white;
 	--fg: black;
 	--primary: black;
+	--primary-rgb: 0, 0, 0;
 	--secondary: #333;
 	--accent: #666;
 	--code-bg: #f6f8fa;
@@ -42,6 +45,7 @@
 	--bg: #2E3440;
 	--fg: #ECEFF4;
 	--primary: #88C0D0;
+	--primary-rgb: 136, 192, 208;
 	--secondary: #81A1C1;
 	--accent: #EBCB8B;
 	--code-bg: #3B4252;
@@ -55,6 +59,7 @@
 	--bg: #FDF6E3;
 	--fg: #657B83;
 	--primary: #268BD2;
+	--primary-rgb: 38, 139, 210;
 	--secondary: #2AA198;
 	--accent: #CB4B16;
 	--code-bg: #EEE8D5;
@@ -68,6 +73,7 @@
 	--bg: #282A36;
 	--fg: #F8F8F2;
 	--primary: #BD93F9;
+	--primary-rgb: 189, 147, 249;
 	--secondary: #6272A4;
 	--accent: #FF79C6;
 	--code-bg: #44475A;
@@ -81,6 +87,7 @@
 	--bg: #ffffff;
 	--fg: #24292e;
 	--primary: #0366d6;
+	--primary-rgb: 3, 102, 214;
 	--secondary: #586069;
 	--accent: #d73a49;
 	--code-bg: #f6f8fa;
@@ -94,6 +101,7 @@
 	--bg: #272822;
 	--fg: #F8F8F2;
 	--primary: #F92672;
+	--primary-rgb: 249, 38, 114;
 	--secondary: #66D9EF;
 	--accent: #A6E22E;
 	--code-bg: #3E3D32;
