@@ -77,33 +77,41 @@ func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegistere
 func getFileIcon(filename string) string {
 	ext := strings.ToLower(filepath.Ext(filename))
 
-	// File type specific icons
+	// File type specific icons for all-the-icons font
 	switch ext {
 	case ".qml":
-		return "🧩" // QML files
+		return "all-icons all-icon-file-code" // QML files
 	case ".json":
-		return "📋" // JSON files
+		return "all-icons all-icon-file-code" // JSON files
 	case ".xml":
-		return "📝" // XML files
+		return "all-icons all-icon-file-code" // XML files
 	case ".md":
-		return "📄" // Markdown files
+		return "all-icons all-icon-file-text" // Markdown files
 	case ".go":
-		return "📄" // Go files
+		return "all-icons all-icon-go" // Go files
 	case ".js":
-		return "📄" // JavaScript files
+		return "all-icons all-icon-javascript" // JavaScript files
 	case ".html", ".htm":
-		return "📄" // HTML files
+		return "all-icons all-icon-html5" // HTML files
 	case ".css":
-		return "📄" // CSS files
+		return "all-icons all-icon-css3" // CSS files
 	case ".py":
-		return "📄" // Python files
+		return "all-icons all-icon-python" // Python files
 	case ".sh", ".bash", ".fish":
-		return "📄" // Shell scripts
+		return "all-icons all-icon-terminal" // Shell scripts
+	case ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg":
+		return "all-icons all-icon-file-image" // Image files
+	case ".pdf":
+		return "all-icons all-icon-file-pdf" // PDF files
+	case ".zip", ".tar", ".gz", ".rar":
+		return "all-icons all-icon-file-archive" // Archive files
+	case ".txt":
+		return "all-icons all-icon-file-text" // Text files
 	default:
 		if strings.HasPrefix(ext, ".") {
-			return "📄" // Other files with extensions
+			return "all-icons all-icon-file" // Other files with extensions
 		}
-		return "📄" // Default
+		return "all-icons all-icon-file" // Default
 	}
 }
 
@@ -175,10 +183,10 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 	renderEntry = func(entry *DirEntry) {
 		for _, child := range entry.Children {
 			if child.IsFolder {
-				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><span class=\"dir-icon\">📁</span> %s</div>", child.Name))
+				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><span class=\"dir-icon all-icons all-icon-folder\"></span> %s</div>", child.Name))
 			} else {
 				fileIcon := getFileIcon(child.Name)
-				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><span class=\"dir-icon\">%s</span> %s</div>", fileIcon, child.Name))
+				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><span class=\"dir-icon %s\"></span> %s</div>", fileIcon, child.Name))
 			}
 
 			if len(child.Children) > 0 {

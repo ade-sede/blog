@@ -26,6 +26,7 @@ var CSSFiles []string = []string{
 	"icons.css",
 	"navbar.css",
 	"syntax-highlighting.css",
+	"all-the-icons.css",
 }
 
 var FLAGS = os.O_RDWR | os.O_CREATE

@@ -415,9 +415,6 @@
   display: inline-block;
   width: 20px;
   text-align: center;
-}
-
-.dir-icon {
   font-size: 0.9em;
   transition: transform 0.2s ease;
 }
@@ -432,6 +429,11 @@
 
 .dir-entry:hover .dir-icon {
   transform: scale(1.2);
+}
+
+.dir-icon i {
+  width: 16px;
+  text-align: center;
 }
 
 .dir-children {
