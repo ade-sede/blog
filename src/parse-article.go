@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -73,20 +74,132 @@ func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegistere
 	reg.Register(ast.KindFencedCodeBlock, r.renderCodeBlock)
 }
 
+func getFileIcon(filename string) string {
+	ext := strings.ToLower(filepath.Ext(filename))
+
+	// File type specific icons
+	switch ext {
+	case ".qml":
+		return "🧩" // QML files
+	case ".json":
+		return "📋" // JSON files
+	case ".xml":
+		return "📝" // XML files
+	case ".md":
+		return "📄" // Markdown files
+	case ".go":
+		return "📄" // Go files
+	case ".js":
+		return "📄" // JavaScript files
+	case ".html", ".htm":
+		return "📄" // HTML files
+	case ".css":
+		return "📄" // CSS files
+	case ".py":
+		return "📄" // Python files
+	case ".sh", ".bash", ".fish":
+		return "📄" // Shell scripts
+	default:
+		if strings.HasPrefix(ext, ".") {
+			return "📄" // Other files with extensions
+		}
+		return "📄" // Default
+	}
+}
+
+func renderDirectoryStructure(w util.BufWriter, content string) {
+	type DirEntry struct {
+		Name     string
+		IsFolder bool
+		Indent   int
+		Children []*DirEntry
+	}
+
+	var lines []string
+	for _, line := range strings.Split(content, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			lines = append(lines, line)
+		}
+	}
+
+	if len(lines) == 0 {
+		return
+	}
+
+	// Root entry
+	root := &DirEntry{
+		Children: []*DirEntry{},
+	}
+
+	// Build tree
+	var currentParent *DirEntry = root
+	var stack []*DirEntry = []*DirEntry{root}
+	var prevIndent int = 0
+
+	for i, line := range lines {
+		trimmedLine := strings.TrimLeft(line, " \t")
+		currentIndent := len(line) - len(trimmedLine)
+
+		isFolder := strings.HasSuffix(trimmedLine, "/")
+		entry := &DirEntry{
+			Name:     trimmedLine,
+			IsFolder: isFolder,
+			Indent:   currentIndent,
+			Children: []*DirEntry{},
+		}
+
+		// Determine parent based on indentation
+		if i > 0 {
+			if currentIndent > prevIndent {
+				// This is a child of the previous entry
+				stack = append(stack, currentParent)
+				currentParent = stack[len(stack)-1].Children[len(stack[len(stack)-1].Children)-1]
+			} else if currentIndent < prevIndent {
+				// Go back up the tree
+				for currentIndent < prevIndent && len(stack) > 1 {
+					stack = stack[:len(stack)-1]
+					currentParent = stack[len(stack)-1]
+					prevIndent -= 2
+				}
+			}
+		}
+
+		currentParent.Children = append(currentParent.Children, entry)
+		prevIndent = currentIndent
+	}
+
+	// Render the tree
+	w.WriteString("<div class=\"directory-tree\">")
+
+	var renderEntry func(entry *DirEntry)
+	renderEntry = func(entry *DirEntry) {
+		for _, child := range entry.Children {
+			if child.IsFolder {
+				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><span class=\"dir-icon\">📁</span> %s</div>", child.Name))
+			} else {
+				fileIcon := getFileIcon(child.Name)
+				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><span class=\"dir-icon\">%s</span> %s</div>", fileIcon, child.Name))
+			}
+
+			if len(child.Children) > 0 {
+				w.WriteString("<div class=\"dir-children\">")
+				renderEntry(child)
+				w.WriteString("</div>")
+			}
+		}
+	}
+
+	renderEntry(root)
+
+	w.WriteString("</div>")
+}
+
 func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	n := node.(*ast.FencedCodeBlock)
 
 	if entering {
 		filenameAttr, hasFilename := n.AttributeString("filename")
 		languageAttr, hasLanguage := n.AttributeString("language")
-
-		w.WriteString("<div class=\"code-block\">")
-
-		if hasFilename {
-			w.WriteString("<div class=\"code-filename\">")
-			w.WriteString(string(filenameAttr.([]byte)))
-			w.WriteString("</div>")
-		}
 
 		var code strings.Builder
 		lines := n.Lines()
@@ -100,6 +213,20 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			lang = string(languageAttr.([]byte))
 		} else if language := n.Language(source); language != nil {
 			lang = string(language)
+		}
+
+		// Handle directory structure special case
+		if lang == "directory-structure" {
+			renderDirectoryStructure(w, code.String())
+			return ast.WalkSkipChildren, nil
+		}
+
+		w.WriteString("<div class=\"code-block\">")
+
+		if hasFilename {
+			w.WriteString("<div class=\"code-filename\">")
+			w.WriteString(string(filenameAttr.([]byte)))
+			w.WriteString("</div>")
 		}
 
 		lexer := lexers.Get(lang)

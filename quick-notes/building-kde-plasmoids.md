@@ -10,27 +10,19 @@ I recently created one and hit several roadblocks with the [official documentati
 
 Plasma has strict expectations about file structure. Deviating from this pattern leads to mysterious failures:
 
-<div class="directory-tree">
-  <div class="dir-entry dir-folder"><span class="dir-icon">📁</span> package/</div>
-  <div class="dir-children">
-    <div class="dir-entry dir-file"><span class="dir-icon">📄</span> metadata.json</div>
-    <div class="dir-entry dir-folder"><span class="dir-icon">📁</span> contents/</div>
-    <div class="dir-children">
-      <div class="dir-entry dir-folder"><span class="dir-icon">📁</span> ui/</div>
-      <div class="dir-children">
-        <div class="dir-entry dir-file"><span class="dir-icon">📄</span> main.qml</div>
-        <div class="dir-entry dir-file"><span class="dir-icon">📄</span> CompactRepresentation.qml</div>
-        <div class="dir-entry dir-file"><span class="dir-icon">📄</span> FullRepresentation.qml</div>
-        <div class="dir-entry dir-file"><span class="dir-icon">📄</span> configGeneral.qml</div>
-      </div>
-      <div class="dir-entry dir-folder"><span class="dir-icon">📁</span> config/</div>
-      <div class="dir-children">
-        <div class="dir-entry dir-file"><span class="dir-icon">📄</span> config.qml</div>
-        <div class="dir-entry dir-file"><span class="dir-icon">📄</span> main.xml</div>
-      </div>
-    </div>
-  </div>
-</div>
+```directory-structure
+package/
+  metadata.json
+  contents/
+    ui/
+      main.qml
+      CompactRepresentation.qml
+      FullRepresentation.qml
+      configGeneral.qml
+    config/
+      config.qml
+      main.xml
+```
 
 ## Metadata
 
