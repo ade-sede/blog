@@ -384,6 +384,58 @@
 :root[data-theme="github"] .chroma .gi { color: #22863a; background-color: #f0fff4; }
 :root[data-theme="github"] .chroma .w { color: #f6f8fa; }
 
+.directory-tree {
+  background-color: var(--bg);
+  color: var(--fg);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--code-border);
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 1.5em 0;
+  padding: 1em;
+  font-family: monospace;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.dir-entry {
+  padding: 3px 0;
+  white-space: nowrap;
+}
+
+.dir-icon {
+  margin-right: 8px;
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+
+.dir-children {
+  padding-left: 2em;
+}
+
+.dir-entry.dir-folder {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.dir-entry.dir-file {
+  color: var(--fg);
+}
+
+@media (max-width: 480px) {
+  .directory-tree {
+    padding: 0.75em;
+    font-size: 0.85em;
+  }
+  
+  .dir-children {
+    padding-left: 1.5em;
+  }
+}
+
 /* Monokai theme syntax highlighting */
 :root[data-theme="monokai"] .chroma { color: #f8f8f2; background-color: #272822; }
 :root[data-theme="monokai"] .chroma .err { color: #960050; background-color: #1e0010; }
