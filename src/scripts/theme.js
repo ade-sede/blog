@@ -75,7 +75,7 @@ const availableThemes = {
     codeBorder: "#ddd",
     linkHover: "black",
   },
-  
+
   dark: {
     name: "dark",
     displayName: "Dark (High Contrast)",
@@ -88,11 +88,11 @@ const availableThemes = {
     trackColor: "#333333",
     ballColor: "#000000",
     codeBg: "#272822",
-    codeFg: "#f8f8f2", 
+    codeFg: "#f8f8f2",
     codeBorder: "#444",
     linkHover: "white",
   },
-  
+
   nord: {
     name: "nord",
     displayName: "Nord",
@@ -109,7 +109,7 @@ const availableThemes = {
     codeBorder: "#4C566A",
     linkHover: "#88C0D0",
   },
-  
+
   solarized: {
     name: "solarized",
     displayName: "Solarized Light",
@@ -126,7 +126,7 @@ const availableThemes = {
     codeBorder: "#D3CAA8",
     linkHover: "#268BD2",
   },
-  
+
   dracula: {
     name: "dracula",
     displayName: "Dracula",
@@ -143,7 +143,7 @@ const availableThemes = {
     codeBorder: "#6272A4",
     linkHover: "#FF79C6",
   },
-  
+
   github: {
     name: "github",
     displayName: "GitHub",
@@ -160,7 +160,7 @@ const availableThemes = {
     codeBorder: "#e1e4e8",
     linkHover: "#0366d6",
   },
-  
+
   monokai: {
     name: "monokai",
     displayName: "Monokai",
@@ -176,7 +176,7 @@ const availableThemes = {
     codeFg: "#F8F8F2",
     codeBorder: "#75715E",
     linkHover: "#F92672",
-  }
+  },
 };
 
 /**
@@ -186,22 +186,29 @@ const availableThemes = {
 function loadThemeFromLocalStorage() {
   let themeObject;
   const themeString = safeStorage.getItem("theme");
-  
+
   if (themeString) {
     themeObject = JSON.parse(themeString);
     if (themeObject) {
+      // Handle migration from previous high constract themes to the new theme picker
+      if (themeObject.name === "light" || themeObject.name === "dark") {
+        if (!themeObject.displayName) {
+          themeObject = availableThemes[themeObject.name];
+        }
+      }
       themeObject = setTheme(themeObject);
     }
   } else {
     themeObject = setTheme(availableThemes.light);
   }
-  
+
+  try {
     const themeSelector = document.getElementById("theme-selector");
     if (themeSelector) {
       themeSelector.value = themeObject.name;
     }
   } catch (err) {}
-  
+
   return themeObject;
 }
 
@@ -214,7 +221,7 @@ function toggleTheme() {
   if (!themeString) {
     return setTheme(availableThemes.light);
   }
-  
+
   const themeObject = JSON.parse(themeString);
   if (themeObject.name === "dark") {
     return setTheme(availableThemes.light);
@@ -268,7 +275,7 @@ function setTheme(themeObject) {
     body.style.setProperty("background-color", "var(--bg)");
     body.style.setProperty("color", "var(--fg)");
   } catch (err) {}
-  
+
   try {
     const navbar = document.querySelector("nav.navbar");
     if (navbar) {
@@ -276,11 +283,11 @@ function setTheme(themeObject) {
       navbar.style.setProperty("--ball-color", themeObject.ballColor);
     }
   } catch (err) {}
-  
+
   try {
     const root = document.querySelector(":root");
     root.setAttribute("data-theme", themeObject.name);
-    
+
     root.style.setProperty("--bg", themeObject.bg);
     root.style.setProperty("--fg", themeObject.fg);
     root.style.setProperty("--primary", themeObject.primary);
@@ -292,9 +299,9 @@ function setTheme(themeObject) {
     root.style.setProperty("--code-border", themeObject.codeBorder);
     root.style.setProperty("--link-hover", themeObject.linkHover);
   } catch (err) {}
-  
+
   safeStorage.setItem("theme", JSON.stringify(themeObject));
-  
+
   return themeObject;
 }
 
@@ -302,73 +309,74 @@ function setTheme(themeObject) {
  * Initializes the theme picker UI
  */
 function initThemePicker() {
-  const themeToggleContainer = document.querySelector('.theme-toggle');
+  const themeToggleContainer = document.querySelector(".theme-toggle");
   if (!themeToggleContainer) return;
-  
-  themeToggleContainer.innerHTML = '';
-  
-  const themeButton = document.createElement('button');
-  themeButton.id = 'theme-button';
-  themeButton.className = 'theme-button';
-  themeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM256 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm0 384c-97.2 0-176-78.8-176-176S158.8 80 256 80s176 78.8 176 176-78.8 176-176 176zm-80-176c0 44.2 35.8 80 80 80s80-35.8 80-80-35.8-80-80-80-80 35.8-80 80z"/></svg>';
-  themeButton.setAttribute('aria-label', 'Change theme');
-  themeButton.setAttribute('title', 'Change theme');
-  
-  const themeMenu = document.createElement('div');
-  themeMenu.id = 'theme-menu';
-  themeMenu.className = 'theme-menu';
-  
+
+  themeToggleContainer.innerHTML = "";
+
+  const themeButton = document.createElement("button");
+  themeButton.id = "theme-button";
+  themeButton.className = "theme-button";
+  themeButton.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM256 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm0 384c-97.2 0-176-78.8-176-176S158.8 80 256 80s176 78.8 176 176-78.8 176-176 176zm-80-176c0 44.2 35.8 80 80 80s80-35.8 80-80-35.8-80-80-80-80 35.8-80 80z"/></svg>';
+  themeButton.setAttribute("aria-label", "Change theme");
+  themeButton.setAttribute("title", "Change theme");
+
+  const themeMenu = document.createElement("div");
+  themeMenu.id = "theme-menu";
+  themeMenu.className = "theme-menu";
+
   const themeCount = Object.keys(availableThemes).length;
   if (themeCount > 4) {
-    themeMenu.style.width = '200px';
+    themeMenu.style.width = "200px";
   }
-  
+
   for (const themeName in availableThemes) {
     const theme = availableThemes[themeName];
-    
-    const themeOption = document.createElement('div');
-    themeOption.className = 'theme-option';
-    themeOption.setAttribute('data-theme', themeName);
-    themeOption.setAttribute('title', theme.displayName);
+
+    const themeOption = document.createElement("div");
+    themeOption.className = "theme-option";
+    themeOption.setAttribute("data-theme", themeName);
+    themeOption.setAttribute("title", theme.displayName);
     themeOption.style.backgroundColor = theme.bg;
-    
-    if (themeName === 'light' || themeName === 'dark') {
+
+    if (themeName === "light" || themeName === "dark") {
       themeOption.style.background = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg} 50%, ${theme.primary} 50%, ${theme.primary} 100%)`;
     } else {
-      themeOption.style.background = `linear-gradient(135deg, 
-        ${theme.bg} 0%, 
-        ${theme.bg} 40%, 
-        ${theme.primary} 40%, 
+      themeOption.style.background = `linear-gradient(135deg,
+        ${theme.bg} 0%,
+        ${theme.bg} 40%,
+        ${theme.primary} 40%,
         ${theme.primary} 60%,
-        ${theme.accent} 60%, 
+        ${theme.accent} 60%,
         ${theme.accent} 100%)`;
     }
-    
-    const themeTitleSpan = document.createElement('span');
-    themeTitleSpan.className = 'theme-option-name';
-    themeTitleSpan.textContent = theme.displayName.split(' ')[0];
+
+    const themeTitleSpan = document.createElement("span");
+    themeTitleSpan.className = "theme-option-name";
+    themeTitleSpan.textContent = theme.displayName.split(" ")[0];
     themeOption.appendChild(themeTitleSpan);
-    
-    themeOption.addEventListener('click', function() {
+
+    themeOption.addEventListener("click", function () {
       setThemeByName(themeName);
       updateActiveTheme(themeName);
       toggleThemeMenu();
     });
-    
+
     themeMenu.appendChild(themeOption);
   }
-  
-  themeButton.addEventListener('click', toggleThemeMenu);
-  
-  document.addEventListener('click', function(event) {
+
+  themeButton.addEventListener("click", toggleThemeMenu);
+
+  document.addEventListener("click", function (event) {
     if (!themeToggleContainer.contains(event.target)) {
-      themeMenu.classList.remove('open');
+      themeMenu.classList.remove("open");
     }
   });
-  
+
   themeToggleContainer.appendChild(themeButton);
   themeToggleContainer.appendChild(themeMenu);
-  
+
   const currentTheme = safeStorage.getItem("theme");
   if (currentTheme) {
     const parsedTheme = JSON.parse(currentTheme);
@@ -381,16 +389,16 @@ function initThemePicker() {
  * @param {string} themeName - The name of the active theme
  */
 function updateActiveTheme(themeName) {
-  const themeOptions = document.querySelectorAll('.theme-option');
-  themeOptions.forEach(option => {
-    if (option.getAttribute('data-theme') === themeName) {
-      option.classList.add('active');
+  const themeOptions = document.querySelectorAll(".theme-option");
+  themeOptions.forEach((option) => {
+    if (option.getAttribute("data-theme") === themeName) {
+      option.classList.add("active");
     } else {
-      option.classList.remove('active');
+      option.classList.remove("active");
     }
   });
-  
-  const themeButton = document.getElementById('theme-button');
+
+  const themeButton = document.getElementById("theme-button");
   if (themeButton && availableThemes[themeName]) {
     themeButton.style.backgroundColor = availableThemes[themeName].primary;
     themeButton.style.borderColor = availableThemes[themeName].primary;
@@ -402,13 +410,13 @@ function updateActiveTheme(themeName) {
  * Toggles the theme menu open/closed
  */
 function toggleThemeMenu() {
-  const themeMenu = document.getElementById('theme-menu');
+  const themeMenu = document.getElementById("theme-menu");
   if (themeMenu) {
-    themeMenu.classList.toggle('open');
+    themeMenu.classList.toggle("open");
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   initThemePicker();
   loadThemeFromLocalStorage();
 });
