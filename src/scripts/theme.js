@@ -93,6 +93,23 @@ const availableThemes = {
     linkHover: "white",
   },
 
+  atom: {
+    name: "atom",
+    displayName: "Atom Dark",
+    bg: "#282c34",
+    fg: "#abb2bf",
+    primary: "#61afef",
+    primaryRgb: "97, 175, 239",
+    secondary: "#c678dd",
+    accent: "#98c379",
+    trackColor: "#3a3f4b",
+    ballColor: "#61afef",
+    codeBg: "#21252b",
+    codeFg: "#abb2bf",
+    codeBorder: "#3a3f4b",
+    linkHover: "#61afef",
+  },
+
   nord: {
     name: "nord",
     displayName: "Nord",

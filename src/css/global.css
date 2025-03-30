@@ -40,6 +40,20 @@
 	--link-hover: black;
 }
 
+/* Atom Dark theme */
+:root[data-theme="atom"] {
+	--bg: #282c34;
+	--fg: #abb2bf;
+	--primary: #61afef;
+	--primary-rgb: 97, 175, 239;
+	--secondary: #c678dd;
+	--accent: #98c379;
+	--code-bg: #21252b;
+	--code-fg: #abb2bf;
+	--code-border: #3a3f4b;
+	--link-hover: #61afef;
+}
+
 /* Nord theme */
 :root[data-theme="nord"] {
 	--bg: #2E3440;
