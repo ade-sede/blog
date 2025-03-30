@@ -11,6 +11,7 @@
 	--code-fg: #abb2bf;
 	--code-border: #444;
 	--link-hover: white;
+	font-size: 22px;
 }
 
 /* High contrast themes */
@@ -150,34 +151,39 @@ body .body-main {
 	box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: var(--primary);
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    line-height: 1.2;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--primary);
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	line-height: 1.2;
 }
 
 hr {
-    border: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--secondary), transparent);
-    margin: 2em 0;
+	border: 0;
+	height: 1px;
+	background: linear-gradient(to right, transparent, var(--secondary), transparent);
+	margin: 2em 0;
 }
 
 h1 {
-    font-size: 2rem;
+	font-size: 2rem;
 }
 
 h2 {
-    font-size: 1.75rem;
+	font-size: 1.75rem;
 }
 
 h3 {
-    font-size: 1.5rem;
+	font-size: 1.5rem;
 }
 
 h4 {
-    font-size: 1.25rem;
+	font-size: 1.25rem;
 }
 
 a {
@@ -224,6 +230,7 @@ a[class]::after {
 }
 
 @media (max-width: 480px) {
+
 	html,
 	body {
 		overflow-x: hidden;

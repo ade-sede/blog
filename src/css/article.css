@@ -114,7 +114,7 @@ code {
 
 .article {
 	line-height: 1.6;
-	max-width: 800px;
+	max-width: 80%;
 	margin: 0 auto;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
