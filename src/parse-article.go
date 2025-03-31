@@ -414,6 +414,11 @@ func parseArticleMarkdown(filename string) (string, error) {
 		goldmark.WithRenderer(htmlRenderer),
 		goldmark.WithExtensions(
 			extension.GFM,
+			extension.NewFootnote(
+				extension.WithFootnoteBacklinkTitle("Return to text"),
+				extension.WithFootnoteLinkTitle("See footnote"),
+				extension.WithFootnoteBacklinkHTML("↩"),
+			),
 		),
 		goldmark.WithParserOptions(
 			parser.WithAutoHeadingID(),
