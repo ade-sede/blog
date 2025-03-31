@@ -1,7 +1,7 @@
 package main
 
 templ resumePage(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry, styleTags []string) {
-	@Base("Adrien's resume", "Senior Software Engineer Resume", styleTags) {
+	@Base("Adrien's resume", "Senior Software Engineer Resume", styleTags, []string{}) {
 		@resume(workExperience, schoolExperience)
 	}
 }
@@ -105,14 +105,14 @@ templ entry(experience ExperienceEntry) {
 templ resumePrintReady(workExperience []ExperienceEntry, schoolExperience []ExperienceEntry, styleTags []string) {
 	<!DOCTYPE html>
 	<html lang="en">
-		@header("Adrien DE SEDE - Resume", "Senior Software Engineer Resume", styleTags)
+		@header("Adrien DE SEDE - Resume", "Senior Software Engineer Resume", styleTags, []string{})
 		<script type="text/javascript" src="scripts/print.js"> </script>
 		<body>
 			@resume(workExperience, schoolExperience)
 			<script>
-				setLightTheme()
-				setToPrintableDimensions()
-			</script>
+		setLightTheme()
+		setToPrintableDimensions()
+	</script>
 		</body>
 	</html>
 }

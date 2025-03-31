@@ -3,18 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/a-h/templ"
 	"io/fs"
 	"log"
 	"os"
-
-	"github.com/a-h/templ"
+	"path/filepath"
 )
 
 type PageGenerator struct {
-	filename      string
-	HTMLgenerator func(args ...interface{}) templ.Component
-	cssFilename   []string
-	arguments     []interface{}
+	filename       string
+	HTMLgenerator  func(args ...interface{}) templ.Component
+	cssFilename    []string
+	scriptFilename []string
+	arguments      []interface{}
 }
 
 // List of 'global' css files that need to be minified and shipped.
@@ -30,6 +31,37 @@ var CSSFiles []string = []string{
 
 var FLAGS = os.O_RDWR | os.O_CREATE
 var MODE fs.FileMode = 0644
+
+func findAndMinifyFile(baseDirs []string, subDir, filename string, minifyFunc func(string) (string, error)) (string, error) {
+	// This function is a bit of a monster.
+	// I have hijacked existing functionalities to inject CSS files to inject javascript and css for articles
+	// Because I need a lot of flexibility to accomodate many formats / locations I just kind of brute force it
+	// Try every place it could be
+
+	for _, baseDir := range baseDirs[:1] {
+		path := filepath.Join(baseDir, subDir, filename)
+		result, err := minifyFunc(path)
+		if err == nil {
+			return result, nil
+		}
+		if !os.IsNotExist(err) {
+			return "", err
+		}
+	}
+
+	for _, baseDir := range baseDirs[1:] {
+		path := filepath.Join(baseDir, filename)
+		result, err := minifyFunc(path)
+		if err == nil {
+			return result, nil
+		}
+		if !os.IsNotExist(err) {
+			return "", err
+		}
+	}
+
+	return "", fmt.Errorf("file %s not found in any location", filename)
+}
 
 func main() {
 	quickNoteDir := os.Getenv("QUICK_NOTE_DIR")
@@ -91,7 +123,8 @@ func main() {
 		stringifiedHTML, _ := args[2].(string)
 		formattedDate, _ := args[3].(string)
 		styleTags, _ := args[4].([]string)
-		return article(title, description, stringifiedHTML, formattedDate, styleTags)
+		scriptTags, _ := args[5].([]string)
+		return article(title, description, stringifiedHTML, formattedDate, styleTags, scriptTags)
 	}
 
 	quickNoteHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -100,7 +133,8 @@ func main() {
 		stringifiedHTML, _ := args[2].(string)
 		formattedDate, _ := args[3].(string)
 		styleTags, _ := args[4].([]string)
-		return quickNote(title, description, stringifiedHTML, formattedDate, styleTags)
+		scriptTags, _ := args[5].([]string)
+		return quickNote(title, description, stringifiedHTML, formattedDate, styleTags, scriptTags)
 	}
 
 	articlesHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -133,53 +167,78 @@ func main() {
 	allQuickNotesHTMLGenerators := make([]PageGenerator, 0)
 
 	for _, a := range allArticles {
-		allArticlesHTMLGenerators = append(allArticlesHTMLGenerators, PageGenerator{
-			filename:      a.HTMLFilename,
-			HTMLgenerator: articleHTMLGenerator,
-			cssFilename:   []string{"article.css", "syntax-highlighting.css"},
-			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
-		})
+		generator := PageGenerator{
+			filename:       a.HTMLFilename,
+			HTMLgenerator:  articleHTMLGenerator,
+			cssFilename:    []string{"article.css", "syntax-highlighting.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
+		}
+
+		if a.Manifest.CssFile != "" {
+			generator.cssFilename = append(generator.cssFilename, a.Manifest.CssFile)
+		}
+
+		if a.Manifest.ScriptFile != "" {
+			generator.scriptFilename = append(generator.scriptFilename, a.Manifest.ScriptFile)
+		}
+		allArticlesHTMLGenerators = append(allArticlesHTMLGenerators, generator)
 	}
 
 	for _, a := range allQuickNotes {
-		allQuickNotesHTMLGenerators = append(allQuickNotesHTMLGenerators, PageGenerator{
-			filename:      a.HTMLFilename,
-			HTMLgenerator: quickNoteHTMLGenerator,
-			cssFilename:   []string{"article.css", "syntax-highlighting.css"},
-			arguments:     []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
-		})
+		generator := PageGenerator{
+			filename:       a.HTMLFilename,
+			HTMLgenerator:  quickNoteHTMLGenerator,
+			cssFilename:    []string{"article.css", "syntax-highlighting.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
+		}
+
+		if a.Manifest.CssFile != "" {
+			generator.cssFilename = append(generator.cssFilename, a.Manifest.CssFile)
+		}
+
+		if a.Manifest.ScriptFile != "" {
+			generator.scriptFilename = append(generator.scriptFilename, a.Manifest.ScriptFile)
+		}
+		allQuickNotesHTMLGenerators = append(allQuickNotesHTMLGenerators, generator)
 	}
 
 	pages := []PageGenerator{
 		{
-			filename:      "index.html",
-			HTMLgenerator: homeHTMLGenerator,
-			cssFilename:   []string{"home.css", "articles.css"},
-			arguments:     []interface{}{allArticles, allQuickNotes},
+			filename:       "index.html",
+			HTMLgenerator:  homeHTMLGenerator,
+			cssFilename:    []string{"home.css", "articles.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{allArticles, allQuickNotes},
 		},
 		{
-			filename:      "resume.html",
-			HTMLgenerator: resumePageHTMLGenerator,
-			cssFilename:   []string{"resume.css"},
-			arguments:     []interface{}{workExperiences, schoolExperiences},
+			filename:       "resume.html",
+			HTMLgenerator:  resumePageHTMLGenerator,
+			cssFilename:    []string{"resume.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{workExperiences, schoolExperiences},
 		},
 		{
-			filename:      "articles.html",
-			HTMLgenerator: articlesHTMLGenerator,
-			cssFilename:   []string{"articles.css"},
-			arguments:     []interface{}{allArticles},
+			filename:       "articles.html",
+			HTMLgenerator:  articlesHTMLGenerator,
+			cssFilename:    []string{"articles.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{allArticles},
 		},
 		{
-			filename:      "quick-notes.html",
-			HTMLgenerator: quickNotesHTMLGenerator,
-			cssFilename:   []string{"articles.css"},
-			arguments:     []interface{}{allQuickNotes},
+			filename:       "quick-notes.html",
+			HTMLgenerator:  quickNotesHTMLGenerator,
+			cssFilename:    []string{"articles.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{allQuickNotes},
 		},
 		{
-			filename:      "resume-printable.html",
-			HTMLgenerator: resumePrintReadyHTMLGenerator,
-			cssFilename:   []string{"resume.css"},
-			arguments:     []interface{}{workExperiences, schoolExperiences},
+			filename:       "resume-printable.html",
+			HTMLgenerator:  resumePrintReadyHTMLGenerator,
+			cssFilename:    []string{"resume.css"},
+			scriptFilename: []string{},
+			arguments:      []interface{}{workExperiences, schoolExperiences},
 		},
 	}
 
@@ -194,30 +253,30 @@ func main() {
 		}
 
 		allStyleTags := make([]string, 0)
+		allScriptTags := make([]string, 0)
 
-		for _, filename := range page.cssFilename {
-			filename := srcDir + "/css/" + filename
-			minifiedCSS, err := MinifyCSS(filename)
-
+		for _, jsFile := range page.scriptFilename {
+			minifiedJS, err := findAndMinifyFile([]string{srcDir, quickNoteDir, articleDir}, "scripts", jsFile, MinifyJS)
 			if err != nil {
-				log.Fatalf("%v", err)
+				log.Fatalf("Failed to find or minify JS file %s: %v", jsFile, err)
 			}
+			scriptTag := fmt.Sprintf("<script>%s</script>", minifiedJS)
+			allScriptTags = append(allScriptTags, scriptTag)
+		}
 
+		for _, cssFile := range page.cssFilename {
+			minifiedCSS, err := findAndMinifyFile([]string{srcDir, quickNoteDir, articleDir}, "css", cssFile, MinifyCSS)
+			if err != nil {
+				log.Fatalf("Failed to find or minify CSS file %s: %v", cssFile, err)
+			}
 			styleTag := fmt.Sprintf("<style type='text/css'>%s</style>", minifiedCSS)
-
 			allStyleTags = append(allStyleTags, styleTag)
 		}
 
-		if len(allStyleTags) > 0 {
-			page.arguments = append(page.arguments, allStyleTags)
-		}
+		page.arguments = append(page.arguments, allStyleTags)
+		page.arguments = append(page.arguments, allScriptTags)
 
 		templComponent := page.HTMLgenerator(page.arguments...)
 		templComponent.Render(context.Background(), file)
 	}
-}
-
-// For some reason I can't substitute within <style></style> directly so I'm trying to bypass the issue by wrapping in a function
-func makeStyleTag(css string) templ.Component {
-	return templ.Raw(fmt.Sprintf("<style type='text/css'>%s</style>", css))
 }

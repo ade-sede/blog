@@ -1,7 +1,8 @@
 package main
 
-templ article(title string, description string, stringifiedHTML string, formattedDate string, styleTags []string) {
-	@Base(title, description, styleTags) {
+templ article(title string, description string, stringifiedHTML string, formattedDate string, scriptTags []string,
+	styleTags []string) {
+	@Base(title, description, styleTags, scriptTags) {
 		<div class="article">
 			<div class="article-date">
 				<i class="far fa-calendar-alt"></i> { formattedDate }

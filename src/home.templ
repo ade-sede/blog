@@ -1,7 +1,7 @@
 package main
 
 templ home(articles []Article, quickNotes []Article, styleTags []string) {
-	@Base("Adrien's blog", "Hobbies, maybe even rants and opinions", styleTags) {
+	@Base("Adrien's blog", "Hobbies, maybe even rants and opinions", styleTags, []string{}) {
 		<div class="home">
 			<div class="intro">
 				<img alt="Adrien DE SEDE" width="200" height="200" src="images/picture.webp"/>

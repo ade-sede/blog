@@ -1,9 +1,9 @@
 package main
 
-templ Base(title string, description string, styleTags []string) {
+templ Base(title string, description string, styleTags []string, scriptTags []string) {
 	<!DOCTYPE html>
 	<html lang="en">
-		@header(title, description, styleTags)
+		@header(title, description, styleTags, scriptTags)
 		<body>
 			@navbar()
 			<div class="body-main">
@@ -44,7 +44,7 @@ templ navbar() {
 	</nav>
 }
 
-templ header(title string, description string, styleTags []string) {
+templ header(title string, description string, styleTags []string, scriptTags []string) {
 	<head>
 		<title>{ title }</title>
 		<meta charset="UTF-8"/>
@@ -80,6 +80,9 @@ templ header(title string, description string, styleTags []string) {
 		<script defer src="libs/katex/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '\\\\[', right: '\\\\]', display: true}, {left: '\\\\(', right: '\\\\)', display: false}]})"></script>
 		for _, styleTag := range styleTags {
 			@templ.Raw(styleTag)
+		}
+		for _, scriptTag := range scriptTags {
+			@templ.Raw(scriptTag)
 		}
 	</head>
 }

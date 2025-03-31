@@ -20,6 +20,10 @@ all: gopath
 	cp -r $(SRC_DIR)/scripts $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/pdfs $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/libs/katex $(OUTPUT_DIR)/libs/.
+	find $(QUICK_NOTE_DIR) -name "*.css" -type f -exec cp {} $(OUTPUT_DIR)/css/. \; 2>/dev/null || true
+	find $(QUICK_NOTE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
+	find $(ARTICLE_DIR) -name "*.css" -type f -exec cp {} $(OUTPUT_DIR)/css/. \; 2>/dev/null || true
+	find $(ARTICLE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
 	cp $(SRC_DIR)/robots.txt $(OUTPUT_DIR)/.
 	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
 	go run $(SRC_DIR)/*.go

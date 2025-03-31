@@ -29,7 +29,9 @@ import (
 type ArticleManifest struct {
 	Title        string `json:"title"`
 	Date         string `json:"date"`
-	MarkdownFile string `json:"markdownFile"`
+	MarkdownFile string `json:"markdownFile, omitempty"`
+	CssFile      string `json:"cssFile, omitempty"`
+	ScriptFile   string `json:"scriptFile"`
 	Description  string `json:"description"`
 }
 
