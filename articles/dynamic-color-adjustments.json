@@ -1,0 +1,8 @@
+{
+  "title": "Dynamic color adjustment for images on the web",
+  "date": "2025-03-29",
+  "markdownFile": "dynamic-color-adjustments.md",
+  "scriptFile": "dynamic-color-adjustments.js",
+  "cssFile": "dynamic-color-adjustments.css",
+  "description": "I recently built a theme picker for my blog. I can seamlessly switch between various dark and light themes for all the text & code blocks ! But what of images ... ?"
+}

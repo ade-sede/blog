@@ -370,16 +370,19 @@ func readArticleManifest(filename string) (*ArticleManifest, error) {
 	return &manifest, nil
 }
 
-// processLatexExpressions pre-processes LaTeX expressions before Markdown parsing.
-// Uses regex instead of a custom AST renderer for simplicity and non-invasive integration.
-// A proper goldmark extension would handle LaTeX as first-class nodes in the AST.
 func processLatexExpressions(input string) string {
-	displayMathRegex := regexp.MustCompile(`(?s)\\\\?\[(.*?)\\\\?\]`)
+	multiLineDisplayRegex := regexp.MustCompile(`(?s)\\\\?\[\s*\n(.*?)\n\s*\\\\?\]`)
+	singleLineDisplayRegex := regexp.MustCompile(`\\\\?\[(.*?)\\\\?\]`)
 	inlineMathRegex := regexp.MustCompile(`(?s)\\\\?\((.*?)\\\\?\)`)
 
-	processed := displayMathRegex.ReplaceAllStringFunc(input, func(match string) string {
-		content := displayMathRegex.FindStringSubmatch(match)[1]
+	processed := multiLineDisplayRegex.ReplaceAllStringFunc(input, func(match string) string {
+		content := multiLineDisplayRegex.FindStringSubmatch(match)[1]
 		return fmt.Sprintf("<div class=\"katex-display\" data-latex=\"%s\"></div>", content)
+	})
+
+	processed = singleLineDisplayRegex.ReplaceAllStringFunc(processed, func(match string) string {
+		content := singleLineDisplayRegex.FindStringSubmatch(match)[1]
+		return fmt.Sprintf("<span class=\"katex-inline\" data-latex=\"%s\"></span>", content)
 	})
 
 	processed = inlineMathRegex.ReplaceAllStringFunc(processed, func(match string) string {
