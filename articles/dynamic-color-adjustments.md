@@ -748,7 +748,7 @@ There are many rabbit holes that I have not crawled.
 - We only shift hue, but what about shifting lightness and saturation ?
 - Can we optimize performance by memoizing color shifts and building some kind of lookup table ?
 
-This implementation is naive, amateurish and shows just how ignorant I am. But it is mine, and it will be good enough to adjust the colors of diagrams and schematics or even silly thank you notes !
+This implementation is naive, amateurish and shows just how ignorant I am. But it is mine, and it will be good enough to adjust the colors of diagrams and schematics or even silly thank you notes written on a color that should be unreadable on a white background !
 
 
 <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
