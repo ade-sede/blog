@@ -234,7 +234,7 @@ The plan is as follows:
 
 That last step is definitely the hardest !
 We want to shift the color tone of the image to have better contrast, but we want the image as a whole to remain coherent.  
-And the most straightforward way to achieve that is most likely to use the _HSl Color Model_
+And the most straightforward way to achieve that is most likely to use the _HSL Color Model_
 
 ### HSL Color Model
 
