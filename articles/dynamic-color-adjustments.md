@@ -475,14 +475,14 @@ function adjustImagesColors() {
 
 #### Detecting whether or not the dominant color contrasts enough with our background
 
-First, we need to be able to detect our background color. The theme picker inject it as the `--bg` css variable, which we can access as follows.
+First, we need to be able to detect our background color. The theme picker injects it as the `--bg` css variable, which we can access as follows.
 
 ```javascript
 const rootStyles = window.getComputedStyle(document.documentElement);
 const bgColor = rootStyles.getPropertyValue("--bg").trim();
 ```
 
-This either returns a string with color in hex format: `#RRGGBB` or the name of the color such as `"white"`.  
+This either returns a string in the hex format: `#RRGGBB` or the name of the color such as `white`.  
 We need a simple parsing function to have them available in the same format as what _Color Thief_ returns.
 
 ```javascript:color_convert.js
@@ -674,6 +674,8 @@ function computeContrastWithHue(saturation, lightness, newHue, bgColor) {
 
 #### Apply the hue shift to our entire image
 
+We can swap our image by injecting a canvas in `img.src` via the DOM.
+
 ```javascript:color_convert.js
 function applyHueShiftToImage(image, hueShift) {
   // Skip if no shift needed
@@ -725,25 +727,21 @@ function applyHueShiftToImage(image, hueShift) {
   // Replace the image source with the canvas data
   const dataURL = canvas.toDataURL();
 
-  // Store the original source for potential toggling
-  if (!image.dataset.originalSrc) {
-    image.dataset.originalSrc = image.src;
-  }
-
   // Update the image
   image.src = dataURL;
 }
 ```
 
-All that is left is hooking our function to events emitted by the theme picker !
+All that is left is hooking our function to events emitted by the theme picker and we are done !
+We have a simple algorithm to adjust the colors in an image to make sure the dominant color of the image contrasts properly with a given background.
 
 
-## The end
+## The end...
 
 I learned a lot writing this article but I am not entirely satisfied.  
 There are too many formulas that I am unable to breakdown and understand.
 There are many rabbit holes that I have not crawled.
-- How do you apply it to GIFs ?  
+- How do we apply it to GIFs ?  
 - Can we force the color shift to better match secondary and accent colors of theme ?
 - We only shift hue, but what about shifting lightness and saturation ?
 - Can we optimize performance by memoizing color shifts and building some kind of lookup table ?
