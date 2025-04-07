@@ -641,7 +641,7 @@ function parseColorToRGB(colorStr) {
     orange: [255, 165, 0],
   };
 
-  color = colorMap[colorStr.toLowerCase()];
+  const color = colorMap[colorStr.toLowerCase()];
 
   if (!color) {
     throw new Error(`Unexpected color: ${colorStr.toLowerCase()}`);

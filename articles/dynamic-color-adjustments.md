@@ -21,7 +21,7 @@ Contrast is one of the ways our brain identifies the boundaries between objects.
 Without it, we simply don't know where things start and where they end. This is particularly true for people with vision impairment. That is what makes contrast such an important aspect of _accessibility_.
 
 And because contrast is so important, we have introduced standards to measure & enforce: meet [WCAG's Luminance Contrast Ratio](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html).
-The idea is simple: two colors with a similar luminance do not have enough contrast and will blend together. In order to guarantee the average person, and even some visiually impaired individuals can see properly, the luminance of both colors must respect a certain ratio.  
+The idea is simple: two colors with a similar luminance do not have enough contrast and will blend together. In order to guarantee the average person, and even some visually impaired individuals can see properly, the luminance of both colors must respect a certain ratio.  
 Using this standard we should be able to compute whether or not two colors properly contrast with each other.  
 But before we can do that, we need to build some fundamentals!  
 
@@ -31,7 +31,7 @@ Light is a wave. It has an amplitude and a wavelength.
 The wavelength dictates the perceived color of the light.  
 The amplitude dictates its intensity.  
 _Luminance_ is an objective measurement of how intense a light is, measured in candela per square meter (cd/m²).[^1]
-_Brightness_ is the subjective perception of that itensity by a given person.  
+_Brightness_ is the subjective perception of that intensity by a given person.  
 
 In digital systems, a pixel has three color channels: red, green, blue (RGB).  
 Each channel is represented by an 8 bit value, ranging from 0 to 255.  
@@ -44,10 +44,10 @@ Our eyes can interpet the mix of intensity of these 3 lights as a color.
 ### Gamma 
 
 But there is one important caveat: our eyes do not perceive a light twice as intense as twice as bright.  
-The relationship between the itensity of a light that is emitted (_luminance_) and the intensity as perceived by the human eye (_brightness_) is exponential.  
+The relationship between the intensity of a light that is emitted (_luminance_) and the intensity as perceived by the human eye (_brightness_) is exponential.  
 On top of that, our eyes are better at spotting changes in darker tones than brigther ones.  
 If we were to use our 8 bits to encode the luminance linearly, half of the range would be dedicated to the brightest 10%. Giving us the other half of the range for the 90% of darker tones where our eyes actualy perform much better.  
-That is where _gamma_ (denoted as _γ_) and more generaly the _gamma encoding_ function (denoted as _Γ_) come in.  
+That is where _gamma_ (denoted as _γ_) and more generally the _gamma encoding_ function (denoted as _Γ_) come in.  
 This _gamma encoding_ is meant to be an approximiation of the non-linear relationship between luminance and brightness.  
 To increase the efficiency of our color encoding and make sure we get the most out of our 8 bits, the color channel is already gamma encoded!  
 The value 255 is not twice as luminous as 128, but rather 4.5 times more luminous, which would make it roughly 2 times brighter to the human eye[^4] ! 
@@ -84,15 +84,15 @@ Let's walk through a concrete example: suppose our screen's gamma is _2.2_. Our 
 
 And there we have it: **Using a gamma of 2.2, doubling the luminance from 80 means increasing the channel's value to _121_**
 To double the perceived brightness you would simply need to double the already gamma encoded value.  
-That's the whole point of gamma, it helps us work with values that feel linear to humans.
+That's the whole point of gamma: it helps us work with values that feel linear to humans.
 
 ### Relative luminance
 
-We have built some understanding of what luminance is and how digital systems deal with it, but we still have one pratical problem: gamma values can vary from one device to another. The gamma curve of an old CRT monitor is different from a modern OLED display.  
+We have built some understanding of what luminance is and how digital systems deal with it, but we still have one practical problem: gamma values can vary from one device to another. The gamma curve of an old CRT monitor is different from a modern OLED display.  
 
 Remember, our immediate goal is to be able to measure and quantify the perception of an average human being. Variations between different type of screens is noise in our model.  
 
-This is where the sRGB (standard RGB) color space comes in. Developed in the 90s, sRGB establishes a standard gamma curve that all devices should aim to reproduce. While we often approximate it as γ = 2.2, sRGB actually defines a more complexe function.
+This is where the sRGB (standard RGB) color space comes in. Developed in the 90s, sRGB establishes a standard gamma curve that all devices should aim to reproduce. While we often approximate it as γ = 2.2, sRGB actually defines a more complex function.
 I copy it here for completeness but don't ask me how this formula works exactly, my understanding does not run that deep.
 
 \[
@@ -168,7 +168,7 @@ Level AAA provides enhanced readability for users with more substantial vision l
 
 ### Let's put it in practice !
 
-Once you understand the model it simply comes down to applying the formulas !
+Once you understand the model it simply comes down to applying the formulas!
 
 
 ```javascript:color_convert.js
@@ -232,7 +232,7 @@ The plan is as follows:
 - If it does not, pick a color yielding a good contrast ratio and use it to replace the dominant color
 - Replace other colors accordingly
 
-That last step is definitley the hardest !
+That last step is definitely the hardest !
 We want to shift the color tone of the image to have better contrast, but we want the image as a whole to remain coherent.  
 And the most straightforward way to achieve that is most likely to use the _HSl Color Model_
 
@@ -284,8 +284,8 @@ _Lightness_ represents how light or dark the color is:
   <div class="lightness-sample" id="lightness-sample"></div>
 </div>
 
-At the end of the day, this nothing more than a model. Everything we have discussed regarding the _Luminance Contrast Ratio_ and _brightness_ still applies. The _amplitude_ of the light remains the only thing our digital systems are able to act on !
-But by using the HSL model we have a much simpler paradigm: once we have found a dominant color with a better contrast to our background, we can compute that it is X° off our initial color and therefore we should shift all other colors of the image by X° !
+But this nothing more than a model. Everything we have discussed regarding the _Luminance Contrast Ratio_ and _brightness_ still applies. The _amplitude_ of the light remains the only thing our digital systems are able to act on !
+But by using the HSL model, we have a much simpler paradigm. Once we've found a dominant color with better contrast to our background, we can compute that it's X° off our initial color. Therefore, we should shift all other colors in the image by X° as well!
 
 Naturally, there are established ways to convert between RGB and HSL.  
 I have copied them below, but I am unable to explain them in details and I accept them without fully understanding them.  
@@ -452,7 +452,7 @@ function hslToRgb(h, s, l) {
 
 ### Building a software solve
 
-Now that we know how to shift color tones in way that feels coherent, we have all the pieces, and all we need is to assemble them.
+Now that we know how to shift color tones in way that feels coherent we have all the pieces, and all we need is to assemble them.
 
 #### Detecting the dominant color
 
@@ -518,7 +518,7 @@ function parseColorToRGB(colorStr) {
     orange: [255, 165, 0],
   };
 
-  color = colorMap[colorStr.toLowerCase()];
+  const color = colorMap[colorStr.toLowerCase()];
 
   if (!color) {
     throw new Error(`Unexpected color: ${colorStr.toLowerCase()}`);
@@ -554,7 +554,6 @@ function adjustImagesColors() {
     };
 
     const contrastRatio = computeContrastRatio(dominantColor, bgColor);
-    );
 
     // We aim for AAA level at the minimum
     if (contrastRatio < 7.0) {
@@ -760,4 +759,4 @@ This implementation is naive, amateurish and shows just how ignorant I am. But i
 [^1]: In physics, intensity is proportional to the square of the amplitude of a wave. Luminance is a measure of this intensity per unit area, so higher intensity light results in higher luminance.
 [^2]: I chose to illustrate the concept using OLED & AMOLED because they are probably the easiest to gloss over. Other types of screens work very differently.
 [^3]: Bit of an oversimplification. Amplitude is linked to intensity which in turn is linked to brightness but saying 'we are increasing brightness' is representative enough for the sake of this article.
-[^4]: Using a standard gamma of about 2.2.
+[^4]: Using a standard gamma of about 2.2 which is often used as an approximation of the of sRGB
