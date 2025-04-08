@@ -1,4 +1,4 @@
-h1 + .article-menu {
+h1+.article-menu {
 	margin-top: 40px;
 }
 
@@ -60,7 +60,8 @@ h1 + .article-menu {
 	border: 0;
 	padding: 0;
 	border-left: 2px solid var(--secondary);
-	background: none; /* Override the global gradient style */
+	background: none;
+	/* Override the global gradient style */
 	margin: 0;
 }
 
@@ -77,7 +78,8 @@ h1 + .article-menu {
 /* Special styling for article links */
 .article-menu .entry a:hover {
 	transform: translateX(8px);
-	color: var(--fg); /* Keep text color consistent */
+	color: var(--fg);
+	/* Keep text color consistent */
 }
 
 /* Don't do the underline animation for article links */

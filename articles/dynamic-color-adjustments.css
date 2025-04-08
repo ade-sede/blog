@@ -64,17 +64,6 @@
 	clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-.hue-indicator {
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: white;
-	border: 2px solid black;
-	position: absolute;
-	transform: translate(-50%, -50%);
-	pointer-events: none;
-}
-
 .hue-value {
 	margin-top: 15px;
 	font-family: monospace;

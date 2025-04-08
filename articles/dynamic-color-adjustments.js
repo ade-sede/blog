@@ -125,10 +125,9 @@ function initContrastDemo() {
 
 function initHueWheel() {
   const wheel = document.getElementById("hue-wheel");
-  const indicator = document.getElementById("hue-indicator");
   const valueDisplay = document.getElementById("hue-value");
 
-  if (!wheel || !indicator || !valueDisplay) {
+  if (!wheel || !valueDisplay) {
     console.error("Missing required elements for hue wheel");
     return;
   }
@@ -196,12 +195,6 @@ function initHueWheel() {
   updateIndicator(0);
 
   function updateIndicator(hue) {
-    const radians = (hue * Math.PI) / 180;
-    const x = centerX + Math.cos(radians) * (radius - 10);
-    const y = centerY + Math.sin(radians) * (radius - 10);
-
-    indicator.style.left = `${x}px`;
-    indicator.style.top = `${y}px`;
     valueDisplay.textContent = `Hue: ${Math.round(hue)}°`;
 
     const colorSample = document.getElementById("color-sample");
