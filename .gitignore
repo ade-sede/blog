@@ -1,3 +1,5 @@
 src/*templ.go
 !web/pdfs
 web/*
+
+**/.claude/settings.local.json
