@@ -193,7 +193,7 @@ body {
 body .body-main {
 	display: flex;
 	flex-direction: column;
-	width: 60%;
+	width: 80%;
 	min-height: 80vh;
 	align-self: center;
 	box-sizing: border-box;
@@ -211,7 +211,7 @@ h6 {
 	line-height: 1.2;
 }
 
-h1, 
+h1,
 h2 {
 	font-family: "Montserrat", sans-serif;
 }
