@@ -143,11 +143,9 @@ body {
 body .body-main {
 	display: flex;
 	flex-direction: column;
-	min-width: 65%;
-	max-width: 1400px;
+	width: 60%;
 	min-height: 80vh;
 	align-self: center;
-	width: 100%;
 	box-sizing: border-box;
 }
 
