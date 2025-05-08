@@ -36,6 +36,7 @@ clean:
 
 .PHONY: init
 init: gopath
+	rm -rf $(PWD)/.git/hooks/pre-commit
 	ln -s $(PWD)/hooks/pre-commit $(PWD)/.git/hooks/pre-commit
 	go install github.com/a-h/templ/cmd/templ@latest
 
