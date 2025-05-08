@@ -3,7 +3,7 @@
 	flex-direction: column;
 
 	align-self: center;
-	max-width: 1200px;
+	width: 70%;
 }
 
 .resume-actions {
