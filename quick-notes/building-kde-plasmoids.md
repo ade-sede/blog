@@ -1,4 +1,6 @@
-# Building KDE Plasmoids: Notes
+# Building KDE Plasmoids for Plasma 6: Notes
+
+_Mostly for myself as a form of internal documentation..._
 
 ## What is a plasmoid?
 
@@ -285,3 +287,8 @@ QML has different types of layout elements:
 I found the code from [plasma-applet-eventcalendar](https://github.com/Zren/plasma-applet-eventcalendar) more helpful than the official docs in many cases.
 
 I've also had good luck asking LLMs for QML examples when I get stuck.
+
+## But ... Plasma 6
+
+A few weeks after writing this quicknote I upgraded to Plasma 6 and you guessed it: my widget does not work...
+I thought I was smart taking notes for later in case I needed to do it again, turns out I will need to re-learn from scratch anyway...
