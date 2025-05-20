@@ -305,7 +305,7 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 		}
 		lexer = chroma.Coalesce(lexer)
 
-		theme := "monokai"
+		theme := "dracula"
 		style := styles.Get(theme)
 		if style == nil {
 			style = styles.Fallback
