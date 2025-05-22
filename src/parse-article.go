@@ -77,116 +77,106 @@ func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegistere
 	reg.Register(ast.KindFencedCodeBlock, r.renderCodeBlock)
 }
 
+var (
+	multiLineDisplayRegex  = regexp.MustCompile(`(?s)\\\\?\[\s*\n(.*?)\n\s*\\\\?\]`)
+	singleLineDisplayRegex = regexp.MustCompile(`\\\\?\[(.*?)\\\\?\]`)
+	inlineMathRegex        = regexp.MustCompile(`(?s)\\\\?\((.*?)\\\\?\)`)
+
+	filenameIcons = map[string]string{
+		"makefile":          "fas fa-cogs",
+		"dockerfile":        "fab fa-docker",
+		"readme.md":         "fas fa-book",
+		"license":           "fas fa-certificate",
+		"license.txt":       "fas fa-certificate",
+		"license.md":        "fas fa-certificate",
+		"go.mod":            "fab fa-golang",
+		"go.sum":            "fab fa-golang",
+		"package.json":      "fab fa-npm",
+		"package-lock.json": "fab fa-npm",
+		".gitignore":        "fab fa-git-alt",
+		".gitmodules":       "fab fa-git-alt",
+		".gitattributes":    "fab fa-git-alt",
+	}
+
+	extensionIcons = map[string]string{
+		".qml":       "fas fa-file-code",
+		".json":      "fas fa-file-code",
+		".go":        "fab fa-golang",
+		".js":        "fab fa-js",
+		".ts":        "fab fa-js-square",
+		".html":      "fab fa-html5",
+		".htm":       "fab fa-html5",
+		".css":       "fab fa-css3-alt",
+		".py":        "fab fa-python",
+		".rb":        "fas fa-gem",
+		".php":       "fab fa-php",
+		".java":      "fab fa-java",
+		".rs":        "fas fa-gears",
+		".c":         "fas fa-code",
+		".cpp":       "fas fa-code",
+		".h":         "fas fa-code",
+		".hpp":       "fas fa-code",
+		".cs":        "fas fa-code",
+		".swift":     "fas fa-code",
+		".kt":        "fas fa-k",
+		".kts":       "fas fa-k",
+		".yml":       "fas fa-file-code",
+		".yaml":      "fas fa-file-code",
+		".toml":      "fas fa-cog",
+		".ini":       "fas fa-sliders-h",
+		".conf":      "fas fa-sliders-h",
+		".config":    "fas fa-sliders-h",
+		".env":       "fas fa-key",
+		".xml":       "fas fa-code",
+		".csv":       "fas fa-file-csv",
+		".sql":       "fas fa-database",
+		".txt":       "fas fa-file-lines",
+		".pdf":       "fas fa-file-pdf",
+		".doc":       "fas fa-file-word",
+		".docx":      "fas fa-file-word",
+		".xls":       "fas fa-file-excel",
+		".xlsx":      "fas fa-file-excel",
+		".ppt":       "fas fa-file-powerpoint",
+		".pptx":      "fas fa-file-powerpoint",
+		".svg":       "fas fa-bezier-curve",
+		".mp3":       "fas fa-file-audio",
+		".wav":       "fas fa-file-audio",
+		".ogg":       "fas fa-file-audio",
+		".flac":      "fas fa-file-audio",
+		".mp4":       "fas fa-file-video",
+		".mov":       "fas fa-file-video",
+		".avi":       "fas fa-file-video",
+		".mkv":       "fas fa-file-video",
+		".webm":      "fas fa-file-video",
+		".vue":       "fab fa-vuejs",
+		".svelte":    "fas fa-fire",
+		".gradle":    "fab fa-android",
+		".xcodeproj": "fab fa-apple",
+	}
+)
+
 func getFileIcon(filename string) string {
-	ext := strings.ToLower(filepath.Ext(filename))
 	basename := strings.ToLower(filepath.Base(filename))
+	if icon, exists := filenameIcons[basename]; exists {
+		return icon
+	}
 
-	switch basename {
-	case "makefile":
-		return "fas fa-cogs"
-	case "dockerfile":
-		return "fab fa-docker"
-	case "readme.md":
-		return "fas fa-book"
-	case "license", "license.txt", "license.md":
-		return "fas fa-certificate"
-	case "go.mod", "go.sum":
-		return "fab fa-golang"
-	case "package.json", "package-lock.json":
-		return "fab fa-npm"
-	case ".gitignore", ".gitmodules", ".gitattributes":
-		return "fab fa-git-alt"
-	default:
-		switch ext {
-		case ".qml":
-			return "fas fa-file-code"
-		case ".json":
-			return "fas fa-file-code"
-		case ".go":
-			return "fab fa-golang"
-		case ".js":
-			return "fab fa-js"
-		case ".ts":
-			return "fab fa-js-square"
-		case ".html", ".htm":
-			return "fab fa-html5"
-		case ".css":
-			return "fab fa-css3-alt"
-		case ".py":
-			return "fab fa-python"
-		case ".rb":
-			return "fas fa-gem"
-		case ".php":
-			return "fab fa-php"
-		case ".java":
-			return "fab fa-java"
-		case ".rs":
-			return "fas fa-gears"
-		case ".c", ".cpp", ".h", ".hpp":
-			return "fas fa-code"
-		case ".cs":
-			return "fas fa-code"
-		case ".swift":
-			return "fas fa-code"
-		case ".kt", ".kts":
-			return "fas fa-k"
-		case ".yml", ".yaml":
-			return "fas fa-file-code"
-		case ".toml":
-			return "fas fa-cog"
-		case ".ini", ".conf", ".config":
-			return "fas fa-sliders-h"
-		case ".env":
-			return "fas fa-key"
-		case ".xml":
-			return "fas fa-code"
-		case ".csv":
-			return "fas fa-file-csv"
-		case ".sql":
-			return "fas fa-database"
-		case ".txt":
-			return "fas fa-file-lines"
-		case ".pdf":
-			return "fas fa-file-pdf"
-		case ".doc", ".docx":
-			return "fas fa-file-word"
-		case ".xls", ".xlsx":
-			return "fas fa-file-excel"
-		case ".ppt", ".pptx":
-			return "fas fa-file-powerpoint"
-		case ".svg":
-			return "fas fa-bezier-curve"
-		case ".mp3", ".wav", ".ogg", ".flac":
-			return "fas fa-file-audio"
-		case ".mp4", ".mov", ".avi", ".mkv", ".webm":
-			return "fas fa-file-video"
-		case ".vue":
-			return "fab fa-vuejs"
-		case ".svelte":
-			return "fas fa-fire"
-		case ".gradle":
-			return "fab fa-android"
-		case ".xcodeproj":
-			return "fab fa-apple"
-
-		default:
-			if strings.HasPrefix(ext, ".") {
-				return ""
-			}
-		}
+	ext := strings.ToLower(filepath.Ext(filename))
+	if icon, exists := extensionIcons[ext]; exists {
+		return icon
 	}
 
 	return ""
 }
 
-func renderDirectoryStructure(w util.BufWriter, content string) {
-	type DirEntry struct {
-		Name     string
-		IsFolder bool
-		Indent   int
-		Children []*DirEntry
-	}
+type DirectoryNode struct {
+	Name     string
+	IsFolder bool
+	Indent   int
+	Children []*DirectoryNode
+}
 
+func buildDirectoryTree(content string) *DirectoryNode {
 	var lines []string
 	for _, line := range strings.Split(content, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
@@ -194,33 +184,27 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 		}
 	}
 
+	root := &DirectoryNode{Children: []*DirectoryNode{}}
 	if len(lines) == 0 {
-		return
+		return root
 	}
 
-	root := &DirEntry{
-		Children: []*DirEntry{},
-	}
-
-	var currentParent *DirEntry = root
-
-	var stack []*DirEntry = []*DirEntry{root}
-	var prevIndent int = 0
+	currentParent := root
+	stack := []*DirectoryNode{root}
+	prevIndent := 0
 
 	for i, line := range lines {
 		trimmedLine := strings.TrimLeft(line, " \t")
 		currentIndent := len(line) - len(trimmedLine)
 
-		isFolder := strings.HasSuffix(trimmedLine, "/")
-		entry := &DirEntry{
+		entry := &DirectoryNode{
 			Name:     trimmedLine,
-			IsFolder: isFolder,
+			IsFolder: strings.HasSuffix(trimmedLine, "/"),
 			Indent:   currentIndent,
-			Children: []*DirEntry{},
+			Children: []*DirectoryNode{},
 		}
 
 		if i > 0 {
-
 			if currentIndent > prevIndent {
 				stack = append(stack, currentParent)
 				currentParent = stack[len(stack)-1].Children[len(stack[len(stack)-1].Children)-1]
@@ -237,28 +221,30 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 		prevIndent = currentIndent
 	}
 
-	w.WriteString("<div class=\"directory-tree\">")
+	return root
+}
 
-	var renderEntry func(entry *DirEntry)
-	renderEntry = func(entry *DirEntry) {
-		for _, child := range entry.Children {
-			if child.IsFolder {
-				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><i class=\"fas fa-folder-open\"></i> %s</div>", child.Name))
-			} else {
-				fileIcon := getFileIcon(child.Name)
-				w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><i class=\"%s\"></i> %s</div>", fileIcon, child.Name))
-			}
+func renderDirectoryTreeRecursive(w util.BufWriter, entry *DirectoryNode) {
+	for _, child := range entry.Children {
+		if child.IsFolder {
+			w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-folder\"><i class=\"fas fa-folder-open\"></i> %s</div>", child.Name))
+		} else {
+			fileIcon := getFileIcon(child.Name)
+			w.WriteString(fmt.Sprintf("<div class=\"dir-entry dir-file\"><i class=\"%s\"></i> %s</div>", fileIcon, child.Name))
+		}
 
-			if len(child.Children) > 0 {
-				w.WriteString("<div class=\"dir-children\">")
-				renderEntry(child)
-				w.WriteString("</div>")
-			}
+		if len(child.Children) > 0 {
+			w.WriteString("<div class=\"dir-children\">")
+			renderDirectoryTreeRecursive(w, child)
+			w.WriteString("</div>")
 		}
 	}
+}
 
-	renderEntry(root)
-
+func renderDirectoryStructure(w util.BufWriter, content string) {
+	root := buildDirectoryTree(content)
+	w.WriteString("<div class=\"directory-tree\">")
+	renderDirectoryTreeRecursive(w, root)
 	w.WriteString("</div>")
 }
 
@@ -339,22 +325,27 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 	return ast.WalkContinue, nil
 }
 
-func ordinal(day int) string {
-	if day%10 == 1 && day != 11 {
-		return "st"
-	} else if day%10 == 2 && day != 12 {
-		return "nd"
-	} else if day%10 == 3 && day != 13 {
-		return "rd"
+func getDateSuffix(day int) string {
+	if day >= 11 && day <= 13 {
+		return "th"
 	}
-	return "th"
+	switch day % 10 {
+	case 1:
+		return "st"
+	case 2:
+		return "nd"
+	case 3:
+		return "rd"
+	default:
+		return "th"
+	}
 }
 
 func formatDate(date time.Time) string {
 	day := date.Day()
 	month := date.Format("January")
 	year := date.Year()
-	return fmt.Sprintf("%s %d%s %d", month, day, ordinal(day), year)
+	return fmt.Sprintf("%s %d%s %d", month, day, getDateSuffix(day), year)
 }
 
 func readArticleManifest(filename string) (*ArticleManifest, error) {
@@ -371,10 +362,6 @@ func readArticleManifest(filename string) (*ArticleManifest, error) {
 }
 
 func processLatexExpressions(input string) string {
-	multiLineDisplayRegex := regexp.MustCompile(`(?s)\\\\?\[\s*\n(.*?)\n\s*\\\\?\]`)
-	singleLineDisplayRegex := regexp.MustCompile(`\\\\?\[(.*?)\\\\?\]`)
-	inlineMathRegex := regexp.MustCompile(`(?s)\\\\?\((.*?)\\\\?\)`)
-
 	processed := multiLineDisplayRegex.ReplaceAllStringFunc(input, func(match string) string {
 		content := multiLineDisplayRegex.FindStringSubmatch(match)[1]
 		return fmt.Sprintf("<div class=\"katex-display\" data-latex=\"%s\"></div>", content)
@@ -460,7 +447,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 				return nil, err
 			}
 			markdownFullPath := articleDir + "/" + manifest.MarkdownFile
-			stringifieldHTML, err := parseArticleMarkdown(markdownFullPath)
+			stringifiedHTML, err := parseArticleMarkdown(markdownFullPath)
 			if err != nil {
 				return nil, err
 			}
@@ -470,7 +457,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 				Date:             date,
 				FormatedDate:     formatDate(date),
 				Manifest:         manifest,
-				StringifiedHTML:  stringifieldHTML,
+				StringifiedHTML:  stringifiedHTML,
 			}
 			articles = append(articles, article)
 		}
