@@ -8,12 +8,12 @@ pre {
 	max-width: 100%;
 	white-space: pre-wrap;
 	word-wrap: break-word;
-	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-family: var(--mono-font);
 }
 
 code {
 	color: var(--accent, #d63384);
-	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-family: var(--mono-font);
 }
 
 /* Table styling for articles */
@@ -230,7 +230,7 @@ code {
 	background-color: var(--code-bg);
 	color: var(--code-fg);
 	padding: 0.5em 1em;
-	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-family: var(--mono-font);
 	font-size: 0.9em;
 	border-bottom: 1px solid var(--code-border);
 	font-weight: bold;
@@ -305,7 +305,7 @@ code {
 }
 
 .code-block code {
-	font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-family: var(--mono-font);
 	font-size: 0.9em;
 	background: transparent;
 	color: var(--code-fg);

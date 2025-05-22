@@ -59,23 +59,12 @@
 	--code-fg: #24292e;
 	--code-border: #ddd;
 	--link-hover: black;
+	--mono-font: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 	font-size: 16px;
 }
 
-html:root[data-theme="light"] {
-	--bg: white;
-	--fg: black;
-	--primary: black;
-	--primary-rgb: 0, 0, 0;
-	--secondary: #333;
-	--accent: #666;
-	--code-bg: #f6f8fa;
-	--code-fg: #24292e;
-	--code-border: #ddd;
-	--link-hover: black;
-}
 
-html:root[data-theme="dark"] {
+:root[data-theme="dark"] {
 	--bg: black;
 	--fg: white;
 	--primary: white;
@@ -88,7 +77,7 @@ html:root[data-theme="dark"] {
 	--link-hover: white;
 }
 
-html:root[data-theme="atom"] {
+:root[data-theme="atom"] {
 	--bg: #282c34;
 	--fg: #abb2bf;
 	--primary: #61afef;
@@ -101,7 +90,7 @@ html:root[data-theme="atom"] {
 	--link-hover: #61afef;
 }
 
-html:root[data-theme="nord"] {
+:root[data-theme="nord"] {
 	--bg: #2E3440;
 	--fg: #ECEFF4;
 	--primary: #88C0D0;
@@ -114,7 +103,7 @@ html:root[data-theme="nord"] {
 	--link-hover: #88C0D0;
 }
 
-html:root[data-theme="solarized"] {
+:root[data-theme="solarized"] {
 	--bg: #FDF6E3;
 	--fg: #657B83;
 	--primary: #268BD2;
@@ -127,7 +116,7 @@ html:root[data-theme="solarized"] {
 	--link-hover: #268BD2;
 }
 
-html:root[data-theme="dracula"] {
+:root[data-theme="dracula"] {
 	--bg: #282A36;
 	--fg: #F8F8F2;
 	--primary: #BD93F9;
@@ -140,7 +129,7 @@ html:root[data-theme="dracula"] {
 	--link-hover: #FF79C6;
 }
 
-html:root[data-theme="github"] {
+:root[data-theme="github"] {
 	--bg: #ffffff;
 	--fg: #24292e;
 	--primary: #0366d6;
@@ -153,7 +142,7 @@ html:root[data-theme="github"] {
 	--link-hover: #0366d6;
 }
 
-html:root[data-theme="monokai"] {
+:root[data-theme="monokai"] {
 	--bg: #272822;
 	--fg: #F8F8F2;
 	--primary: #F92672;
