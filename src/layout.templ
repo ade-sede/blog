@@ -62,8 +62,6 @@ templ header(title string, description string, styleTags []string, scriptTags []
 				if (storedTheme) {
 					const theme = JSON.parse(storedTheme);
 					document.documentElement.setAttribute("data-theme", theme.name);
-					document.documentElement.style.setProperty("--bg", theme.bg);
-					document.documentElement.style.setProperty("--fg", theme.fg);
 				}
 			} catch (e) { }
 		})();

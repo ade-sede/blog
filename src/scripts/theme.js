@@ -36,290 +36,128 @@ const safeStorage = {
   },
 };
 
-/**
- * @typedef {Object} Theme
- * @property {string} name - Theme name
- * @property {string} displayName - User-friendly theme name
- * @property {string} bg - Background color value
- * @property {string} fg - Foreground color value
- * @property {string} primary - Primary color for accents and highlights
- * @property {string} primaryRgb - Primary color in RGB format (r, g, b)
- * @property {string} secondary - Secondary color for subtle elements
- * @property {string} accent - Accent color for emphasis
- * @property {string} trackColor - Color of theme change track
- * @property {string} ballColor - Color of theme change ball
- * @property {string} codeBg - Code block background
- * @property {string} codeFg - Code text color
- * @property {string} codeBorder - Code block border color
- * @property {string} linkHover - Link hover color
- */
-
-/**
- * Available themes collection
- * @type {Object.<string, Theme>}
- */
 const availableThemes = {
-  light: {
-    name: "light",
-    displayName: "Light (High Contrast)",
-    bg: "white",
-    fg: "black",
-    primary: "black",
-    primaryRgb: "0, 0, 0",
-    secondary: "#333",
-    accent: "#666",
-    trackColor: "#e0e0e0",
-    ballColor: "#ffffff",
-    codeBg: "#f8f8f8",
-    codeFg: "#333333",
-    codeBorder: "#ddd",
-    linkHover: "black",
-  },
-
-  dark: {
-    name: "dark",
-    displayName: "Dark (High Contrast)",
-    bg: "black",
-    fg: "white",
-    primary: "white",
-    primaryRgb: "255, 255, 255",
-    secondary: "#ddd",
-    accent: "#aaa",
-    trackColor: "#333333",
-    ballColor: "#000000",
-    codeBg: "#272822",
-    codeFg: "#f8f8f2",
-    codeBorder: "#444",
-    linkHover: "white",
-  },
-
-  atom: {
-    name: "atom",
-    displayName: "Atom Dark",
-    bg: "#282c34",
-    fg: "#abb2bf",
-    primary: "#61afef",
-    primaryRgb: "97, 175, 239",
-    secondary: "#c678dd",
-    accent: "#98c379",
-    trackColor: "#3a3f4b",
-    ballColor: "#61afef",
-    codeBg: "#21252b",
-    codeFg: "#abb2bf",
-    codeBorder: "#3a3f4b",
-    linkHover: "#61afef",
-  },
-
-  nord: {
-    name: "nord",
-    displayName: "Nord",
-    bg: "#2E3440",
-    fg: "#ECEFF4",
-    primary: "#88C0D0",
-    primaryRgb: "136, 192, 208",
-    secondary: "#81A1C1",
-    accent: "#EBCB8B",
-    trackColor: "#4C566A",
-    ballColor: "#88C0D0",
-    codeBg: "#3B4252",
-    codeFg: "#E5E9F0",
-    codeBorder: "#4C566A",
-    linkHover: "#88C0D0",
-  },
-
-  solarized: {
-    name: "solarized",
-    displayName: "Solarized Light",
-    bg: "#FDF6E3",
-    fg: "#657B83",
-    primary: "#268BD2",
-    primaryRgb: "38, 139, 210",
-    secondary: "#2AA198",
-    accent: "#CB4B16",
-    trackColor: "#EEE8D5",
-    ballColor: "#268BD2",
-    codeBg: "#EEE8D5",
-    codeFg: "#586E75",
-    codeBorder: "#D3CAA8",
-    linkHover: "#268BD2",
-  },
-
-  dracula: {
-    name: "dracula",
-    displayName: "Dracula",
-    bg: "#282A36",
-    fg: "#F8F8F2",
-    primary: "#BD93F9",
-    primaryRgb: "189, 147, 249",
-    secondary: "#6272A4",
-    accent: "#FF79C6",
-    trackColor: "#44475A",
-    ballColor: "#BD93F9",
-    codeBg: "#44475A",
-    codeFg: "#F8F8F2",
-    codeBorder: "#6272A4",
-    linkHover: "#FF79C6",
-  },
-
-  github: {
-    name: "github",
-    displayName: "GitHub",
-    bg: "#ffffff",
-    fg: "#24292e",
-    primary: "#0366d6",
-    primaryRgb: "3, 102, 214",
-    secondary: "#586069",
-    accent: "#d73a49",
-    trackColor: "#e1e4e8",
-    ballColor: "#0366d6",
-    codeBg: "#f6f8fa",
-    codeFg: "#24292e",
-    codeBorder: "#e1e4e8",
-    linkHover: "#0366d6",
-  },
-
-  monokai: {
-    name: "monokai",
-    displayName: "Monokai",
-    bg: "#272822",
-    fg: "#F8F8F2",
-    primary: "#F92672",
-    primaryRgb: "249, 38, 114",
-    secondary: "#66D9EF",
-    accent: "#A6E22E",
-    trackColor: "#49483E",
-    ballColor: "#F92672",
-    codeBg: "#3E3D32",
-    codeFg: "#F8F8F2",
-    codeBorder: "#75715E",
-    linkHover: "#F92672",
-  },
+  light: { name: "light", displayName: "Light (High Contrast)" },
+  dark: { name: "dark", displayName: "Dark (High Contrast)" },
+  atom: { name: "atom", displayName: "Atom Dark" },
+  nord: { name: "nord", displayName: "Nord" },
+  solarized: { name: "solarized", displayName: "Solarized Light" },
+  dracula: { name: "dracula", displayName: "Dracula" },
+  github: { name: "github", displayName: "GitHub" },
+  monokai: { name: "monokai", displayName: "Monokai" },
 };
 
 /**
  * Loads theme from localStorage and applies it if present
- * @returns {Theme} The loaded or default theme object
+ * @returns {string} The loaded theme name
  */
 function loadThemeFromLocalStorage() {
-  let themeObject;
   const themeString = safeStorage.getItem("theme");
+  let themeName = "light";
 
   if (themeString) {
-    themeObject = JSON.parse(themeString);
-    if (themeObject) {
-      // Handle migration from previous high constract themes to the new theme picker
-      if (themeObject.name === "light" || themeObject.name === "dark") {
-        if (!themeObject.displayName) {
-          themeObject = availableThemes[themeObject.name];
-        }
+    try {
+      const themeObject = JSON.parse(themeString);
+      if (themeObject && themeObject.name && availableThemes[themeObject.name]) {
+        themeName = themeObject.name;
       }
-      themeObject = setTheme(themeObject);
+    } catch (err) {
+      console.warn("Failed to parse stored theme, using default");
     }
-  } else {
-    themeObject = setTheme(availableThemes.light);
   }
 
-  try {
-    const themeSelector = document.getElementById("theme-selector");
-    if (themeSelector) {
-      themeSelector.value = themeObject.name;
-    }
-  } catch (err) {}
-
-  return themeObject;
+  setTheme(themeName);
+  return themeName;
 }
 
 /**
  * Toggles between light and dark themes (for backward compatibility)
- * @returns {Theme} The new theme object after toggle
+ * @returns {string} The new theme name after toggle
  */
 function toggleTheme() {
   const themeString = safeStorage.getItem("theme");
-  if (!themeString) {
-    return setTheme(availableThemes.light);
+  let currentTheme = "light";
+  
+  if (themeString) {
+    try {
+      const themeObject = JSON.parse(themeString);
+      if (themeObject && themeObject.name) {
+        currentTheme = themeObject.name;
+      }
+    } catch (err) {}
   }
 
-  const themeObject = JSON.parse(themeString);
-  if (themeObject.name === "dark") {
-    return setTheme(availableThemes.light);
-  } else {
-    return setTheme(availableThemes.dark);
-  }
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  return setTheme(newTheme);
 }
 
 /**
  * Sets theme by name
  * @param {string} themeName - Name of the theme to apply
- * @returns {Theme} The applied theme object
+ * @returns {string} The applied theme name
  */
 function setThemeByName(themeName) {
   if (availableThemes[themeName]) {
-    return setTheme(availableThemes[themeName]);
+    return setTheme(themeName);
   } else {
     console.warn(`Theme "${themeName}" not found, using default light theme`);
-    return setTheme(availableThemes.light);
+    return setTheme("light");
   }
 }
 
 /**
  * Sets dark theme (for backward compatibility)
- * @returns {Theme} The dark theme object
+ * @returns {string} The dark theme name
  */
 function setDarkTheme() {
-  return setTheme(availableThemes.dark);
+  return setTheme("dark");
 }
 
 /**
  * Sets light theme (for backward compatibility)
- * @returns {Theme} The light theme object
+ * @returns {string} The light theme name
  */
 function setLightTheme() {
-  return setTheme(availableThemes.light);
+  return setTheme("light");
 }
 
 /**
- * Applies theme by setting CSS custom properties.
- * Note: setting the variables is not enough.
- * The stylesheet is loaded after this script is run.
- * Before the style sheet is loaded, the default background of
- * the html and body elements is the browser's default which can cause flickering.
- * @param {Theme} themeObject - The theme object containing color values
- * @returns {Theme} The applied theme object
+ * Applies theme by setting the data-theme attribute.
+ * CSS handles all color changes through attribute selectors for better performance.
+ * @param {string} themeName - The theme name to apply
+ * @returns {string} The applied theme name
  */
-function setTheme(themeObject) {
-  try {
-    const body = document.querySelector("body");
-    body.style.setProperty("background-color", "var(--bg)");
-    body.style.setProperty("color", "var(--fg)");
-  } catch (err) {}
+function setTheme(themeName) {
+  if (!availableThemes[themeName]) {
+    console.warn(`Theme "${themeName}" not found, using light theme`);
+    themeName = "light";
+  }
 
   try {
-    const navbar = document.querySelector("nav.navbar");
-    if (navbar) {
-      navbar.style.setProperty("--track-color", themeObject.trackColor);
-      navbar.style.setProperty("--ball-color", themeObject.ballColor);
-    }
-  } catch (err) {}
+    const root = document.documentElement;
+    
+    root.style.removeProperty("--bg");
+    root.style.removeProperty("--fg");
+    root.style.removeProperty("--primary");
+    root.style.removeProperty("--primary-rgb");
+    root.style.removeProperty("--secondary");
+    root.style.removeProperty("--accent");
+    root.style.removeProperty("--code-bg");
+    root.style.removeProperty("--code-fg");
+    root.style.removeProperty("--code-border");
+    root.style.removeProperty("--link-hover");
+    
+    root.setAttribute("data-theme", themeName);
+  } catch (err) {
+    console.warn("Failed to set theme:", err);
+  }
 
-  try {
-    const root = document.querySelector(":root");
-    root.setAttribute("data-theme", themeObject.name);
+  safeStorage.setItem("theme", JSON.stringify({ 
+    name: themeName, 
+    displayName: availableThemes[themeName].displayName 
+  }));
 
-    root.style.setProperty("--bg", themeObject.bg);
-    root.style.setProperty("--fg", themeObject.fg);
-    root.style.setProperty("--primary", themeObject.primary);
-    root.style.setProperty("--primary-rgb", themeObject.primaryRgb);
-    root.style.setProperty("--secondary", themeObject.secondary);
-    root.style.setProperty("--accent", themeObject.accent);
-    root.style.setProperty("--code-bg", themeObject.codeBg);
-    root.style.setProperty("--code-fg", themeObject.codeFg);
-    root.style.setProperty("--code-border", themeObject.codeBorder);
-    root.style.setProperty("--link-hover", themeObject.linkHover);
-  } catch (err) {}
-
-  safeStorage.setItem("theme", JSON.stringify(themeObject));
-
-  return themeObject;
+  return themeName;
 }
 
 /**
@@ -365,19 +203,8 @@ function initThemePicker(selector = ".theme-toggle") {
       themeOption.className = "theme-option";
       themeOption.setAttribute("data-theme", themeName);
       themeOption.setAttribute("title", theme.displayName);
-      themeOption.style.backgroundColor = theme.bg;
-
-      if (themeName === "light" || themeName === "dark") {
-        themeOption.style.background = `linear-gradient(135deg, ${theme.bg} 0%, ${theme.bg} 50%, ${theme.primary} 50%, ${theme.primary} 100%)`;
-      } else {
-        themeOption.style.background = `linear-gradient(135deg,
-          ${theme.bg} 0%,
-          ${theme.bg} 40%,
-          ${theme.primary} 40%,
-          ${theme.primary} 60%,
-          ${theme.accent} 60%,
-          ${theme.accent} 100%)`;
-      }
+      
+      themeOption.classList.add(`theme-preview-${themeName}`);
 
       const themeTitleSpan = document.createElement("span");
       themeTitleSpan.className = "theme-option-name";
@@ -431,15 +258,13 @@ function updateActiveTheme(themeName) {
     }
   });
 
-  // Update all theme buttons across all instances
   const themeButtons = document.querySelectorAll(".theme-button");
-  if (availableThemes[themeName]) {
-    themeButtons.forEach((button) => {
-      button.style.backgroundColor = availableThemes[themeName].primary;
-      button.style.borderColor = availableThemes[themeName].primary;
-      button.style.color = availableThemes[themeName].bg;
-    });
-  }
+  themeButtons.forEach((button) => {
+    button.setAttribute("data-current-theme", themeName);
+    button.style.backgroundColor = "";
+    button.style.borderColor = "";
+    button.style.color = "";
+  });
 }
 
 /**
@@ -507,7 +332,6 @@ function computeContrastRatio(rgb1, rgb2) {
 
 document.addEventListener("DOMContentLoaded", function () {
   initThemePicker();
-  loadThemeFromLocalStorage();
 });
 
 function hexToRgb(hex) {

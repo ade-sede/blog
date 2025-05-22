@@ -48,37 +48,21 @@
 	font-style: normal;
 }
 
-/* Theme definitions are now handled by JavaScript */
-/* Default values for fallback */
 :root {
-	--bg: black;
-	--fg: white;
-	--primary: white;
-	--primary-rgb: 255, 255, 255;
-	--secondary: #ddd;
-	--accent: #aaa;
-	--code-bg: #282c34;
-	--code-fg: #abb2bf;
-	--code-border: #444;
-	--link-hover: white;
+	--bg: white;
+	--fg: black;
+	--primary: black;
+	--primary-rgb: 0, 0, 0;
+	--secondary: #333;
+	--accent: #666;
+	--code-bg: #f6f8fa;
+	--code-fg: #24292e;
+	--code-border: #ddd;
+	--link-hover: black;
 	font-size: 16px;
 }
 
-/* High contrast themes */
-:root[data-theme="dark"] {
-	--bg: black;
-	--fg: white;
-	--primary: white;
-	--primary-rgb: 255, 255, 255;
-	--secondary: #ddd;
-	--accent: #aaa;
-	--code-bg: #282c34;
-	--code-fg: #abb2bf;
-	--code-border: #444;
-	--link-hover: white;
-}
-
-:root[data-theme="light"] {
+html:root[data-theme="light"] {
 	--bg: white;
 	--fg: black;
 	--primary: black;
@@ -91,8 +75,20 @@
 	--link-hover: black;
 }
 
-/* Atom Dark theme */
-:root[data-theme="atom"] {
+html:root[data-theme="dark"] {
+	--bg: black;
+	--fg: white;
+	--primary: white;
+	--primary-rgb: 255, 255, 255;
+	--secondary: #ddd;
+	--accent: #aaa;
+	--code-bg: #282c34;
+	--code-fg: #abb2bf;
+	--code-border: #444;
+	--link-hover: white;
+}
+
+html:root[data-theme="atom"] {
 	--bg: #282c34;
 	--fg: #abb2bf;
 	--primary: #61afef;
@@ -105,8 +101,7 @@
 	--link-hover: #61afef;
 }
 
-/* Nord theme */
-:root[data-theme="nord"] {
+html:root[data-theme="nord"] {
 	--bg: #2E3440;
 	--fg: #ECEFF4;
 	--primary: #88C0D0;
@@ -119,8 +114,7 @@
 	--link-hover: #88C0D0;
 }
 
-/* Solarized theme */
-:root[data-theme="solarized"] {
+html:root[data-theme="solarized"] {
 	--bg: #FDF6E3;
 	--fg: #657B83;
 	--primary: #268BD2;
@@ -133,8 +127,7 @@
 	--link-hover: #268BD2;
 }
 
-/* Dracula theme */
-:root[data-theme="dracula"] {
+html:root[data-theme="dracula"] {
 	--bg: #282A36;
 	--fg: #F8F8F2;
 	--primary: #BD93F9;
@@ -147,8 +140,7 @@
 	--link-hover: #FF79C6;
 }
 
-/* GitHub theme */
-:root[data-theme="github"] {
+html:root[data-theme="github"] {
 	--bg: #ffffff;
 	--fg: #24292e;
 	--primary: #0366d6;
@@ -161,8 +153,7 @@
 	--link-hover: #0366d6;
 }
 
-/* Monokai theme */
-:root[data-theme="monokai"] {
+html:root[data-theme="monokai"] {
 	--bg: #272822;
 	--fg: #F8F8F2;
 	--primary: #F92672;
@@ -175,8 +166,18 @@
 	--link-hover: #F92672;
 }
 
-body,
-html {
+
+.theme-preview-light { background: linear-gradient(135deg, white 0%, white 50%, black 50%, black 100%); }
+.theme-preview-dark { background: linear-gradient(135deg, black 0%, black 50%, white 50%, white 100%); }
+.theme-preview-atom { background: linear-gradient(135deg, #282c34 0%, #282c34 40%, #61afef 40%, #61afef 60%, #98c379 60%, #98c379 100%); }
+.theme-preview-nord { background: linear-gradient(135deg, #2E3440 0%, #2E3440 40%, #88C0D0 40%, #88C0D0 60%, #EBCB8B 60%, #EBCB8B 100%); }
+.theme-preview-solarized { background: linear-gradient(135deg, #FDF6E3 0%, #FDF6E3 40%, #268BD2 40%, #268BD2 60%, #CB4B16 60%, #CB4B16 100%); }
+.theme-preview-dracula { background: linear-gradient(135deg, #282A36 0%, #282A36 40%, #BD93F9 40%, #BD93F9 60%, #FF79C6 60%, #FF79C6 100%); }
+.theme-preview-github { background: linear-gradient(135deg, #ffffff 0%, #ffffff 40%, #0366d6 40%, #0366d6 60%, #d73a49 60%, #d73a49 100%); }
+.theme-preview-monokai { background: linear-gradient(135deg, #272822 0%, #272822 40%, #F92672 40%, #F92672 60%, #A6E22E 60%, #A6E22E 100%); }
+
+html,
+body {
 	background-color: var(--bg);
 	color: var(--fg);
 }
