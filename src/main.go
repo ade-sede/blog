@@ -7,15 +7,25 @@ import (
 	"io/fs"
 	"log"
 	"os"
-	"path/filepath"
+)
+
+type PageType string
+
+const (
+	PageTypeGlobal    PageType = "global"
+	PageTypeArticle   PageType = "article"
+	PageTypeQuickNote PageType = "quicknote"
 )
 
 type PageGenerator struct {
-	filename       string
-	HTMLgenerator  func(args ...interface{}) templ.Component
-	cssFilename    []string
-	scriptFilename []string
-	arguments      []interface{}
+	filename                   string
+	pageType                   PageType
+	HTMLgenerator              func(args ...interface{}) templ.Component
+	globalCssFiles             []string
+	globalScriptFiles          []string
+	articleSpecificCssFiles    []string
+	articleSpecificScriptFiles []string
+	arguments                  []interface{}
 }
 
 // List of 'global' css files that need to be minified and shipped.
@@ -32,35 +42,86 @@ var CSSFiles []string = []string{
 var FLAGS = os.O_RDWR | os.O_CREATE
 var MODE fs.FileMode = 0644
 
-func findAndMinifyFile(baseDirs []string, subDir, filename string, minifyFunc func(string) (string, error)) (string, error) {
-	// This function is a bit of a monster.
-	// I have hijacked existing functionalities to inject CSS files to inject javascript and css for articles
-	// Because I need a lot of flexibility to accomodate many formats / locations I just kind of brute force it
-	// Try every place it could be
-
-	for _, baseDir := range baseDirs[:1] {
-		path := filepath.Join(baseDir, subDir, filename)
-		result, err := minifyFunc(path)
-		if err == nil {
-			return result, nil
-		}
-		if !os.IsNotExist(err) {
-			return "", err
-		}
+func createContentPageGenerator(article Article, pageType PageType, htmlGenerator func(args ...interface{}) templ.Component) PageGenerator {
+	generator := PageGenerator{
+		filename:                   article.HTMLFilename,
+		pageType:                   pageType,
+		HTMLgenerator:              htmlGenerator,
+		globalCssFiles:             []string{"article.css", "syntax-highlighting.css"},
+		globalScriptFiles:          []string{},
+		articleSpecificCssFiles:    []string{},
+		articleSpecificScriptFiles: []string{},
+		arguments:                  []interface{}{article.Manifest.Title, article.Manifest.Description, article.StringifiedHTML, article.FormatedDate},
 	}
 
-	for _, baseDir := range baseDirs[1:] {
-		path := filepath.Join(baseDir, filename)
-		result, err := minifyFunc(path)
-		if err == nil {
-			return result, nil
-		}
-		if !os.IsNotExist(err) {
-			return "", err
-		}
+	if article.Manifest.CssFile != "" {
+		generator.articleSpecificCssFiles = append(generator.articleSpecificCssFiles, article.Manifest.CssFile)
 	}
 
-	return "", fmt.Errorf("file %s not found in any location", filename)
+	if article.Manifest.ScriptFile != "" {
+		generator.articleSpecificScriptFiles = append(generator.articleSpecificScriptFiles, article.Manifest.ScriptFile)
+	}
+
+	return generator
+}
+
+func createInlineStyleAndScriptTags(page PageGenerator, srcDir, articleDir, quickNoteDir string) ([]string, []string, error) {
+	allStyleTags := make([]string, 0)
+	allScriptTags := make([]string, 0)
+
+	for _, jsFile := range page.globalScriptFiles {
+		minifiedJS, err := loadAndMinifyGlobalScript(srcDir, jsFile)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to load global JS file %s: %v", jsFile, err)
+		}
+		scriptTag := fmt.Sprintf("<script>%s</script>", minifiedJS)
+		allScriptTags = append(allScriptTags, scriptTag)
+	}
+
+	for _, jsFile := range page.articleSpecificScriptFiles {
+		var minifiedJS string
+		var err error
+
+		if page.pageType == PageTypeQuickNote {
+			minifiedJS, err = loadAndMinifyQuickNoteScript(quickNoteDir, jsFile)
+		} else {
+			minifiedJS, err = loadAndMinifyArticleScript(articleDir, jsFile)
+		}
+
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to load article-specific JS file %s: %v", jsFile, err)
+		}
+		scriptTag := fmt.Sprintf("<script>%s</script>", minifiedJS)
+		allScriptTags = append(allScriptTags, scriptTag)
+	}
+
+	for _, cssFile := range page.globalCssFiles {
+		minifiedCSS, err := loadAndMinifyGlobalStyle(srcDir, cssFile)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to load global CSS file %s: %v", cssFile, err)
+		}
+		styleTag := fmt.Sprintf("<style type='text/css'>%s</style>", minifiedCSS)
+		allStyleTags = append(allStyleTags, styleTag)
+	}
+
+	for _, cssFile := range page.articleSpecificCssFiles {
+		var minifiedCSS string
+		var err error
+
+		if page.pageType == PageTypeQuickNote {
+			minifiedCSS, err = loadAndMinifyQuickNoteStyle(quickNoteDir, cssFile)
+		} else {
+			minifiedCSS, err = loadAndMinifyArticleStyle(articleDir, cssFile)
+		}
+
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to load article-specific CSS file %s: %v", cssFile, err)
+		}
+		styleTag := fmt.Sprintf("<style type='text/css'>%s</style>", minifiedCSS)
+		allStyleTags = append(allStyleTags, styleTag)
+	}
+
+	return allStyleTags, allScriptTags, nil
 }
 
 func main() {
@@ -167,78 +228,65 @@ func main() {
 	allQuickNotesHTMLGenerators := make([]PageGenerator, 0)
 
 	for _, a := range allArticles {
-		generator := PageGenerator{
-			filename:       a.HTMLFilename,
-			HTMLgenerator:  articleHTMLGenerator,
-			cssFilename:    []string{"article.css", "syntax-highlighting.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
-		}
-
-		if a.Manifest.CssFile != "" {
-			generator.cssFilename = append(generator.cssFilename, a.Manifest.CssFile)
-		}
-
-		if a.Manifest.ScriptFile != "" {
-			generator.scriptFilename = append(generator.scriptFilename, a.Manifest.ScriptFile)
-		}
+		generator := createContentPageGenerator(a, PageTypeArticle, articleHTMLGenerator)
 		allArticlesHTMLGenerators = append(allArticlesHTMLGenerators, generator)
 	}
 
 	for _, a := range allQuickNotes {
-		generator := PageGenerator{
-			filename:       a.HTMLFilename,
-			HTMLgenerator:  quickNoteHTMLGenerator,
-			cssFilename:    []string{"article.css", "syntax-highlighting.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormatedDate},
-		}
-
-		if a.Manifest.CssFile != "" {
-			generator.cssFilename = append(generator.cssFilename, a.Manifest.CssFile)
-		}
-
-		if a.Manifest.ScriptFile != "" {
-			generator.scriptFilename = append(generator.scriptFilename, a.Manifest.ScriptFile)
-		}
+		generator := createContentPageGenerator(a, PageTypeQuickNote, quickNoteHTMLGenerator)
 		allQuickNotesHTMLGenerators = append(allQuickNotesHTMLGenerators, generator)
 	}
 
 	pages := []PageGenerator{
 		{
-			filename:       "index.html",
-			HTMLgenerator:  homeHTMLGenerator,
-			cssFilename:    []string{"home.css", "articles.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{allArticles, allQuickNotes},
+			filename:                   "index.html",
+			pageType:                   PageTypeGlobal,
+			HTMLgenerator:              homeHTMLGenerator,
+			globalCssFiles:             []string{"home.css", "articles.css"},
+			globalScriptFiles:          []string{},
+			articleSpecificCssFiles:    []string{},
+			articleSpecificScriptFiles: []string{},
+			arguments:                  []interface{}{allArticles, allQuickNotes},
 		},
 		{
-			filename:       "resume.html",
-			HTMLgenerator:  resumePageHTMLGenerator,
-			cssFilename:    []string{"resume.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{workExperiences, schoolExperiences},
+			filename:                   "resume.html",
+			pageType:                   PageTypeGlobal,
+			HTMLgenerator:              resumePageHTMLGenerator,
+			globalCssFiles:             []string{"resume.css"},
+			globalScriptFiles:          []string{},
+			articleSpecificCssFiles:    []string{},
+			articleSpecificScriptFiles: []string{},
+			arguments:                  []interface{}{workExperiences, schoolExperiences},
 		},
 		{
-			filename:       "articles.html",
-			HTMLgenerator:  articlesHTMLGenerator,
-			cssFilename:    []string{"articles.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{allArticles},
+			filename:                   "articles.html",
+			pageType:                   PageTypeGlobal,
+			HTMLgenerator:              articlesHTMLGenerator,
+			globalCssFiles:             []string{"articles.css"},
+			globalScriptFiles:          []string{},
+			articleSpecificCssFiles:    []string{},
+			articleSpecificScriptFiles: []string{},
+			arguments:                  []interface{}{allArticles},
 		},
 		{
-			filename:       "quick-notes.html",
-			HTMLgenerator:  quickNotesHTMLGenerator,
-			cssFilename:    []string{"articles.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{allQuickNotes},
+			filename:                   "quick-notes.html",
+			pageType:                   PageTypeGlobal,
+			HTMLgenerator:              quickNotesHTMLGenerator,
+			globalCssFiles:             []string{"articles.css"},
+			globalScriptFiles:          []string{},
+			articleSpecificCssFiles:    []string{},
+			articleSpecificScriptFiles: []string{},
+			arguments:                  []interface{}{allQuickNotes},
 		},
 		{
-			filename:       "resume-printable.html",
-			HTMLgenerator:  resumePrintReadyHTMLGenerator,
-			cssFilename:    []string{"resume.css"},
-			scriptFilename: []string{},
-			arguments:      []interface{}{workExperiences, schoolExperiences},
+			filename:                   "resume-printable.html",
+			pageType:                   PageTypeGlobal,
+			HTMLgenerator:              resumePrintReadyHTMLGenerator,
+			globalCssFiles:             []string{"resume.css"},
+			globalScriptFiles:          []string{},
+			articleSpecificCssFiles:    []string{},
+			articleSpecificScriptFiles: []string{},
+			arguments:                  []interface{}{workExperiences, schoolExperiences},
 		},
 	}
 
@@ -252,25 +300,9 @@ func main() {
 			log.Fatalf("Could not open file: %v", err)
 		}
 
-		allStyleTags := make([]string, 0)
-		allScriptTags := make([]string, 0)
-
-		for _, jsFile := range page.scriptFilename {
-			minifiedJS, err := findAndMinifyFile([]string{srcDir, quickNoteDir, articleDir}, "scripts", jsFile, MinifyJS)
-			if err != nil {
-				log.Fatalf("Failed to find or minify JS file %s: %v", jsFile, err)
-			}
-			scriptTag := fmt.Sprintf("<script>%s</script>", minifiedJS)
-			allScriptTags = append(allScriptTags, scriptTag)
-		}
-
-		for _, cssFile := range page.cssFilename {
-			minifiedCSS, err := findAndMinifyFile([]string{srcDir, quickNoteDir, articleDir}, "css", cssFile, MinifyCSS)
-			if err != nil {
-				log.Fatalf("Failed to find or minify CSS file %s: %v", cssFile, err)
-			}
-			styleTag := fmt.Sprintf("<style type='text/css'>%s</style>", minifiedCSS)
-			allStyleTags = append(allStyleTags, styleTag)
+		allStyleTags, allScriptTags, err := createInlineStyleAndScriptTags(page, srcDir, articleDir, quickNoteDir)
+		if err != nil {
+			log.Fatalf("Failed to create inline style and script tags for page %s: %v", page.filename, err)
 		}
 
 		page.arguments = append(page.arguments, allStyleTags)
