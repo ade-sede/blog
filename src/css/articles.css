@@ -1,126 +1,144 @@
-h1+.article-menu {
-	margin-top: 2.5rem;
-}
-
-.article-menu {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	width: fit-content;
-	height: fit-content;
-	gap: 0;
-}
-
-.article-menu:has(.empty-content) {
-	width: 100%;
-	align-items: center;
-}
-
-.empty-content {
-	margin: 2rem 0;
-	padding: 2rem;
-	border: 1px dashed var(--accent);
-	border-radius: 8px;
+.page-header {
+	margin-bottom: 3rem;
 	text-align: center;
-	color: var(--secondary);
-	background-color: var(--bg-light);
-	max-width: 600px;
-	width: 80%;
 }
 
-.empty-content p:first-child {
-	font-size: 1.2rem;
-	font-weight: bold;
+.page-header h1 {
 	margin-bottom: 0.5rem;
+	color: var(--primary);
 }
 
-.empty-content p:last-child {
+.page-header p {
+	color: var(--secondary);
 	font-style: italic;
-}
-
-.article-menu .entry {
-	display: flex;
-	flex-direction: row;
-	justify-items: center;
-	padding-right: 1rem;
-	transition: padding 0.3s ease;
-	/* negative margin to overlap borders */
-	/* so that we have a continous line from all the HRs */
-	margin: -8px 0;
-}
-
-.article-menu .entry:hover {
-	padding-left: 1rem;
-	padding-right: 0;
-}
-
-.article-menu .entry hr {
-	width: 1px;
-	height: auto;
-	border: 0;
-	padding: 0;
-	border-left: 2px solid var(--secondary);
-	background: none;
-	/* Override the global gradient style */
 	margin: 0;
 }
 
-.article-menu .entry .link {
-	display: flex;
-	flex-direction: column;
-	padding: 8px;
-	padding-top: 1.5rem;
-	padding-bottom: 1.5rem;
-	color: var(--fg);
-	transition: transform 0.3s ease, background-color 0.3s ease;
+.article-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+	margin: 2rem auto 0;
+	max-width: 1200px;
+	padding: 0 1rem;
 }
 
-/* Special styling for article links */
-.article-menu .entry a:hover {
-	transform: translateX(8px);
-	color: var(--fg);
-	/* Keep text color consistent */
+.article-card {
+	background: var(--bg);
+	border: 2px solid var(--secondary);
+	border-radius: 12px;
+	padding: 1.5rem;
+	transition: all 0.2s ease;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
-/* Don't do the underline animation for article links */
-.article-menu .entry a::after {
+.article-card:hover {
+	border-color: var(--accent);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+	transform: translateY(-3px);
+}
+
+.article-card a {
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+
+.article-card a:hover {
+	color: inherit;
+	border: none;
+}
+
+.article-card a::after {
 	display: none;
 }
 
-.article-menu .entry .link .name {
-	font-style: italic;
+.article-date {
+	display: block;
+	font-size: 0.85rem;
+	color: var(--secondary);
+	font-weight: 500;
+	margin-bottom: 0.75rem;
+}
+
+.article-title {
+	font-size: 1.3rem;
 	color: var(--primary);
-	margin-bottom: 4px;
+	margin: 0 0 0.75rem 0;
+	line-height: 1.3;
+	font-weight: 600;
 }
 
-.article-menu .entry .link .date {
-	font-weight: bold;
-	font-style: italic;
-	align-self: flex-start;
-	color: var(--secondary);
-	font-size: 0.9rem;
-	margin-bottom: 4px;
-}
-
-.article-menu .entry .link .date .author {
-	color: var(--secondary);
-	font-weight: normal;
-	font-style: italic;
-}
-
-.article-menu .entry .link .description {
+.article-description {
 	color: var(--fg);
+	line-height: 1.5;
+	margin: 0 0 1rem 0;
+}
+
+.article-author {
+	font-size: 0.8rem;
+	color: var(--secondary);
+	font-style: italic;
+	opacity: 0.8;
+}
+
+.empty-state {
+	text-align: center;
+	margin: 3rem auto;
+	padding: 3rem 2rem;
+	max-width: 500px;
+	border: 2px dashed rgba(var(--accent-rgb), 0.3);
+	border-radius: 12px;
+	background: rgba(var(--bg-light-rgb), 0.5);
+}
+
+.empty-state p:first-child {
+	font-size: 1.2rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	color: var(--primary);
+}
+
+.empty-state p:last-child {
+	color: var(--secondary);
+	font-style: italic;
+	margin: 0;
+}
+
+@media (max-width: 768px) {
+	.article-grid {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+	
+	.article-card {
+		padding: 1.25rem;
+	}
+	
+	.page-header {
+		margin-bottom: 2rem;
+	}
+	
+	.empty-state {
+		margin: 2rem auto;
+		padding: 2rem 1.5rem;
+	}
 }
 
 @media (max-width: 480px) {
-	.article-menu .entry .link .description {
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 3;
-		line-clamp: 3;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		max-height: 100px;
-		margin-bottom: 10px;
+	.article-grid {
+		gap: 1rem;
+	}
+	
+	.article-card {
+		padding: 1rem;
+	}
+	
+	.article-title {
+		font-size: 1.2rem;
+	}
+	
+	.page-header h1 {
+		font-size: 1.8rem;
 	}
 }

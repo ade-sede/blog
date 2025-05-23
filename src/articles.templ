@@ -2,33 +2,36 @@ package main
 
 templ articles(articles []Article, styleTags []string) {
 	@Base("Adrien's articles", "Side projects, hobbies, rants", styleTags, []string{}) {
-		<h1>Articles </h1>
+		<div class="page-header">
+			<h1>Articles</h1>
+			<p>Side projects, hobbies, rants</p>
+		</div>
 		@articleMenu(articles)
 	}
 }
 
 templ articleMenu(articles []Article) {
-	<div class="article-menu">
-		if len(articles) == 0 {
-			<div class="empty-content">
-				<p>📝 Articles are being carefully crafted in the depths of my mind...</p>
-				<p>Check back soon for some hopefully interesting content!</p>
-			</div>
-		} else {
+	if len(articles) == 0 {
+		<div class="empty-state">
+			<p>📝 Articles are being carefully crafted in the depths of my mind...</p>
+			<p>Check back soon for some hopefully interesting content!</p>
+		</div>
+	} else {
+		<div class="article-grid">
 			for _, article := range articles {
-				@articleMenuEntry(article)
+				@articleCard(article)
 			}
-		}
-	</div>
+		</div>
+	}
 }
 
-templ articleMenuEntry(article Article) {
-	<div class="entry">
-		<hr/>
-		<a class="link" href={ templ.URL(article.HTMLFilename) }>
-			<span class="date"><i class="far fa-calendar-alt"></i> { article.FormatedDate }, <span class="author">{ article.Manifest.Author }</span></span>
-			<span class="name">{ article.Manifest.Title } </span>
-			<span class="description">{ article.Manifest.Description }</span>
+templ articleCard(article Article) {
+	<article class="article-card">
+		<a href={ templ.URL(article.HTMLFilename) }>
+			<time class="article-date">{ article.FormatedDate }</time>
+			<h3 class="article-title">{ article.Manifest.Title }</h3>
+			<p class="article-description">{ article.Manifest.Description }</p>
+			<span class="article-author">by { article.Manifest.Author }</span>
 		</a>
-	</div>
+	</article>
 }

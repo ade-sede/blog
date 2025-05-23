@@ -2,34 +2,25 @@ package main
 
 templ quickNotes(articles []Article, styleTags []string) {
 	@Base("Adrien's quick-notes", "Small pieces of documentation to make sure I don't forget", styleTags, []string{}) {
-		<h1>Quick notes </h1>
-		<p>Small snippets of documentation, mostly for my own usage.</p>
+		<div class="page-header">
+			<h1>Quick notes</h1>
+			<p>Small snippets of documentation, mostly for my own usage.</p>
+		</div>
 		@quickNoteMenu(articles)
 	}
 }
 
 templ quickNoteMenu(articles []Article) {
-	<div class="article-menu">
-		if len(articles) == 0 {
-			<div class="empty-content">
-				<p>🤔 My brain is currently devoid of quick notes...</p>
-				<p>But don't worry, I'll forget how to do something complicated soon and document it here!</p>
-			</div>
-		} else {
+	if len(articles) == 0 {
+		<div class="empty-state">
+			<p>🤔 My brain is currently devoid of quick notes...</p>
+			<p>But don't worry, I'll forget how to do something complicated soon and document it here!</p>
+		</div>
+	} else {
+		<div class="article-grid">
 			for _, article := range articles {
-				@articleMenuEntry(article)
+				@articleCard(article)
 			}
-		}
-	</div>
-}
-
-templ quickNoteEntry(article Article) {
-	<div class="entry">
-		<hr/>
-		<a class="link" href={ templ.URL(article.HTMLFilename) }>
-			<span class="date"><i class="far fa-calendar-alt"></i> { article.FormatedDate }, <span class="author">{ article.Manifest.Author }</span></span>
-			<span class="name">{ article.Manifest.Title } </span>
-			<span class="description">{ article.Manifest.Description }</span>
-		</a>
-	</div>
+		</div>
+	}
 }
