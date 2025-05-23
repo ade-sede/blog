@@ -3,29 +3,69 @@ package main
 templ home(articles []Article, quickNotes []Article, styleTags []string) {
 	@Base("Adrien's blog", "Hobbies, maybe even rants and opinions", styleTags, []string{}) {
 		<div class="home">
-			<div class="intro">
-				<img alt="Adrien DE SEDE" width="200" height="200" src="images/picture.webp"/>
-				<p>
-					I am Adrien, a software engineer living in Lyon, France.
-					<br/>
-					I like building things. From small IoT devices to distributed systems and anything in-between.
-					<br/>
-				</p>
-			</div>
-			<div class="rest">
-				if len(articles) > 0 {
-					<div>
-						<h2>Most recent articles </h2>
-						@articleMenu(articles)
+			<section class="hero">
+				<div class="hero-content">
+					<div class="profile">
+						<img class="profile-image" alt="Adrien DE SEDE" width="160" height="160" src="images/picture.webp"/>
+						<div class="profile-text">
+							<h1 class="profile-name">Adrien DE SEDE</h1>
+							<p class="profile-title">Software Engineer</p>
+							<p class="profile-location">Lyon, France</p>
+						</div>
 					</div>
-				}
-				if len(quickNotes) > 0 {
-					<div>
-						<h2>Most recent quick notes </h2>
-						@quickNoteMenu(quickNotes)
-					</div>
-				}
-			</div>
+					<p class="profile-bio">
+						I like building things. From small IoT devices to distributed systems and anything in-between.
+					</p>
+				</div>
+			</section>
+			<section class="content-sections">
+				<div class="sections-grid">
+					if len(articles) > 0 {
+						<div class="content-section">
+							<div class="section-header">
+								<h2>Most Recent Article</h2>
+								<a href="/articles" class="view-all">View all →</a>
+							</div>
+							<div class="home-articles">
+								@homeArticleList(articles)
+							</div>
+						</div>
+					}
+					if len(quickNotes) > 0 {
+						<div class="content-section">
+							<div class="section-header">
+								<h2>Most Recent Quick Note</h2>
+								<a href="/quick-notes" class="view-all">View all →</a>
+							</div>
+							<div class="home-quick-notes">
+								@homeQuickNoteList(quickNotes)
+							</div>
+						</div>
+					}
+				</div>
+			</section>
 		</div>
 	}
+}
+
+templ homeArticleList(articles []Article) {
+	if len(articles) > 0 {
+		@homeContentItem(articles[0])
+	}
+}
+
+templ homeQuickNoteList(quickNotes []Article) {
+	if len(quickNotes) > 0 {
+		@homeContentItem(quickNotes[0])
+	}
+}
+
+templ homeContentItem(item Article) {
+	<a href={ templ.URL(item.HTMLFilename) } class="home-item">
+		<div class="item-meta">
+			<time class="item-date">{ item.FormatedDate }</time>
+		</div>
+		<h3 class="item-title">{ item.Manifest.Title }</h3>
+		<p class="item-description">{ item.Manifest.Description }</p>
+	</a>
 }
