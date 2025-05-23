@@ -27,7 +27,7 @@ templ quickNoteEntry(article Article) {
 	<div class="entry">
 		<hr/>
 		<a class="link" href={ templ.URL(article.HTMLFilename) }>
-			<span class="date">{ article.FormatedDate }</span>
+			<span class="date"><i class="far fa-calendar-alt"></i> { article.FormatedDate }, <span class="author">{ article.Manifest.Author }</span></span>
 			<span class="name">{ article.Manifest.Title } </span>
 			<span class="description">{ article.Manifest.Description }</span>
 		</a>

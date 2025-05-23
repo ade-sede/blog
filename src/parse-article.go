@@ -489,14 +489,14 @@ func processLatexExpressions(input string) string {
 	return processed
 }
 
-func injectBylineAfterFirstH1(html string, formattedDate string, author string, authorImage string) (string, error) {
+func injectBylineBeforeFirstH1(html string, formattedDate string, author string, authorImage string) (string, error) {
 	h1Regex := regexp.MustCompile(`(<h1[^>]*>.*?</h1>)`)
 	if !h1Regex.MatchString(html) {
 		return "", fmt.Errorf("no h1 tag found in article HTML")
 	}
 
 	bylineHTML := fmt.Sprintf(`<div class="article-byline"><img src="images/%s" alt="%s" class="author-avatar"><div class="byline-content"><div class="date-line"><i class="far fa-calendar-alt"></i> %s</div><div class="author-line">by %s</div></div></div>`, authorImage, author, formattedDate, author)
-	result := h1Regex.ReplaceAllString(html, `$1`+bylineHTML)
+	result := h1Regex.ReplaceAllString(html, bylineHTML+`$1`)
 
 	return result, nil
 }
@@ -545,7 +545,7 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 	}
 
 	html := buf.String()
-	return injectBylineAfterFirstH1(html, formattedDate, author, authorImage)
+	return injectBylineBeforeFirstH1(html, formattedDate, author, authorImage)
 }
 
 func parseArticles(articleDir string) ([]Article, error) {

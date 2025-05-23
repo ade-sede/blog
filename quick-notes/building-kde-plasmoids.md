@@ -1,6 +1,4 @@
-# Building KDE Plasmoids for Plasma 5: Notes
-
-_Mostly for myself as a form of internal documentation..._
+# Building KDE Plasmoids for Plasma 5
 
 ## What is a plasmoid?
 

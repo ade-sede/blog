@@ -88,17 +88,24 @@ h1+.article-menu {
 }
 
 .article-menu .entry .link .name {
-	font-weight: bold;
+	font-style: italic;
 	color: var(--primary);
 	margin-bottom: 4px;
 }
 
 .article-menu .entry .link .date {
+	font-weight: bold;
 	font-style: italic;
 	align-self: flex-start;
 	color: var(--secondary);
 	font-size: 0.9rem;
 	margin-bottom: 4px;
+}
+
+.article-menu .entry .link .date .author {
+	color: var(--secondary);
+	font-weight: normal;
+	font-style: italic;
 }
 
 .article-menu .entry .link .description {
