@@ -2,16 +2,23 @@ nav.navbar {
 	--track-color: #e0e0e0;
 	--ball-color: #ffffff;
 
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	background-color: var(--bg);
+	border-bottom: 1px solid var(--code-border);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 	display: flex;
 	flex-direction: row;
-	align-self: center;
-	width: 90%;
+	justify-content: center;
+	width: 100%;
 
 	font-family: "Montserrat", sans-serif;
 	font-size: 1.5rem;
 	font-weight: bold;
 
-	padding: 2rem;
+	padding: 1rem 0;
 }
 
 nav .navbar-contents {
@@ -19,7 +26,8 @@ nav .navbar-contents {
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	width: 100%;
+	width: 90%;
+	max-width: 1200px;
 }
 
 nav .navbar-links {

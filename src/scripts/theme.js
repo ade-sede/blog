@@ -182,8 +182,7 @@ function initThemePicker(selector = ".theme-toggle") {
     const themeButton = document.createElement("button");
     themeButton.id = `theme-button-${instanceId}`;
     themeButton.className = "theme-button";
-    themeButton.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor"><path d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM256 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm0 384c-97.2 0-176-78.8-176-176S158.8 80 256 80s176 78.8 176 176-78.8 176-176 176zm-80-176c0 44.2 35.8 80 80 80s80-35.8 80-80-35.8-80-80-80-80 35.8-80 80z"/></svg>';
+    themeButton.innerHTML = '<i class="fas fa-palette"></i>';
     themeButton.setAttribute("aria-label", "Change theme");
     themeButton.setAttribute("title", "Change theme");
 
