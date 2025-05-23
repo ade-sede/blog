@@ -24,7 +24,7 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 						<div class="content-section">
 							<div class="section-header">
 								<h2>Most Recent Article</h2>
-								<a href="/articles" class="view-all">View all →</a>
+								<a href="articles.html" class="view-all">View all →</a>
 							</div>
 							<div class="home-articles">
 								@homeArticleList(articles)
@@ -35,7 +35,7 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 						<div class="content-section">
 							<div class="section-header">
 								<h2>Most Recent Quick Note</h2>
-								<a href="/quick-notes" class="view-all">View all →</a>
+								<a href="quick-notes.html" class="view-all">View all →</a>
 							</div>
 							<div class="home-quick-notes">
 								@homeQuickNoteList(quickNotes)
