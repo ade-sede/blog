@@ -48,6 +48,27 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('/fonts/jetbrains-mono/JetBrainsMono-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('/fonts/jetbrains-mono/JetBrainsMono-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('/fonts/jetbrains-mono/JetBrainsMono-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
 :root {
 	--bg: white;
 	--fg: black;
@@ -60,7 +81,7 @@
 	--code-border: #d1d5db;
 	--code-header-bg: #e1e4e8;
 	--link-hover: black;
-	--mono-font: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+	--mono-font: 'JetBrains Mono', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 	--diff-add-color: #1b5e20;
 	--diff-add-bg: #e8f5e8;
 	--diff-del-color: #c62828;

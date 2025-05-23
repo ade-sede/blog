@@ -238,7 +238,7 @@
   box-sizing: border-box;
   margin: 1.5rem 0;
   padding: 1rem;
-  font-family: monospace;
+  font-family: var(--mono-font);
   font-size: 0.9rem;
   line-height: 1.2;
 }
