@@ -30,7 +30,7 @@ code {
 .article table {
 	border-collapse: collapse;
 	width: 100%;
-	margin: 1.5em 0;
+	margin: 1.5rem 0;
 	overflow-x: auto;
 	display: block;
 }
@@ -155,7 +155,7 @@ code {
 	font-size: 2.2rem;
 	margin-bottom: 1rem;
 	color: var(--primary);
-	margin-top: 16px;
+	margin-top: 1rem;
 }
 
 .article h2 {
@@ -227,7 +227,7 @@ code {
 
 
 .code-block {
-	margin: 1.5em 0;
+	margin: 1.5rem 0;
 	border-radius: 6px;
 	overflow: hidden;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -239,9 +239,9 @@ code {
 .code-filename {
 	background-color: var(--code-header-bg);
 	color: var(--code-fg);
-	padding: 0.35em 1em;
+	padding: 0.35rem 1rem;
 	font-family: var(--mono-font);
-	font-size: 0.9em;
+	font-size: 0.9rem;
 	border-bottom: 1px solid var(--code-border);
 	font-weight: bold;
 	white-space: nowrap;
@@ -304,7 +304,7 @@ code {
 
 .code-block pre {
 	margin: 0;
-	padding: 1em;
+	padding: 1rem;
 	overflow-x: auto;
 	background-color: var(--code-bg);
 	color: var(--code-fg);
@@ -316,7 +316,7 @@ code {
 
 .code-block code {
 	font-family: var(--mono-font);
-	font-size: 0.9em;
+	font-size: 0.9rem;
 	background: transparent;
 	color: var(--code-fg);
 	padding: 0;
@@ -324,14 +324,14 @@ code {
 
 @media (max-width: 480px) {
 	.code-block {
-		margin: 1em 0;
+		margin: 1rem 0;
 		border-radius: 4px;
 		width: 100%;
 	}
 
 	.code-filename {
-		padding: 0.3em 0.8em;
-		font-size: 0.8em;
+		padding: 0.3rem 0.8rem;
+		font-size: 0.8rem;
 	}
 
 	.code-filename>span:first-child {
@@ -342,16 +342,16 @@ code {
 
 	.copy-filename {
 		padding: 3px 4px;
-		font-size: 0.9em;
+		font-size: 0.9rem;
 	}
 
 	.code-block pre {
-		padding: 0.8em;
-		font-size: 0.9em;
+		padding: 0.8rem;
+		font-size: 0.9rem;
 	}
 
 	.code-block code {
-		font-size: 0.85em;
+		font-size: 0.85rem;
 	}
 }
 
@@ -390,13 +390,13 @@ code {
 }
 
 .chroma .lnt {
-	margin-right: 0.4em;
-	padding: 0 0.4em 0 0.4em;
+	margin-right: 0.4rem;
+	padding: 0 0.4rem 0 0.4rem;
 }
 
 .chroma .ln {
-	margin-right: 0.4em;
-	padding: 0 0.4em 0 0.4em;
+	margin-right: 0.4rem;
+	padding: 0 0.4rem 0 0.4rem;
 }
 
 .chroma .k {
@@ -638,7 +638,7 @@ code {
 }
 
 .footnote-ref {
-	font-size: 0.8em;
+	font-size: 0.8rem;
 	vertical-align: super;
 	line-height: 0;
 	color: var(--secondary);
@@ -654,10 +654,10 @@ code {
 }
 
 .footnote-backref {
-	font-size: 0.75em;
-	padding: 0.1em 0.3em;
+	font-size: 0.75rem;
+	padding: 0.1rem 0.3rem;
 	color: var(--secondary);
-	margin-left: 0.3em;
+	margin-left: 0.3rem;
 	border: none !important;
 	text-decoration: none;
 	transition: color 0.2s ease;

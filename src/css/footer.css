@@ -16,7 +16,7 @@ footer .footer-contacts {
 	display: flex;
 	flex-direction: row;
 	justify-self: flex-end;
-	gap: 16px;
+	gap: 1rem;
 }
 
 footer a {
@@ -41,6 +41,6 @@ footer hr {
 	width: 100%;
 	border: 0;
 	background: linear-gradient(to right, transparent, var(--primary), transparent);
-	margin: 1.5em 0;
+	margin: 1.5rem 0;
 	padding: 0;
 }

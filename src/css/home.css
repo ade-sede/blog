@@ -10,9 +10,9 @@
 	align-self: center;
 	align-items: center;
 	font-size: 1.3rem;
-	gap: 48px;
-	padding-bottom: 64px;
-	max-width: 800px;
+	gap: 3rem;
+	padding-bottom: 4rem;
+	max-width: 50rem;
 }
 
 .home .intro img {
@@ -30,12 +30,12 @@
 	border-bottom: 2px solid var(--accent);
 	padding-bottom: 8px;
 	display: inline-block;
-	margin-bottom: 40px;
-	margin-top: 40px;
+	margin-bottom: 2.5rem;
+	margin-top: 2.5rem;
 }
 
 .home .rest {
-	margin-top: 20px;
+	margin-top: 1.25rem;
 }
 
 @media (max-width: 480px) {

@@ -1,5 +1,5 @@
 h1+.article-menu {
-	margin-top: 40px;
+	margin-top: 2.5rem;
 }
 
 .article-menu {
@@ -42,7 +42,7 @@ h1+.article-menu {
 	display: flex;
 	flex-direction: row;
 	justify-items: center;
-	padding-right: 16px;
+	padding-right: 1rem;
 	transition: padding 0.3s ease;
 	/* negative margin to overlap borders */
 	/* so that we have a continous line from all the HRs */
@@ -50,7 +50,7 @@ h1+.article-menu {
 }
 
 .article-menu .entry:hover {
-	padding-left: 16px;
+	padding-left: 1rem;
 	padding-right: 0;
 }
 
@@ -69,8 +69,8 @@ h1+.article-menu {
 	display: flex;
 	flex-direction: column;
 	padding: 8px;
-	padding-top: 24px;
-	padding-bottom: 24px;
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
 	color: var(--fg);
 	transition: transform 0.3s ease, background-color 0.3s ease;
 }

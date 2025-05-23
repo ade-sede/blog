@@ -79,7 +79,7 @@
 	--syntax-error: #d73a49;
 	--syntax-line-number: #6a737d;
 	--syntax-highlight: #ffffcc;
-	font-size: 16px;
+	font-size: 1rem;
 }
 
 
@@ -369,7 +369,7 @@ hr {
 	border: 0;
 	height: 1px;
 	background: linear-gradient(to right, transparent, var(--secondary), transparent);
-	margin: 2em 0;
+	margin: 2rem 0;
 }
 
 h1 {
@@ -401,7 +401,7 @@ a::after {
 	position: absolute;
 	width: 100%;
 	height: 2px;
-	bottom: 0px;
+	bottom: 0;
 	left: 0;
 	background-color: var(--accent);
 	transform: scaleX(0);
@@ -447,7 +447,7 @@ a[class]::after {
 	}
 
 	body .body-main {
-		padding: 0 15px;
+		padding: 0 1rem;
 		font-size: 1rem;
 		max-width: 100%;
 		width: 100%;
