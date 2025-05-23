@@ -1,10 +1,23 @@
 package main
 
+import "fmt"
+
 templ article(title string, description string, stringifiedHTML string, formattedDate string, scriptTags []string,
-	styleTags []string) {
+	styleTags []string, toc []TOCEntry) {
 	@Base(title, description, styleTags, scriptTags) {
-		<div class="article">
-			@templ.Raw(stringifiedHTML)
+		<div class="article-container">
+			<nav class="table-of-contents">
+				<ul>
+					for _, entry := range toc {
+						<li class={ "toc-level-" + fmt.Sprintf("%d", entry.Level) }>
+							<a href={ templ.SafeURL("#" + entry.ID) }>{ entry.Text }</a>
+						</li>
+					}
+				</ul>
+			</nav>
+			<div class="article">
+				@templ.Raw(stringifiedHTML)
+			</div>
 		</div>
 	}
 }

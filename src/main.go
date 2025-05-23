@@ -48,10 +48,10 @@ func createContentPageGenerator(article Article, pageType PageType, htmlGenerato
 		pageType:                   pageType,
 		HTMLgenerator:              htmlGenerator,
 		globalCssFiles:             []string{"article.css", "syntax-highlighting.css"},
-		globalScriptFiles:          []string{},
+		globalScriptFiles:          []string{"toc.js"},
 		articleSpecificCssFiles:    []string{},
 		articleSpecificScriptFiles: []string{},
-		arguments:                  []interface{}{article.Manifest.Title, article.Manifest.Description, article.StringifiedHTML, article.FormatedDate},
+		arguments:                  []interface{}{article.Manifest.Title, article.Manifest.Description, article.StringifiedHTML, article.FormatedDate, article.TOC},
 	}
 
 	if article.Manifest.CssFile != "" {
@@ -183,9 +183,10 @@ func main() {
 		description, _ := args[1].(string)
 		stringifiedHTML, _ := args[2].(string)
 		formattedDate, _ := args[3].(string)
-		styleTags, _ := args[4].([]string)
-		scriptTags, _ := args[5].([]string)
-		return article(title, description, stringifiedHTML, formattedDate, styleTags, scriptTags)
+		toc, _ := args[4].([]TOCEntry)
+		styleTags, _ := args[5].([]string)
+		scriptTags, _ := args[6].([]string)
+		return article(title, description, stringifiedHTML, formattedDate, scriptTags, styleTags, toc)
 	}
 
 	quickNoteHTMLGenerator := func(args ...interface{}) templ.Component {
@@ -193,9 +194,10 @@ func main() {
 		description, _ := args[1].(string)
 		stringifiedHTML, _ := args[2].(string)
 		formattedDate, _ := args[3].(string)
-		styleTags, _ := args[4].([]string)
-		scriptTags, _ := args[5].([]string)
-		return quickNote(title, description, stringifiedHTML, formattedDate, styleTags, scriptTags)
+		toc, _ := args[4].([]TOCEntry)
+		styleTags, _ := args[5].([]string)
+		scriptTags, _ := args[6].([]string)
+		return quickNote(title, description, stringifiedHTML, formattedDate, scriptTags, styleTags, toc)
 	}
 
 	articlesHTMLGenerator := func(args ...interface{}) templ.Component {

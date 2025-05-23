@@ -37,6 +37,12 @@ type ArticleManifest struct {
 	AuthorImage  string `json:"authorImage"`
 }
 
+type TOCEntry struct {
+	Level int
+	Text  string
+	ID    string
+}
+
 type Article struct {
 	ManifestFilename string
 	HTMLFilename     string
@@ -44,6 +50,7 @@ type Article struct {
 	Date             time.Time
 	FormatedDate     string
 	Manifest         *ArticleManifest
+	TOC              []TOCEntry
 }
 
 // filenameTitleTransformer supports 4 formats:
@@ -52,6 +59,10 @@ type Article struct {
 //   - language:diff
 //   - language:filename:diff
 type filenameTitleTransformer struct{}
+
+type tocExtractor struct {
+	TOC []TOCEntry
+}
 
 func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
 	ast.Walk(node, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -89,12 +100,91 @@ func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Rea
 	})
 }
 
+func (toc *tocExtractor) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
+	ast.Walk(node, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+		if !entering {
+			return ast.WalkContinue, nil
+		}
+
+		if heading, ok := n.(*ast.Heading); ok {
+			var headingText strings.Builder
+
+			// Extract text content recursively from all child nodes
+			ast.Walk(heading, func(child ast.Node, childEntering bool) (ast.WalkStatus, error) {
+				if !childEntering {
+					return ast.WalkContinue, nil
+				}
+				if textNode, ok := child.(*ast.Text); ok {
+					headingText.Write(textNode.Segment.Value(reader.Source()))
+				}
+				return ast.WalkContinue, nil
+			})
+
+			headingID := ""
+			if id, exists := heading.AttributeString("id"); exists {
+				headingID = string(id.([]byte))
+			}
+
+			if headingText.Len() > 0 {
+				toc.TOC = append(toc.TOC, TOCEntry{
+					Level: heading.Level,
+					Text:  headingText.String(),
+					ID:    headingID,
+				})
+			}
+		}
+		return ast.WalkContinue, nil
+	})
+}
+
 type codeBlockRenderer struct {
 	html.Config
 }
 
 func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindFencedCodeBlock, r.renderCodeBlock)
+}
+
+type headingRenderer struct {
+	html.Config
+}
+
+func (r *headingRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindHeading, r.renderHeading)
+}
+
+func (r *headingRenderer) renderHeading(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.Heading)
+
+	if entering {
+		tag := fmt.Sprintf("h%d", n.Level)
+
+		headingID := ""
+		if id, exists := n.AttributeString("id"); exists {
+			headingID = string(id.([]byte))
+		}
+
+		if headingID != "" {
+			w.WriteString(fmt.Sprintf("<%s id=\"%s\" class=\"heading-with-anchor\">", tag, headingID))
+		} else {
+			w.WriteString(fmt.Sprintf("<%s>", tag))
+		}
+	} else {
+		tag := fmt.Sprintf("h%d", n.Level)
+
+		headingID := ""
+		if id, exists := n.AttributeString("id"); exists {
+			headingID = string(id.([]byte))
+		}
+
+		if headingID != "" {
+			w.WriteString(fmt.Sprintf("<a href=\"#%s\" class=\"header-anchor\" title=\"Link to this section\"><i class=\"fas fa-link\"></i></a>", headingID))
+		}
+
+		w.WriteString(fmt.Sprintf("</%s>", tag))
+	}
+
+	return ast.WalkContinue, nil
 }
 
 type DiffLineType int
@@ -501,12 +591,14 @@ func injectBylineBeforeFirstH1(html string, formattedDate string, author string,
 	return result, nil
 }
 
-func parseArticleMarkdown(filename string, formattedDate string, author string, authorImage string) (string, error) {
+func parseArticleMarkdown(filename string, formattedDate string, author string, authorImage string) (string, []TOCEntry, error) {
 	var buf bytes.Buffer
 	input, err := os.ReadFile(filename)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
+
+	tocExtractor := &tocExtractor{TOC: []TOCEntry{}}
 
 	processedInput := processLatexExpressions(string(input))
 
@@ -518,6 +610,7 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 				html.WithUnsafe(),
 			), 100),
 			util.Prioritized(&codeBlockRenderer{}, 80),
+			util.Prioritized(&headingRenderer{}, 70),
 		),
 	)
 
@@ -535,17 +628,23 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 			parser.WithAutoHeadingID(),
 			parser.WithASTTransformers(
 				util.Prioritized(&filenameTitleTransformer{}, 100),
+				util.Prioritized(tocExtractor, 50),
 			),
 		),
 	)
 
 	err = p.Convert([]byte(processedInput), &buf)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	html := buf.String()
-	return injectBylineBeforeFirstH1(html, formattedDate, author, authorImage)
+	processedHTML, err := injectBylineBeforeFirstH1(html, formattedDate, author, authorImage)
+	if err != nil {
+		return "", nil, err
+	}
+
+	return processedHTML, tocExtractor.TOC, nil
 }
 
 func parseArticles(articleDir string) ([]Article, error) {
@@ -570,7 +669,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 			}
 			markdownFullPath := articleDir + "/" + manifest.MarkdownFile
 			formattedDate := formatDate(date)
-			stringifiedHTML, err := parseArticleMarkdown(markdownFullPath, formattedDate, manifest.Author, manifest.AuthorImage)
+			stringifiedHTML, toc, err := parseArticleMarkdown(markdownFullPath, formattedDate, manifest.Author, manifest.AuthorImage)
 			if err != nil {
 				return nil, err
 			}
@@ -581,6 +680,7 @@ func parseArticles(articleDir string) ([]Article, error) {
 				FormatedDate:     formatDate(date),
 				Manifest:         manifest,
 				StringifiedHTML:  stringifiedHTML,
+				TOC:              toc,
 			}
 			articles = append(articles, article)
 		}
