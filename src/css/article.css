@@ -6,8 +6,7 @@ pre {
 	padding: 10px;
 	overflow: auto;
 	max-width: 100%;
-	white-space: pre-wrap;
-	word-wrap: break-word;
+	white-space: pre;
 	font-family: var(--mono-font);
 	line-height: 1.2;
 }
@@ -93,8 +92,7 @@ code {
 	pre {
 		overflow-x: auto;
 		max-width: 100%;
-		white-space: pre-wrap;
-		word-wrap: break-word;
+		white-space: pre;
 		font-family: var(--mono-font);
 		font-size: 14px;
 		padding: 8px;
@@ -116,10 +114,6 @@ code {
 		font-size: 1.1rem;
 	}
 
-	.article p,
-	.article li {
-		word-break: break-word;
-	}
 
 	.article-byline {
 		padding: 0.8rem 0;
@@ -147,9 +141,6 @@ code {
 	width: 55%;
 	max-width: 900px;
 	margin: 0 auto;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	hyphens: auto;
 }
 
 .article-byline {
