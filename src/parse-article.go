@@ -44,6 +44,11 @@ type Article struct {
 	Manifest         *ArticleManifest
 }
 
+// filenameTitleTransformer supports 4 formats:
+//   - language
+//   - language:filename
+//   - language:diff
+//   - language:filename:diff
 type filenameTitleTransformer struct{}
 
 func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
@@ -61,7 +66,12 @@ func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Rea
 				cb.SetAttribute([]byte("isDiff"), []byte("false"))
 			}
 
-			if len(parts) == 2 {
+			if len(parts) == 2 && parts[1] == "diff" {
+				cb.SetAttribute([]byte("language"), []byte(parts[0]))
+				cb.SetAttribute([]byte("isDiff"), []byte("true"))
+			}
+
+			if len(parts) == 2 && parts[1] != "diff" {
 				cb.SetAttribute([]byte("language"), []byte(parts[0]))
 				cb.SetAttribute([]byte("filename"), []byte(parts[1]))
 				cb.SetAttribute([]byte("isDiff"), []byte("false"))
