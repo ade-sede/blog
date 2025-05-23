@@ -1,4 +1,4 @@
-# Building KDE Plasmoids for Plasma 6: Notes
+# Building KDE Plasmoids for Plasma 5: Notes
 
 _Mostly for myself as a form of internal documentation..._
 
