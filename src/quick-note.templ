@@ -4,9 +4,6 @@ templ quickNote(title string, description string, stringifiedHTML string, format
 	styleTags []string) {
 	@Base(title, description, styleTags, scriptTags) {
 		<div class="article">
-			<div class="article-date">
-				<i class="far fa-calendar-alt"></i> { formattedDate }
-			</div>
 			@templ.Raw(stringifiedHTML)
 		</div>
 	}

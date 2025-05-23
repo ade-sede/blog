@@ -33,6 +33,8 @@ type ArticleManifest struct {
 	CssFile      string `json:"cssFile, omitempty"`
 	ScriptFile   string `json:"scriptFile"`
 	Description  string `json:"description"`
+	Author       string `json:"author"`
+	AuthorImage  string `json:"authorImage"`
 }
 
 type Article struct {
@@ -487,7 +489,19 @@ func processLatexExpressions(input string) string {
 	return processed
 }
 
-func parseArticleMarkdown(filename string) (string, error) {
+func injectBylineAfterFirstH1(html string, formattedDate string, author string, authorImage string) (string, error) {
+	h1Regex := regexp.MustCompile(`(<h1[^>]*>.*?</h1>)`)
+	if !h1Regex.MatchString(html) {
+		return "", fmt.Errorf("no h1 tag found in article HTML")
+	}
+
+	bylineHTML := fmt.Sprintf(`<div class="article-byline"><img src="images/%s" alt="%s" class="author-avatar"><div class="byline-content"><div class="date-line"><i class="far fa-calendar-alt"></i> %s</div><div class="author-line">by %s</div></div></div>`, authorImage, author, formattedDate, author)
+	result := h1Regex.ReplaceAllString(html, `$1`+bylineHTML)
+
+	return result, nil
+}
+
+func parseArticleMarkdown(filename string, formattedDate string, author string, authorImage string) (string, error) {
 	var buf bytes.Buffer
 	input, err := os.ReadFile(filename)
 	if err != nil {
@@ -530,7 +544,8 @@ func parseArticleMarkdown(filename string) (string, error) {
 		return "", err
 	}
 
-	return buf.String(), nil
+	html := buf.String()
+	return injectBylineAfterFirstH1(html, formattedDate, author, authorImage)
 }
 
 func parseArticles(articleDir string) ([]Article, error) {
@@ -554,7 +569,8 @@ func parseArticles(articleDir string) ([]Article, error) {
 				return nil, err
 			}
 			markdownFullPath := articleDir + "/" + manifest.MarkdownFile
-			stringifiedHTML, err := parseArticleMarkdown(markdownFullPath)
+			formattedDate := formatDate(date)
+			stringifiedHTML, err := parseArticleMarkdown(markdownFullPath, formattedDate, manifest.Author, manifest.AuthorImage)
 			if err != nil {
 				return nil, err
 			}

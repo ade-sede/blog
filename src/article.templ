@@ -4,9 +4,6 @@ templ article(title string, description string, stringifiedHTML string, formatte
 	styleTags []string) {
 	@Base(title, description, styleTags, scriptTags) {
 		<div class="article">
-			<div class="article-date">
-				<i class="far fa-calendar-alt"></i> { formattedDate }
-			</div>
 			@templ.Raw(stringifiedHTML)
 		</div>
 	}
