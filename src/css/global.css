@@ -89,17 +89,35 @@
 	--syntax-keyword: #d73a49;
 	--syntax-string: #032f62;
 	--syntax-comment: #6a737d;
-	--syntax-number: #005cc5;
+	--syntax-number: #e36209;
 	--syntax-function: #6f42c1;
 	--syntax-class: #e36209;
 	--syntax-tag: #22863a;
 	--syntax-attribute: #6f42c1;
 	--syntax-builtin: #005cc5;
-	--syntax-variable: #005cc5;
+	--syntax-variable: #24292e;
 	--syntax-operator: #d73a49;
 	--syntax-error: #d73a49;
 	--syntax-line-number: #6a737d;
 	--syntax-highlight: #ffffcc;
+	--syntax-function-call: #795da3;
+	--syntax-property: #22863a;
+	--syntax-parameter: #e36209;
+	--syntax-constant: #005cc5;
+	--syntax-type: #6f42c1;
+	--syntax-decorator: #d73a49;
+	--syntax-import: #22863a;
+	--syntax-regex: #032f62;
+	--syntax-escape: #e36209;
+	--syntax-markup-tag: #22863a;
+	--syntax-markup-attr: #6f42c1;
+	--syntax-css-selector: #6f42c1;
+	--syntax-css-property: #005cc5;
+	--syntax-css-value: #032f62;
+	--syntax-method: #795da3;
+	--syntax-field: #e36209;
+	--syntax-namespace: #6f42c1;
+	--syntax-generic: #d73a49;
 	font-size: 1rem;
 }
 
@@ -129,11 +147,29 @@
 	--syntax-tag: #e06c75;
 	--syntax-attribute: #d19a66;
 	--syntax-builtin: #56b6c2;
-	--syntax-variable: #56b6c2;
+	--syntax-variable: #abb2bf;
 	--syntax-operator: #c678dd;
 	--syntax-error: #f85149;
 	--syntax-line-number: #5c6370;
 	--syntax-highlight: #3e4451;
+	--syntax-function-call: #e5c07b;
+	--syntax-property: #98c379;
+	--syntax-parameter: #d19a66;
+	--syntax-constant: #d19a66;
+	--syntax-type: #e5c07b;
+	--syntax-decorator: #c678dd;
+	--syntax-import: #c678dd;
+	--syntax-regex: #98c379;
+	--syntax-escape: #e06c75;
+	--syntax-markup-tag: #e06c75;
+	--syntax-markup-attr: #d19a66;
+	--syntax-css-selector: #c678dd;
+	--syntax-css-property: #61afef;
+	--syntax-css-value: #98c379;
+	--syntax-method: #e5c07b;
+	--syntax-field: #e06c75;
+	--syntax-namespace: #c678dd;
+	--syntax-generic: #e5c07b;
 }
 
 :root[data-theme="atom"] {
@@ -161,11 +197,29 @@
 	--syntax-tag: #e06c75;
 	--syntax-attribute: #d19a66;
 	--syntax-builtin: #56b6c2;
-	--syntax-variable: #56b6c2;
+	--syntax-variable: #abb2bf;
 	--syntax-operator: #c678dd;
 	--syntax-error: #f85149;
 	--syntax-line-number: #5c6370;
 	--syntax-highlight: #3e4451;
+	--syntax-function-call: #e5c07b;
+	--syntax-property: #98c379;
+	--syntax-parameter: #d19a66;
+	--syntax-constant: #d19a66;
+	--syntax-type: #e5c07b;
+	--syntax-decorator: #c678dd;
+	--syntax-import: #c678dd;
+	--syntax-regex: #98c379;
+	--syntax-escape: #e06c75;
+	--syntax-markup-tag: #e06c75;
+	--syntax-markup-attr: #d19a66;
+	--syntax-css-selector: #c678dd;
+	--syntax-css-property: #61afef;
+	--syntax-css-value: #98c379;
+	--syntax-method: #e5c07b;
+	--syntax-field: #e06c75;
+	--syntax-namespace: #c678dd;
+	--syntax-generic: #e5c07b;
 }
 
 :root[data-theme="nord"] {
@@ -192,12 +246,30 @@
 	--syntax-class: #EBCB8B;
 	--syntax-tag: #81A1C1;
 	--syntax-attribute: #8FBCBB;
-	--syntax-builtin: #88C0D0;
+	--syntax-builtin: #5E81AC;
 	--syntax-variable: #D8DEE9;
 	--syntax-operator: #81A1C1;
 	--syntax-error: #BF616A;
 	--syntax-line-number: #4C566A;
 	--syntax-highlight: #434C5E;
+	--syntax-function-call: #EBCB8B;
+	--syntax-property: #A3BE8C;
+	--syntax-parameter: #D08770;
+	--syntax-constant: #B48EAD;
+	--syntax-type: #8FBCBB;
+	--syntax-decorator: #D08770;
+	--syntax-import: #81A1C1;
+	--syntax-regex: #A3BE8C;
+	--syntax-escape: #EBCB8B;
+	--syntax-markup-tag: #81A1C1;
+	--syntax-markup-attr: #8FBCBB;
+	--syntax-css-selector: #B48EAD;
+	--syntax-css-property: #88C0D0;
+	--syntax-css-value: #A3BE8C;
+	--syntax-method: #EBCB8B;
+	--syntax-field: #D08770;
+	--syntax-namespace: #8FBCBB;
+	--syntax-generic: #B48EAD;
 }
 
 :root[data-theme="solarized"] {
@@ -224,12 +296,30 @@
 	--syntax-class: #cb4b16;
 	--syntax-tag: #268bd2;
 	--syntax-attribute: #268bd2;
-	--syntax-builtin: #cb4b16;
+	--syntax-builtin: #6c71c4;
 	--syntax-variable: #657b83;
 	--syntax-operator: #859900;
 	--syntax-error: #dc322f;
 	--syntax-line-number: #93a1a1;
 	--syntax-highlight: #eee8d5;
+	--syntax-function-call: #b58900;
+	--syntax-property: #2aa198;
+	--syntax-parameter: #cb4b16;
+	--syntax-constant: #d33682;
+	--syntax-type: #6c71c4;
+	--syntax-decorator: #859900;
+	--syntax-import: #859900;
+	--syntax-regex: #2aa198;
+	--syntax-escape: #dc322f;
+	--syntax-markup-tag: #268bd2;
+	--syntax-markup-attr: #6c71c4;
+	--syntax-css-selector: #859900;
+	--syntax-css-property: #268bd2;
+	--syntax-css-value: #2aa198;
+	--syntax-method: #b58900;
+	--syntax-field: #cb4b16;
+	--syntax-namespace: #6c71c4;
+	--syntax-generic: #d33682;
 }
 
 :root[data-theme="dracula"] {
@@ -253,15 +343,33 @@
 	--syntax-comment: #6272a4;
 	--syntax-number: #bd93f9;
 	--syntax-function: #50fa7b;
-	--syntax-class: #50fa7b;
+	--syntax-class: #ffb86c;
 	--syntax-tag: #ff79c6;
 	--syntax-attribute: #50fa7b;
 	--syntax-builtin: #8be9fd;
-	--syntax-variable: #8be9fd;
+	--syntax-variable: #f8f8f2;
 	--syntax-operator: #ff79c6;
 	--syntax-error: #ff5555;
 	--syntax-line-number: #6272a4;
 	--syntax-highlight: #44475a;
+	--syntax-function-call: #ffb86c;
+	--syntax-property: #50fa7b;
+	--syntax-parameter: #ff79c6;
+	--syntax-constant: #bd93f9;
+	--syntax-type: #8be9fd;
+	--syntax-decorator: #ff79c6;
+	--syntax-import: #ff79c6;
+	--syntax-regex: #f1fa8c;
+	--syntax-escape: #ffb86c;
+	--syntax-markup-tag: #ff79c6;
+	--syntax-markup-attr: #50fa7b;
+	--syntax-css-selector: #bd93f9;
+	--syntax-css-property: #8be9fd;
+	--syntax-css-value: #f1fa8c;
+	--syntax-method: #ffb86c;
+	--syntax-field: #50fa7b;
+	--syntax-namespace: #8be9fd;
+	--syntax-generic: #bd93f9;
 }
 
 :root[data-theme="github"] {
@@ -285,7 +393,7 @@
 	--syntax-comment: #6a737d;
 	--syntax-number: #005cc5;
 	--syntax-function: #6f42c1;
-	--syntax-class: #6f42c1;
+	--syntax-class: #e36209;
 	--syntax-tag: #22863a;
 	--syntax-attribute: #6f42c1;
 	--syntax-builtin: #005cc5;
@@ -294,6 +402,24 @@
 	--syntax-error: #a71d5d;
 	--syntax-line-number: #6a737d;
 	--syntax-highlight: #fffbdd;
+	--syntax-function-call: #795da3;
+	--syntax-property: #22863a;
+	--syntax-parameter: #e36209;
+	--syntax-constant: #005cc5;
+	--syntax-type: #6f42c1;
+	--syntax-decorator: #d73a49;
+	--syntax-import: #22863a;
+	--syntax-regex: #032f62;
+	--syntax-escape: #e36209;
+	--syntax-markup-tag: #22863a;
+	--syntax-markup-attr: #6f42c1;
+	--syntax-css-selector: #6f42c1;
+	--syntax-css-property: #005cc5;
+	--syntax-css-value: #032f62;
+	--syntax-method: #795da3;
+	--syntax-field: #e36209;
+	--syntax-namespace: #6f42c1;
+	--syntax-generic: #d73a49;
 }
 
 :root[data-theme="monokai"] {
@@ -317,15 +443,33 @@
 	--syntax-comment: #75715e;
 	--syntax-number: #ae81ff;
 	--syntax-function: #a6e22e;
-	--syntax-class: #a6e22e;
+	--syntax-class: #fd971f;
 	--syntax-tag: #f92672;
 	--syntax-attribute: #a6e22e;
-	--syntax-builtin: #f8f8f2;
+	--syntax-builtin: #66d9ef;
 	--syntax-variable: #f8f8f2;
 	--syntax-operator: #f92672;
 	--syntax-error: #960050;
 	--syntax-line-number: #75715e;
 	--syntax-highlight: #ffffcc;
+	--syntax-function-call: #fd971f;
+	--syntax-property: #a6e22e;
+	--syntax-parameter: #ae81ff;
+	--syntax-constant: #ae81ff;
+	--syntax-type: #66d9ef;
+	--syntax-decorator: #a6e22e;
+	--syntax-import: #f92672;
+	--syntax-regex: #e6db74;
+	--syntax-escape: #fd971f;
+	--syntax-markup-tag: #f92672;
+	--syntax-markup-attr: #a6e22e;
+	--syntax-css-selector: #a6e22e;
+	--syntax-css-property: #66d9ef;
+	--syntax-css-value: #e6db74;
+	--syntax-method: #fd971f;
+	--syntax-field: #a6e22e;
+	--syntax-namespace: #66d9ef;
+	--syntax-generic: #ae81ff;
 }
 
 

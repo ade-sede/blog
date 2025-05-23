@@ -83,7 +83,7 @@
 
 /* Names and identifiers */
 .chroma .na { 
-  color: var(--syntax-attribute); 
+  color: var(--syntax-property); 
 }
 
 .chroma .nb, 
@@ -112,7 +112,10 @@
 
 .chroma .nl, 
 .chroma .no, 
-.chroma .py, 
+.chroma .py { 
+  color: var(--syntax-function-call); 
+}
+
 .chroma .nv, 
 .chroma .vc, 
 .chroma .vg, 
@@ -205,6 +208,12 @@
   font-weight: bold; 
 }
 
+/* Function parameters */
+.chroma .nx.param,
+.chroma .n.param {
+  color: var(--syntax-parameter);
+}
+
 .chroma .go, 
 .chroma .gp { 
   color: var(--code-fg); 
@@ -224,6 +233,113 @@
 
 .chroma .w { 
   color: var(--syntax-comment); 
+}
+
+/* Constants and literals */
+.chroma .kc,
+.chroma .kt {
+  color: var(--syntax-constant);
+}
+
+/* Type annotations */
+.chroma .kt,
+.chroma .nt.type {
+  color: var(--syntax-type);
+}
+
+/* Decorators */
+.chroma .nd,
+.chroma .decorator {
+  color: var(--syntax-decorator);
+  font-weight: bold;
+}
+
+/* Import/export */
+.chroma .kn,
+.chroma .kr {
+  color: var(--syntax-import);
+  font-weight: bold;
+}
+
+/* Regular expressions */
+.chroma .sr {
+  color: var(--syntax-regex);
+}
+
+/* Escape sequences */
+.chroma .se {
+  color: var(--syntax-escape);
+  font-weight: bold;
+}
+
+/* Markup tags */
+.chroma .nt {
+  color: var(--syntax-markup-tag);
+}
+
+/* Markup attributes */
+.chroma .na {
+  color: var(--syntax-markup-attr);
+}
+
+/* CSS selectors */
+.chroma .nc.css,
+.chroma .nf.css {
+  color: var(--syntax-css-selector);
+}
+
+/* CSS properties */
+.chroma .k.css {
+  color: var(--syntax-css-property);
+}
+
+/* CSS values */
+.chroma .s.css,
+.chroma .m.css {
+  color: var(--syntax-css-value);
+}
+
+/* Method calls */
+.chroma .nf.method {
+  color: var(--syntax-method);
+}
+
+/* Object fields */
+.chroma .nv.field {
+  color: var(--syntax-field);
+}
+
+/* Namespaces */
+.chroma .nn {
+  color: var(--syntax-namespace);
+}
+
+/* Generic types */
+.chroma .generic,
+.chroma .angle-bracket {
+  color: var(--syntax-generic);
+}
+
+/* JavaScript specific improvements */
+.chroma .nx:not(.nf):not(.nc):not(.nn) {
+  color: var(--syntax-function-call);
+}
+
+.chroma .p + .nx,
+.chroma .o + .nx {
+  color: var(--syntax-function-call);
+}
+
+/* Boolean literals */
+.chroma .kc {
+  color: var(--syntax-constant);
+  font-weight: bold;
+}
+
+/* Null/undefined */
+.chroma .kn.null,
+.chroma .kn.undefined {
+  color: var(--syntax-constant);
 }
 
 /* Directory tree styling */
