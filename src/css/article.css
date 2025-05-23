@@ -9,11 +9,21 @@ pre {
 	white-space: pre-wrap;
 	word-wrap: break-word;
 	font-family: var(--mono-font);
+	line-height: 1.2;
 }
 
 code {
-	color: var(--accent, #d63384);
+	background-color: var(--code-bg);
+	color: var(--code-fg);
 	font-family: var(--mono-font);
+	padding: 2px 4px;
+	border-radius: 3px;
+}
+
+.code-block code {
+	background: none;
+	padding: 0;
+	border-radius: 0;
 }
 
 /* Table styling for articles */
@@ -227,9 +237,9 @@ code {
 }
 
 .code-filename {
-	background-color: var(--code-bg);
+	background-color: var(--code-header-bg);
 	color: var(--code-fg);
-	padding: 0.5em 1em;
+	padding: 0.35em 1em;
 	font-family: var(--mono-font);
 	font-size: 0.9em;
 	border-bottom: 1px solid var(--code-border);
@@ -320,7 +330,7 @@ code {
 	}
 
 	.code-filename {
-		padding: 0.4em 0.8em;
+		padding: 0.3em 0.8em;
 		font-size: 0.8em;
 	}
 

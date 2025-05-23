@@ -58,11 +58,19 @@ func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Rea
 
 			if len(parts) == 1 {
 				cb.SetAttribute([]byte("language"), []byte(parts[0]))
+				cb.SetAttribute([]byte("isDiff"), []byte("false"))
 			}
 
 			if len(parts) == 2 {
 				cb.SetAttribute([]byte("language"), []byte(parts[0]))
 				cb.SetAttribute([]byte("filename"), []byte(parts[1]))
+				cb.SetAttribute([]byte("isDiff"), []byte("false"))
+			}
+
+			if len(parts) == 3 && parts[2] == "diff" {
+				cb.SetAttribute([]byte("language"), []byte(parts[0]))
+				cb.SetAttribute([]byte("filename"), []byte(parts[1]))
+				cb.SetAttribute([]byte("isDiff"), []byte("true"))
 			}
 		}
 		return ast.WalkContinue, nil
@@ -76,6 +84,14 @@ type codeBlockRenderer struct {
 func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindFencedCodeBlock, r.renderCodeBlock)
 }
+
+type DiffLineType int
+
+const (
+	DiffContext DiffLineType = iota
+	DiffAddition
+	DiffDeletion
+)
 
 var (
 	multiLineDisplayRegex  = regexp.MustCompile(`(?s)\\\\?\[\s*\n(.*?)\n\s*\\\\?\]`)
@@ -248,12 +264,70 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 	w.WriteString("</div>")
 }
 
+func processDiffContent(content string) (string, []DiffLineType) {
+	lines := strings.Split(content, "\n")
+	var cleanedLines []string
+	var lineTypes []DiffLineType
+
+	for _, line := range lines {
+		if len(line) == 0 {
+			cleanedLines = append(cleanedLines, line)
+			lineTypes = append(lineTypes, DiffContext)
+			continue
+		}
+
+		if line[0] == '+' {
+			cleanedLines = append(cleanedLines, line[1:])
+			lineTypes = append(lineTypes, DiffAddition)
+		} else if line[0] == '-' {
+			cleanedLines = append(cleanedLines, line[1:])
+			lineTypes = append(lineTypes, DiffDeletion)
+		} else {
+			cleanedLines = append(cleanedLines, line)
+			lineTypes = append(lineTypes, DiffContext)
+		}
+	}
+
+	return strings.Join(cleanedLines, "\n"), lineTypes
+}
+
+func postProcessDiffHTML(html string, lineTypes []DiffLineType) string {
+	lines := strings.Split(html, "\n")
+	var processedLines []string
+
+	for i, line := range lines {
+		if i < len(lineTypes) {
+			switch lineTypes[i] {
+			case DiffAddition:
+				if strings.Contains(line, "<span class=\"line\">") {
+					processedLines = append(processedLines, strings.Replace(line, "<span class=\"line\">", "<span class=\"line gi\">", 1))
+				} else {
+					processedLines = append(processedLines, fmt.Sprintf("<span class=\"gi\">%s</span>", line))
+				}
+			case DiffDeletion:
+				if strings.Contains(line, "<span class=\"line\">") {
+					processedLines = append(processedLines, strings.Replace(line, "<span class=\"line\">", "<span class=\"line gd\">", 1))
+				} else {
+					processedLines = append(processedLines, fmt.Sprintf("<span class=\"gd\">%s</span>", line))
+				}
+			default:
+				processedLines = append(processedLines, line)
+			}
+		} else {
+			processedLines = append(processedLines, line)
+		}
+	}
+
+	return strings.Join(processedLines, "\n")
+}
+
 func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	n := node.(*ast.FencedCodeBlock)
 
 	if entering {
 		filenameAttr, hasFilename := n.AttributeString("filename")
 		languageAttr, hasLanguage := n.AttributeString("language")
+		isDiffAttr, hasDiff := n.AttributeString("isDiff")
 
 		var code strings.Builder
 		lines := n.Lines()
@@ -285,6 +359,16 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			w.WriteString("</div>")
 		}
 
+		isDiff := hasDiff && string(isDiffAttr.([]byte)) == "true"
+
+		var codeContent string
+		var diffLineTypes []DiffLineType
+		if isDiff {
+			codeContent, diffLineTypes = processDiffContent(code.String())
+		} else {
+			codeContent = code.String()
+		}
+
 		lexer := lexers.Get(lang)
 		if lexer == nil {
 			lexer = lexers.Fallback
@@ -302,17 +386,30 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			chromahtml.WithLineNumbers(false),
 		)
 
-		iterator, err := lexer.Tokenise(nil, code.String())
+		iterator, err := lexer.Tokenise(nil, codeContent)
 		if err != nil {
 			w.WriteString("<div class=\"code-content-wrapper\">")
 			w.WriteString("<pre><code>")
-			w.WriteString(code.String())
+			var content string
+			if isDiff {
+				content = postProcessDiffHTML(codeContent, diffLineTypes)
+			} else {
+				content = code.String()
+			}
+			w.WriteString(content)
 			w.WriteString("</code></pre>")
 			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
 			w.WriteString("</div>")
 		} else {
 			w.WriteString("<div class=\"highlight code-content-wrapper\">")
-			err = formatter.Format(w, style, iterator)
+			if isDiff {
+				var buf strings.Builder
+				err = formatter.Format(&buf, style, iterator)
+				processedHTML := postProcessDiffHTML(buf.String(), diffLineTypes)
+				w.WriteString(processedHTML)
+			} else {
+				err = formatter.Format(w, style, iterator)
+			}
 			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
 			w.WriteString("</div>")
 		}
