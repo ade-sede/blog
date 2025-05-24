@@ -2,8 +2,38 @@ const initTOC = () => {
     const tocLinks = document.querySelectorAll('.table-of-contents a');
     const tocItems = document.querySelectorAll('.table-of-contents li');
     const headings = document.querySelectorAll('.article h1[id], .article h2[id], .article h3[id], .article h4[id]');
+    const tocToggle = document.getElementById('toc-toggle');
+    const tocList = document.getElementById('toc-list');
+    const tocIcon = document.getElementById('toc-toggle-icon');
     
     if (!tocLinks.length || !headings.length) return;
+
+    const TOC_STORAGE_KEY = 'toc-visible';
+    
+    const getTocVisibility = () => {
+        const stored = localStorage.getItem(TOC_STORAGE_KEY);
+        return stored !== null ? stored === 'true' : true;
+    };
+    
+    const setTocVisibility = (visible) => {
+        localStorage.setItem(TOC_STORAGE_KEY, visible);
+        if (visible) {
+            tocList.style.display = 'block';
+            tocIcon.className = 'fas fa-eye-slash';
+        } else {
+            tocList.style.display = 'none';
+            tocIcon.className = 'fas fa-eye';
+        }
+    };
+    
+    setTocVisibility(getTocVisibility());
+    
+    if (tocToggle) {
+        tocToggle.addEventListener('click', () => {
+            const isVisible = tocList.style.display !== 'none';
+            setTocVisibility(!isVisible);
+        });
+    }
 
     tocLinks.forEach(link => {
         link.addEventListener('click', (e) => {
