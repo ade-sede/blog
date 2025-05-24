@@ -9,8 +9,8 @@ export SRC_DIR
 export ARTICLE_DIR
 export QUICK_NOTE_DIR
 
-.PHONY: all
-all: gopath
+.PHONY: build
+build: gopath
 	mkdir -p $(OUTPUT_DIR)
 	mkdir -p $(OUTPUT_DIR)/css
 	mkdir -p $(OUTPUT_DIR)/libs
@@ -27,6 +27,9 @@ all: gopath
 	find $(ARTICLE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
 	cp $(SRC_DIR)/robots.txt $(OUTPUT_DIR)/.
 	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
+
+.PHONY: all
+all: build
 	go run $(SRC_DIR)/*.go
 
 .PHONY: clean
@@ -47,6 +50,11 @@ deploy: clean init all
 format: gopath
 	gofmt -w $(SRC_DIR)/*.go
 	$(GOPATH)/bin/templ fmt .
+
+.PHONY: pdf
+pdf: build
+	go install github.com/chromedp/chromedp
+	go run $(SRC_DIR)/*.go -pdf
 
 # Deploying via cloudflare pages
 # GOPATH is not set by default, had to set it myself

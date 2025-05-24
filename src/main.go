@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"github.com/a-h/templ"
 	"io/fs"
@@ -125,6 +126,9 @@ func createInlineStyleAndScriptTags(page PageGenerator, srcDir, articleDir, quic
 }
 
 func main() {
+	generatePDFFlag := flag.Bool("pdf", false, "Generate PDF after building site")
+	flag.Parse()
+
 	quickNoteDir := os.Getenv("QUICK_NOTE_DIR")
 	articleDir := os.Getenv("ARTICLE_DIR")
 	outputDir := os.Getenv("OUTPUT_DIR")
@@ -312,5 +316,11 @@ func main() {
 
 		templComponent := page.HTMLgenerator(page.arguments...)
 		templComponent.Render(context.Background(), file)
+	}
+
+	if *generatePDFFlag {
+		if err := generatePDF(outputDir, srcDir); err != nil {
+			log.Printf("Warning: Failed to generate PDF: %v", err)
+		}
 	}
 }

@@ -2,18 +2,38 @@
 
 ## Installation
 
+### Managing dependencies yourself
+
 - [Golang 1.20](https://go.dev/doc/install) or greater
 - Make sure [`GOPATH`](https://go.dev/wiki/GOPATH) environment variable is properly set
 - [GNU Make](https://www.gnu.org/software/make/)
+- [Chromium]https://www.chromium.org/getting-involved/download-chromium/) (for automated PDF resume generation)
 
-Install [`templ`](https://github.com/a-h/templ) to `$GOPATH/bin`.  
-Install pre-commit hooks for auto-formating.
+
+### Managing dependencies through devbox
+
+- [Devbox](https://www.jetify.com/devbox)
+
+Devbox install dependencies through nix.
+After installing devbox, you can start a shell with all the registered dependencies available in your path:
+
+```bash
+devbox shell
+```
+
+### After installing dev dependencies
 
 ```bash
 make init
 ```
 
+It will:
+- Install [`templ`](https://github.com/a-h/templ) to `$GOPATH/bin`.  
+- Install pre-commit hooks
+
 ## Running
+
+If you are managing dependencies through devbox, don't forget to step into a devbox managed shell using `devbox shell`.
 
 ```bash
 # Generate HTML files
@@ -27,6 +47,9 @@ make re
 
 # Self explanatory
 make format
+
+# Generates HTML files and a PDF version of the resume (available at src/pdfs/ade-sede.pdf)
+make pdf
 ```
 
 ## General working principle
@@ -45,14 +68,8 @@ Everything static, very efficiently cached.
 ## Deployment
 
 Currently deployed to Cloudfare Pages: [blog.ade-sede.dev](https://blog.ade-sede.dev)  
-⚠️ Cloudflare Pages runners do not set the `GOPATH` variable by default.
-
-## PDF Resume generation
-
-Automation has been removed until I find a better solution.  
-To generate a PDF, open `resume-printable.html` and print to PDF yourself.
+⚠️ Cloudflare Pages runners do not set the `GOPATH` variable by default, don't forget to set it in the pages settings.
 
 ## Disclaimer
 
 Lot of AI written stuff in there.
-Once I put the basics in place I have let LLMs take over for a lot of boilerplate. Mostly CSS and self contained features.

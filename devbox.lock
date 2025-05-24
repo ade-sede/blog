@@ -1,6 +1,45 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "chromium@latest": {
+      "last_modified": "2025-05-16T20:19:48Z",
+      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#chromium",
+      "source": "devbox-search",
+      "version": "136.0.7103.113",
+      "systems": {
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/m3h8caljj7rwdpi76558kfjab913kdzc-chromium-136.0.7103.113",
+              "default": true
+            },
+            {
+              "name": "sandbox",
+              "path": "/nix/store/2n3p2xrrkl5zwb1yb6lrkqfsb274kvv5-chromium-136.0.7103.113-sandbox"
+            }
+          ],
+          "store_path": "/nix/store/m3h8caljj7rwdpi76558kfjab913kdzc-chromium-136.0.7103.113"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2gkjkdqykhy45vc7pnsvplrxcg2s1swx-chromium-136.0.7103.113",
+              "default": true
+            },
+            {
+              "name": "sandbox",
+              "path": "/nix/store/sndmqszm3j8m6g57lp48bvn40qy49l6s-chromium-136.0.7103.113-sandbox"
+            }
+          ],
+          "store_path": "/nix/store/2gkjkdqykhy45vc7pnsvplrxcg2s1swx-chromium-136.0.7103.113"
+        }
+      }
+    },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "resolved": "github:NixOS/nixpkgs/fe51d34885f7b5e3e7b59572796e1bcb427eccb1?lastModified=1747958103&narHash=sha256-qmmFCrfBwSHoWw7cVK4Aj%2Bfns%2Bc54EBP8cGqp%2FyK410%3D"
+    },
     "gnumake@latest": {
       "last_modified": "2025-05-20T08:00:33Z",
       "resolved": "github:NixOS/nixpkgs/2f9173bde1d3fbf1ad26ff6d52f952f9e9da52ea#gnumake",
