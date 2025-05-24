@@ -64,6 +64,9 @@ function loadThemeFromLocalStorage() {
     } catch (err) {
       console.warn("Failed to parse stored theme, using default");
     }
+  } else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    themeName = prefersDark ? "dark" : "light";
   }
 
   setTheme(themeName);

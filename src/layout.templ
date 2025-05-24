@@ -62,6 +62,9 @@ templ header(title string, description string, styleTags []string, scriptTags []
 				if (storedTheme) {
 					const theme = JSON.parse(storedTheme);
 					document.documentElement.setAttribute("data-theme", theme.name);
+				} else {
+					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
 				}
 			} catch (e) { }
 		})();
