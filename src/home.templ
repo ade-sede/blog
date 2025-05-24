@@ -21,26 +21,10 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 			<section class="content-sections">
 				<div class="sections-grid">
 					if len(articles) > 0 {
-						<div class="content-section">
-							<div class="section-header">
-								<h2>Most Recent Article</h2>
-								<a href="articles.html" class="view-all">View all →</a>
-							</div>
-							<div class="home-articles">
-								@homeArticleList(articles)
-							</div>
-						</div>
+						@homeCardWrapper("Most Recent Article", "articles.html", articles[0])
 					}
 					if len(quickNotes) > 0 {
-						<div class="content-section">
-							<div class="section-header">
-								<h2>Most Recent Quick Note</h2>
-								<a href="quick-notes.html" class="view-all">View all →</a>
-							</div>
-							<div class="home-quick-notes">
-								@homeQuickNoteList(quickNotes)
-							</div>
-						</div>
+						@homeCardWrapper("Most Recent Quick Note", "quick-notes.html", quickNotes[0])
 					}
 				</div>
 			</section>
@@ -48,24 +32,19 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 	}
 }
 
-templ homeArticleList(articles []Article) {
-	if len(articles) > 0 {
-		@homeContentItem(articles[0])
-	}
-}
-
-templ homeQuickNoteList(quickNotes []Article) {
-	if len(quickNotes) > 0 {
-		@homeContentItem(quickNotes[0])
-	}
-}
-
-templ homeContentItem(item Article) {
-	<a href={ templ.URL(item.HTMLFilename) } class="home-item">
-		<div class="item-meta">
-			<time class="item-date">{ item.FormatedDate }</time>
-		</div>
-		<h3 class="item-title">{ item.Manifest.Title }</h3>
-		<p class="item-description">{ item.Manifest.Description }</p>
-	</a>
+templ homeCardWrapper(title string, viewAllHref string, item Article) {
+	<div class="content-section">
+		<a href={ templ.URL(item.HTMLFilename) } class="home-card-link">
+			<div class="section-header">
+				<h2>{ title }</h2>
+				<span class="view-all-placeholder">View all →</span>
+			</div>
+			<div class="item-meta">
+				<time class="item-date">{ item.FormatedDate }</time>
+			</div>
+			<h3 class="item-title">{ item.Manifest.Title }</h3>
+			<p class="item-description">{ item.Manifest.Description }</p>
+		</a>
+		<a href={ templ.URL(viewAllHref) } class="view-all-overlay">View all →</a>
+	</div>
 }

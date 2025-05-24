@@ -88,10 +88,12 @@
 	background: var(--bg);
 	border: 2px solid var(--secondary);
 	border-radius: 12px;
-	padding: 1rem;
+	padding: 0;
 	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 	transition: all 0.2s ease;
 	min-height: 0;
+	position: relative;
+	overflow: hidden;
 }
 
 .content-section:hover {
@@ -116,38 +118,51 @@
 	font-weight: 600;
 }
 
-.view-all {
+
+.home-card-link {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+	padding: 1rem;
+	border-radius: 12px;
+	transition: all 0.2s ease;
+}
+
+.home-card-link::after {
+	display: none !important;
+}
+
+.home-card-link:hover {
+	color: inherit;
+	background: rgba(var(--accent-rgb), 0.03);
+}
+
+.home-card-link:hover .item-title {
+	color: var(--accent);
+}
+
+.view-all-placeholder {
+	color: var(--accent);
+	font-size: 0.9rem;
+	font-weight: 500;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.view-all-overlay {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
 	color: var(--accent);
 	text-decoration: none;
 	font-size: 0.9rem;
 	font-weight: 500;
 	transition: color 0.2s ease;
+	z-index: 2;
 }
 
-.view-all:hover {
+.view-all-overlay:hover {
 	color: var(--primary);
-}
-
-.home-item {
-	display: block;
-	text-decoration: none;
-	color: inherit;
-	padding: 0.75rem 0;
-	transition: all 0.2s ease;
-}
-
-.home-item::after {
-	display: none !important;
-}
-
-
-.home-item:hover {
-	color: inherit;
-	background: rgba(var(--accent-rgb), 0.03);
-}
-
-.home-item:hover .item-title {
-	color: var(--accent);
 }
 
 .item-meta {
