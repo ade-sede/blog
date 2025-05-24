@@ -168,7 +168,6 @@ code {
 	left: 2rem;
 	top: 120px;
 	width: 280px;
-	max-height: calc(100vh - 140px);
 	overflow-y: auto;
 	background: transparent;
 	padding: 1.2rem;

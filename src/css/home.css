@@ -2,7 +2,6 @@
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 0 1rem;
-	height: calc(100vh - 120px);
 	display: flex;
 	flex-direction: column;
 }
@@ -194,7 +193,6 @@
 
 @media (max-width: 768px) {
 	.home {
-		height: calc(100vh - 100px);
 	}
 	
 	.hero {
@@ -238,7 +236,6 @@
 @media (max-width: 480px) {
 	.home {
 		padding: 0 0.75rem;
-		height: calc(100vh - 80px);
 	}
 	
 	.hero {
