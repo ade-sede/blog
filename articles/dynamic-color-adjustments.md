@@ -589,7 +589,9 @@ function findOptimalHueShift(dominantColor, bgColor) {
 
   // Start with complementary color if background is light,
   // or keep similar hue if background is dark
-  let currentHue = bgLuminance > 0.5 ? (originalHue + 180) % 360 : originalHue;
+  let currentHue = bgLuminance > 0.5
+      ? (originalHue + 180) % 360
+      : originalHue;
 
   let currentContrast = computeContrastWithHue(
     saturation,
