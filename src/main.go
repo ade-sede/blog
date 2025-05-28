@@ -49,7 +49,7 @@ func createContentPageGenerator(article Article, pageType PageType, htmlGenerato
 		pageType:                   pageType,
 		HTMLgenerator:              htmlGenerator,
 		globalCssFiles:             []string{"article.css", "syntax-highlighting.css"},
-		globalScriptFiles:          []string{"toc.js"},
+		globalScriptFiles:          []string{"toc.js", "anchors.js"},
 		articleSpecificCssFiles:    []string{},
 		articleSpecificScriptFiles: []string{},
 		arguments:                  []interface{}{article.Manifest.Title, article.Manifest.Description, article.StringifiedHTML, article.FormatedDate, article.TOC},

@@ -358,20 +358,25 @@ code {
 .header-anchor {
 	margin-left: 0.5rem;
 	opacity: 0;
-	transition: opacity 0.2s ease;
-	color: var(--accent);
+	transition: all 0.2s ease;
+	color: var(--text-muted);
 	text-decoration: none;
 	border: none;
-	font-size: 0.6em;
+	font-size: 0.7em;
 	display: inline;
+	cursor: pointer;
+	border-radius: 4px;
+	padding: 2px 4px;
 }
 
 .heading-with-anchor:hover .header-anchor {
-	opacity: 1;
+	opacity: 0.6;
 }
 
 .header-anchor:hover {
-	color: var(--primary);
+	opacity: 1 !important;
+	color: var(--accent);
+	background-color: var(--background-secondary);
 }
 
 .article h1 {
