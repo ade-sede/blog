@@ -53,7 +53,7 @@ const availableThemes = {
  */
 function loadThemeFromLocalStorage() {
   const themeString = safeStorage.getItem("theme");
-  let themeName = "light";
+  let themeName = "github";
 
   if (themeString) {
     try {
@@ -66,7 +66,7 @@ function loadThemeFromLocalStorage() {
     }
   } else {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    themeName = prefersDark ? "dark" : "light";
+    themeName = prefersDark ? "nord" : "github";
   }
 
   setTheme(themeName);
@@ -79,7 +79,7 @@ function loadThemeFromLocalStorage() {
  */
 function toggleTheme() {
   const themeString = safeStorage.getItem("theme");
-  let currentTheme = "light";
+  let currentTheme = "github";
   
   if (themeString) {
     try {
@@ -90,7 +90,7 @@ function toggleTheme() {
     } catch (err) {}
   }
 
-  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  const newTheme = currentTheme === "nord" ? "github" : "nord";
   return setTheme(newTheme);
 }
 
@@ -103,8 +103,8 @@ function setThemeByName(themeName) {
   if (availableThemes[themeName]) {
     return setTheme(themeName);
   } else {
-    console.warn(`Theme "${themeName}" not found, using default light theme`);
-    return setTheme("light");
+    console.warn(`Theme "${themeName}" not found, using default github theme`);
+    return setTheme("github");
   }
 }
 
@@ -113,7 +113,7 @@ function setThemeByName(themeName) {
  * @returns {string} The dark theme name
  */
 function setDarkTheme() {
-  return setTheme("dark");
+  return setTheme("nord");
 }
 
 /**
@@ -121,7 +121,7 @@ function setDarkTheme() {
  * @returns {string} The light theme name
  */
 function setLightTheme() {
-  return setTheme("light");
+  return setTheme("github");
 }
 
 /**
@@ -132,8 +132,8 @@ function setLightTheme() {
  */
 function setTheme(themeName) {
   if (!availableThemes[themeName]) {
-    console.warn(`Theme "${themeName}" not found, using light theme`);
-    themeName = "light";
+    console.warn(`Theme "${themeName}" not found, using github theme`);
+    themeName = "github";
   }
 
   try {
@@ -166,83 +166,150 @@ function setTheme(themeName) {
 /**
  * Initializes the theme picker UI
  * @param {string} [selector=".theme-toggle"] - CSS selector for the theme toggle container(s)
+ * @param {boolean} [useSimpleToggle=true] - Use simple dark/light toggle instead of full menu
  */
-function initThemePicker(selector = ".theme-toggle") {
+function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
   // Find all theme toggle containers matching the selector
   const themeToggleContainers = document.querySelectorAll(selector);
   if (!themeToggleContainers.length) return;
 
-  // Counter for unique IDs
-  let instanceCounter = 0;
+  // Counter for unique IDs (make it global to this function)
+  if (!window.themePickerInstanceCounter) {
+    window.themePickerInstanceCounter = 0;
+  }
 
   // Process each theme toggle container
   themeToggleContainers.forEach((container) => {
     // Create a unique ID for this instance
-    const instanceId = `theme-instance-${instanceCounter++}`;
+    const instanceId = `theme-instance-${window.themePickerInstanceCounter++}`;
     container.dataset.themeInstance = instanceId;
     container.innerHTML = "";
 
     const themeButton = document.createElement("button");
     themeButton.id = `theme-button-${instanceId}`;
     themeButton.className = "theme-button";
-    themeButton.innerHTML = '<i class="fas fa-palette"></i>';
-    themeButton.setAttribute("aria-label", "Change theme");
-    themeButton.setAttribute("title", "Change theme");
-
-    const themeMenu = document.createElement("div");
-    themeMenu.id = `theme-menu-${instanceId}`;
-    themeMenu.className = "theme-menu";
-
-    const themeCount = Object.keys(availableThemes).length;
-    if (themeCount > 4) {
-      themeMenu.style.width = "200px";
+    
+    if (useSimpleToggle) {
+      themeButton.innerHTML = '<i class="fas fa-sun"></i>';
+      themeButton.setAttribute("aria-label", "Toggle theme");
+      themeButton.setAttribute("title", "Toggle theme");
+    } else {
+      themeButton.innerHTML = '<i class="fas fa-palette"></i>';
+      themeButton.setAttribute("aria-label", "Change theme");
+      themeButton.setAttribute("title", "Change theme");
     }
 
-    for (const themeName in availableThemes) {
-      const theme = availableThemes[themeName];
-
-      const themeOption = document.createElement("div");
-      themeOption.className = "theme-option";
-      themeOption.setAttribute("data-theme", themeName);
-      themeOption.setAttribute("title", theme.displayName);
-      
-      themeOption.classList.add(`theme-preview-${themeName}`);
-
-      const themeTitleSpan = document.createElement("span");
-      themeTitleSpan.className = "theme-option-name";
-      themeTitleSpan.textContent = theme.displayName.split(" ")[0];
-      themeOption.appendChild(themeTitleSpan);
-
-      themeOption.addEventListener("click", function () {
-        setThemeByName(themeName);
-        updateActiveTheme(themeName);
-        toggleThemeMenu(instanceId);
-        const event = new CustomEvent("themeLoaded", { themeName: themeName });
+    if (useSimpleToggle) {
+      // Simple toggle - just add click handler to button
+      themeButton.addEventListener("click", function () {
+        const currentTheme = safeStorage.getItem("theme");
+        let currentThemeName = "github";
+        
+        if (currentTheme) {
+          try {
+            const themeObject = JSON.parse(currentTheme);
+            if (themeObject && themeObject.name) {
+              currentThemeName = themeObject.name;
+            }
+          } catch (err) {}
+        }
+        
+        // Toggle between github (light) and nord (dark)
+        const newTheme = (currentThemeName === "nord") ? "github" : "nord";
+        setThemeByName(newTheme);
+        updateThemeIcon(themeButton, newTheme);
+        const event = new CustomEvent("themeLoaded", { themeName: newTheme });
         document.dispatchEvent(event);
       });
-
-      themeMenu.appendChild(themeOption);
-    }
-
-    themeButton.addEventListener("click", function () {
-      toggleThemeMenu(instanceId);
-    });
-
-    document.addEventListener("click", function (event) {
-      if (!container.contains(event.target)) {
-        themeMenu.classList.remove("open");
+      
+      container.appendChild(themeButton);
+      
+      // Set initial icon
+      const currentTheme = safeStorage.getItem("theme");
+      if (currentTheme) {
+        try {
+          const parsedTheme = JSON.parse(currentTheme);
+          updateThemeIcon(themeButton, parsedTheme.name);
+        } catch (err) {
+          updateThemeIcon(themeButton, "github");
+        }
+      } else {
+        updateThemeIcon(themeButton, "github");
       }
-    });
+    } else {
+      // Full theme menu
+      const themeMenu = document.createElement("div");
+      themeMenu.id = `theme-menu-${instanceId}`;
+      themeMenu.className = "theme-menu";
 
-    container.appendChild(themeButton);
-    container.appendChild(themeMenu);
+      for (const themeName in availableThemes) {
+        const theme = availableThemes[themeName];
 
-    const currentTheme = safeStorage.getItem("theme");
-    if (currentTheme) {
-      const parsedTheme = JSON.parse(currentTheme);
-      updateActiveTheme(parsedTheme.name);
+        const themeOption = document.createElement("div");
+        themeOption.className = "theme-option";
+        themeOption.setAttribute("data-theme", themeName);
+        themeOption.setAttribute("title", theme.displayName);
+        
+        themeOption.classList.add(`theme-preview-${themeName}`);
+
+        const themeTitleSpan = document.createElement("span");
+        themeTitleSpan.className = "theme-option-name";
+        const simpleName = theme.displayName.replace(" (High Contrast)", "").replace("GitHub", "Github");
+        themeTitleSpan.textContent = simpleName;
+        themeOption.appendChild(themeTitleSpan);
+
+        themeOption.addEventListener("click", function () {
+          setThemeByName(themeName);
+          updateActiveTheme(themeName);
+          toggleThemeMenu(instanceId);
+          const event = new CustomEvent("themeLoaded", { themeName: themeName });
+          document.dispatchEvent(event);
+        });
+
+        themeMenu.appendChild(themeOption);
+      }
+
+      themeButton.addEventListener("click", function () {
+        toggleThemeMenu(instanceId);
+      });
+      
+      container.appendChild(themeButton);
+      container.appendChild(themeMenu);
+      
+      const currentTheme = safeStorage.getItem("theme");
+      if (currentTheme) {
+        const parsedTheme = JSON.parse(currentTheme);
+        updateActiveTheme(parsedTheme.name);
+      }
     }
+
   });
+  
+  // Add click outside listener for full theme menus (only once globally)
+  if (!useSimpleToggle && !window.themePickerClickListenerAdded) {
+    window.themePickerClickListenerAdded = true;
+    document.addEventListener("click", function (event) {
+      // Find all theme containers on the page
+      const allContainers = document.querySelectorAll('[data-theme-instance]');
+      allContainers.forEach((container) => {
+        const instanceId = container.dataset.themeInstance;
+        const themeMenu = document.getElementById(`theme-menu-${instanceId}`);
+        if (themeMenu && !container.contains(event.target)) {
+          themeMenu.classList.remove("open");
+        }
+      });
+    });
+  }
+}
+
+/**
+ * Updates the theme icon for simple toggle
+ * @param {HTMLElement} button - The theme button element
+ * @param {string} themeName - The current theme name
+ */
+function updateThemeIcon(button, themeName) {
+  const isDark = themeName === "nord";
+  button.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
 }
 
 /**
@@ -275,7 +342,6 @@ function updateActiveTheme(themeName) {
  */
 function toggleThemeMenu(instanceId) {
   if (instanceId) {
-    // Toggle specific instance
     const themeMenu = document.getElementById(`theme-menu-${instanceId}`);
     if (themeMenu) {
       themeMenu.classList.toggle("open");

@@ -1,6 +1,3 @@
-initThemePicker("#inline-theme-picker");
-initThemePicker("#conclusion-theme-picker");
-
 function initContrastDemo() {
   const fgPicker = document.getElementById("fg-color");
   const bgPicker = document.getElementById("bg-color");
@@ -386,6 +383,9 @@ document.addEventListener("themeLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+  initThemePicker("#demo-theme-toggle", false);
+  initThemePicker("#conclusion-theme-toggle", false);
+  
   if (document.getElementById("fg-color")) {
     initContrastDemo();
   }

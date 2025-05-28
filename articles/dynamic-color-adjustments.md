@@ -5,7 +5,8 @@ An image with dominating tones of a pale yellow, easily readable on black backgr
 Don't trust me ? Look at the following image and play around with the theme picker.  
 You can see the text clear as day when using _Nord_ or _Dracula_ but it is almost invisible when using _Solarized_.
 
-<div style="display: flex; align-items: center; justify-content: center;">
+<div style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
+  <div id="demo-theme-toggle" style="flex-shrink: 0;"></div>
   <img src="./images/unreadable-on-white.png" width="300px">
 </div>
 
@@ -750,7 +751,8 @@ There are many rabbit holes that I have not crawled.
 This implementation is naive, amateurish and shows just how ignorant I am. But it is mine, and it will be good enough to adjust the colors of diagrams and schematics or even silly thank you notes written on a color that should be unreadable on a white background !
 
 
-<div style="display: flex; align-items: center; justify-content: center;">
+<div style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
+  <div id="conclusion-theme-toggle" style="flex-shrink: 0;"></div>
   <img crossorigin="anonymous" class="dynamic-colors" src="./images/thank-you-for-reading.png" width="300px">
 </div>
 

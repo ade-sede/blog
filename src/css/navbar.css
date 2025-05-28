@@ -107,91 +107,6 @@ nav .navbar-links a::after {
 	opacity: 1;
 }
 
-.theme-menu {
-	position: absolute;
-	top: 2.5rem;
-	right: 0;
-	width: 15rem;
-	background-color: var(--bg);
-	border: 1px solid var(--code-border);
-	border-radius: 8px;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-	padding: 10px 5px;
-	z-index: 100;
-	display: none;
-	flex-wrap: wrap;
-	transition: all 0.3s ease;
-	justify-content: center;
-}
-
-.theme-menu.open {
-	display: flex;
-}
-
-.theme-option {
-	width: 50px;
-	height: 50px;
-	border-radius: 8px;
-	cursor: pointer;
-	border: 2px solid transparent;
-	position: relative;
-	overflow: hidden;
-	transition: all 0.3s ease;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-	flex: 0 0 50px; /* Ensure fixed width */
-	margin: 5px; /* Even margin around all theme options */
-}
-
-.theme-option:hover {
-	transform: scale(1.1);
-	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.theme-option.active {
-	border-color: var(--accent, #888);
-	box-shadow: 0 0 0 2px var(--accent, #888), 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.theme-option::before {
-	content: "✓";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	color: white;
-	font-size: 1rem;
-	font-weight: bold;
-	opacity: 0;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-	z-index: 2;
-	transition: opacity 0.3s ease;
-}
-
-.theme-option.active::before {
-	opacity: 1;
-}
-
-.theme-option::after {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 15px;
-	background-color: rgba(0, 0, 0, 0.2);
-}
-
-.theme-option-name {
-	position: absolute;
-	bottom: 2px;
-	left: 0;
-	right: 0;
-	text-align: center;
-	font-size: 9px;
-	color: white;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-	z-index: 1;
-}
 
 /* No longer needed toggle styles removed */
 
@@ -227,24 +142,4 @@ nav .navbar-links a::after {
 		font-size: 0.875rem;
 	}
 	
-	.theme-menu {
-		position: fixed;
-		top: 3.125rem;
-		right: 10px;
-		width: 17.5rem;
-		max-width: 90vw;
-		padding: 10px 5px;
-		justify-content: center;
-	}
-	
-	.theme-option {
-		width: 40px;
-		height: 40px;
-		flex: 0 0 40px;
-		margin: 5px;
-	}
-	
-	.theme-option-name {
-		font-size: 8px;
-	}
 }
