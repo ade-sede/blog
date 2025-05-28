@@ -494,6 +494,7 @@ body {
 	font-family: "Poly", serif;
 	line-height: 1.6;
 	margin: 0;
+	min-height: 100vh;
 	transition: background-color 0.3s;
 }
 
@@ -501,7 +502,7 @@ body .body-main {
 	display: flex;
 	flex-direction: column;
 	width: 80%;
-	min-height: 80vh;
+	flex: 1;
 	align-self: center;
 	box-sizing: border-box;
 	padding-top: 2rem;
