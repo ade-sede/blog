@@ -598,6 +598,13 @@ a[class]::after {
 	color: inherit;
 }
 
+@media (max-width: 768px) {
+	body .body-main {
+		width: 90%;
+		padding: 0 1rem;
+	}
+}
+
 @media (max-width: 480px) {
 
 	html,
@@ -614,7 +621,7 @@ a[class]::after {
 	}
 
 	body .body-main {
-		padding: 0 1rem;
+		padding: 0 0.75rem;
 		font-size: 1rem;
 		max-width: 100%;
 		width: 100%;

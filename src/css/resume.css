@@ -185,7 +185,17 @@
 	color: var(--secondary);
 }
 
+@media (max-width: 768px) {
+	.resume-container {
+		width: 90%;
+	}
+}
+
 @media (max-width: 480px) {
+	.resume-container {
+		width: 95%;
+	}
+
 	.resume .header {
 		flex-direction: column;
 		padding: 1.5rem;
