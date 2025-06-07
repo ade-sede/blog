@@ -3,7 +3,8 @@
   "packages": [
     "go@latest",
     "gnumake@latest",
-    "chromium@latest"
+    "chromium@latest",
+    "python3@latest"
   ],
   "shell": {
     "init_hook": [

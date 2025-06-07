@@ -1,5 +1,6 @@
 src/*templ.go
 !web/pdfs
 web/*
+.venv/
 
 **/.claude/settings.local.json

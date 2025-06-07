@@ -10,11 +10,11 @@ export ARTICLE_DIR
 export QUICK_NOTE_DIR
 
 .PHONY: all
-all: build
+all: prepare
 	go run $(SRC_DIR)/*.go
 
-.PHONY: build
-build: gopath
+.PHONY: prepare
+prepare: gopath
 	mkdir -p $(OUTPUT_DIR)
 	mkdir -p $(OUTPUT_DIR)/css
 	mkdir -p $(OUTPUT_DIR)/libs
@@ -52,7 +52,7 @@ format: gopath
 	$(GOPATH)/bin/templ fmt .
 
 .PHONY: pdf
-pdf: build
+pdf: prepare
 	go install github.com/chromedp/chromedp
 	go run $(SRC_DIR)/*.go -pdf
 
@@ -72,5 +72,5 @@ endif
 re: clean all
 
 .PHONY: serve
-serve: build
+serve: all
 	python3 -m http.server 8080 --directory $(OUTPUT_DIR)
