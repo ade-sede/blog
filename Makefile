@@ -9,6 +9,10 @@ export SRC_DIR
 export ARTICLE_DIR
 export QUICK_NOTE_DIR
 
+.PHONY: all
+all: build
+	go run $(SRC_DIR)/*.go
+
 .PHONY: build
 build: gopath
 	mkdir -p $(OUTPUT_DIR)
@@ -27,10 +31,6 @@ build: gopath
 	find $(ARTICLE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
 	cp $(SRC_DIR)/robots.txt $(OUTPUT_DIR)/.
 	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
-
-.PHONY: all
-all: build
-	go run $(SRC_DIR)/*.go
 
 .PHONY: clean
 clean:
@@ -70,3 +70,7 @@ endif
 
 .PHONY: re
 re: clean all
+
+.PHONY: serve
+serve: build
+	python3 -m http.server 8080 --directory $(OUTPUT_DIR)
