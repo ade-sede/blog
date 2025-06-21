@@ -6,7 +6,7 @@
 ## Build, Lint, and Test
 
 - **Build:** `make all`
-- **Format:** `make format`
+- **Format:** Pre-commit hook
 - **Serve:** `make serve` (serves on port 8080)
 - **Clean:** `make clean`
 - **PDF:** `make pdf`
@@ -21,7 +21,7 @@
 
 - **Language:** Go
 - **Templating:** [templ](https://templ.dev/)
-- **Formatting:** Use `gofmt` and `templ fmt`. Run `make format`.
+- **Formatting:** Use `gofmt` and `templ fmt`. These are run automatically by a pre-commit hook.
 - **Naming Conventions:** Standard Go conventions.
 - **Error Handling:** Use `if err != nil`.
 - **Imports:** Organized by Go toolchain.

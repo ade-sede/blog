@@ -1,0 +1,24 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+    -   id: prettier
+        types_or: [css, javascript, markdown]
+-   repo: local
+    hooks:
+    -   id: gofmt
+        name: gofmt
+        entry: gofmt -w
+        language: golang
+        types: [go]
+    -   id: templ
+        name: templ
+        entry: templ fmt
+        language: golang
+        files: \.templ$

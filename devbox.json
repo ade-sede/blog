@@ -4,7 +4,8 @@
     "go@latest",
     "gnumake@latest",
     "chromium@latest",
-    "python3@latest"
+    "python3@latest",
+    "pre-commit@latest"
   ],
   "shell": {
     "init_hook": [

@@ -39,17 +39,12 @@ clean:
 
 .PHONY: init
 init: gopath
-	rm -rf $(PWD)/.git/hooks/pre-commit
-	ln -s $(PWD)/hooks/pre-commit $(PWD)/.git/hooks/pre-commit
+	pre-commit install
 	go install github.com/a-h/templ/cmd/templ@latest
 
 .PHONY: deploy
 deploy: clean init all
 
-.PHONY: format
-format: gopath
-	gofmt -w $(SRC_DIR)/*.go
-	$(GOPATH)/bin/templ fmt .
 
 .PHONY: pdf
 pdf: prepare
