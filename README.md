@@ -21,6 +21,8 @@ After installing devbox, you can start a shell with all the registered dependenc
 devbox shell
 ```
 
+You can also pipe commands into `devbox shell`.
+
 ### After installing dev dependencies
 
 ```bash
@@ -50,6 +52,9 @@ make format
 
 # Generates HTML files and a PDF version of the resume (available at src/pdfs/ade-sede.pdf)
 make pdf
+
+# Serve files on :8080, useful when working on a remote machine
+make serve
 ```
 
 ## General working principle
