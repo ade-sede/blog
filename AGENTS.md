@@ -1,7 +1,12 @@
+## First-time setup
+
+- Run `make init-dev` to install all dependencies and pre-commit hooks.
+
 ## Guidelines
 
 - Build after every change to sources.
 - Never comment code or configuration.
+- After you make changes, update the documentation if applicable.
 
 ## Build, Lint, and Test
 
