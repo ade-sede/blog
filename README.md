@@ -34,7 +34,12 @@ make init
 It will:
 
 - Install [`templ`](https://github.com/a-h/templ) to `$GOPATH/bin`.
-- Install pre-commit hooks
+
+For development, you can also install pre-commit hooks:
+
+```bash
+make init-dev
+```
 
 ## Running
 

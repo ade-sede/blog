@@ -39,8 +39,11 @@ clean:
 
 .PHONY: init
 init: gopath
-	pre-commit install
 	go install github.com/a-h/templ/cmd/templ@latest
+
+.PHONY: init-dev
+init-dev: init
+	pre-commit install
 
 .PHONY: deploy
 deploy: clean init all
