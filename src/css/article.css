@@ -55,19 +55,22 @@ code {
 	.table-of-contents {
 		display: none;
 	}
-
-	.article {
-		width: 75%;
-	}
 }
 
 @media (max-width: 768px) {
-	.article {
-		width: 95%;
-	}
-	
 	.article-container {
 		padding: 0 8px;
+	}
+}
+
+.article .katex-display {
+	overflow-x: auto;
+	padding-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+	.article .katex-display {
+		font-size: 0.9em;
 	}
 }
 
@@ -86,6 +89,14 @@ code {
 		box-sizing: border-box;
 		margin: 0;
 		font-size: 0.95rem;
+	}
+
+	.article .katex-display,
+	.article .hue-wheel-container,
+	.article .saturation-container,
+	.article .lightness-container,
+	.article .contrast-demo {
+		align-self: center;
 	}
 
 	.article img {
@@ -175,6 +186,7 @@ code {
 	overflow-y: auto;
 	background: transparent;
 	padding: 1.2rem;
+	width: 280px;
 }
 
 .toc-toggle {
@@ -270,9 +282,18 @@ code {
 
 .article {
 	line-height: 1.6;
-	width: 55%;
 	max-width: 900px;
 	margin: 0 auto;
+}
+
+@media (min-width: 1201px) {
+	.article-container {
+		display: flex;
+		justify-content: space-between;
+	}
+	.article {
+		width: 55%;
+	}
 }
 
 .article-byline {

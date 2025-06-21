@@ -590,20 +590,19 @@ function findOptimalHueShift(dominantColor, bgColor) {
   );
 
   const originalContrast = computeContrastRatio(dominantColor, bgColor);
-
   const bgLuminance = computeLuminance(bgColor);
 
+  // Start with a complementary color if the background is light,
+  // otherwise start with the original hue.
   let currentHue = bgLuminance > 0.5 ? (originalHue + 180) % 360 : originalHue;
 
-  let currentContrast = computeContrastWithHue(
+  let bestHue = currentHue;
+  let bestContrast = computeContrastWithHue(
     saturation,
     lightness,
     currentHue,
     bgColor,
   );
-
-  let bestHue = currentHue;
-  let bestContrast = currentContrast;
 
   let stepSize = 30;
   let improving = true;
