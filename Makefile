@@ -30,7 +30,7 @@ prepare: gopath
 	find $(ARTICLE_DIR) -name "*.css" -type f -exec cp {} $(OUTPUT_DIR)/css/. \; 2>/dev/null || true
 	find $(ARTICLE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
 	cp $(SRC_DIR)/robots.txt $(OUTPUT_DIR)/.
-	$(GOPATH)/bin/templ generate -path $(SRC_DIR)
+	go run github.com/a-h/templ/cmd/templ@latest generate -path $(SRC_DIR)
 
 .PHONY: clean
 clean:
