@@ -38,15 +38,11 @@ clean:
 	rm -rf $(OUTPUT_DIR)/*
 
 .PHONY: init
-init: gopath
-	go install github.com/a-h/templ/cmd/templ@latest
-
-.PHONY: init-dev
-init-dev: init
+init:
 	pre-commit install
 
 .PHONY: deploy
-deploy: clean init all
+deploy: clean all
 
 
 .PHONY: pdf

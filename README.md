@@ -27,19 +27,7 @@ You can also pipe commands into `devbox shell`.
 
 ### After installing dev dependencies
 
-```bash
-make init
-```
-
-It will:
-
-- Install [`templ`](https://github.com/a-h/templ) to `$GOPATH/bin`.
-
-For development, you can also install pre-commit hooks:
-
-```bash
-make init-dev
-```
+Run `make init` to install all dependencies and pre-commit hooks.
 
 ## Running
 

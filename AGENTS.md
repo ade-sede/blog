@@ -1,6 +1,6 @@
 ## First-time setup
 
-- Run `make init-dev` to install all dependencies and pre-commit hooks.
+- Run `make init` to install all dependencies and pre-commit hooks.
 
 ## Guidelines
 
