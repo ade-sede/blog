@@ -180,6 +180,54 @@
         }
       }
     },
+    "gopls@latest": {
+      "last_modified": "2025-06-22T15:15:55Z",
+      "resolved": "github:NixOS/nixpkgs/3078b9a9e75f1790e6d6ef9955fdc6a2d1740cc6#gopls",
+      "source": "devbox-search",
+      "version": "0.19.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vs0w0czy9y0j75m4f04c9wxzngsfmhjk-gopls-0.19.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vs0w0czy9y0j75m4f04c9wxzngsfmhjk-gopls-0.19.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/m1516g6y4pbka1z8pxnvf0xfzlw05674-gopls-0.19.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/m1516g6y4pbka1z8pxnvf0xfzlw05674-gopls-0.19.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4qiig786146zfzh3v892wid7z3n5bymf-gopls-0.19.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4qiig786146zfzh3v892wid7z3n5bymf-gopls-0.19.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/26pxyvnsgh0psak2xd8jm9884xdi40z3-gopls-0.19.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/26pxyvnsgh0psak2xd8jm9884xdi40z3-gopls-0.19.1"
+        }
+      }
+    },
     "pre-commit@latest": {
       "last_modified": "2025-06-17T01:11:27Z",
       "resolved": "github:NixOS/nixpkgs/c539ae8d21e49776966d714f82fba33b1fca78bc#pre-commit",
@@ -298,6 +346,54 @@
             }
           ],
           "store_path": "/nix/store/c9m6yd8fg1flz2j5r4bif1ib5j20a0cy-python3-3.12.8"
+        }
+      }
+    },
+    "templ@latest": {
+      "last_modified": "2025-06-20T02:24:11Z",
+      "resolved": "github:NixOS/nixpkgs/076e8c6678d8c54204abcb4b1b14c366835a58bb#templ",
+      "source": "devbox-search",
+      "version": "0.3.898",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cm55qhsx750sqwrxyza9xxplpwb1dh31-templ-0.3.898",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cm55qhsx750sqwrxyza9xxplpwb1dh31-templ-0.3.898"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wh61xcaay9bqvgd57sk2vbii27isc5sf-templ-0.3.898",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wh61xcaay9bqvgd57sk2vbii27isc5sf-templ-0.3.898"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/acca0cbhwymj7qwhs9kvk2kmharbsd01-templ-0.3.898",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/acca0cbhwymj7qwhs9kvk2kmharbsd01-templ-0.3.898"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cn4sdzni4jbrbcqdm0q3nc78kkcwnv2g-templ-0.3.898",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cn4sdzni4jbrbcqdm0q3nc78kkcwnv2g-templ-0.3.898"
         }
       }
     }
