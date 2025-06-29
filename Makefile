@@ -39,7 +39,7 @@ build: gopath
 .PHONY: clean
 clean:
 	rm -rf $(SRC_DIR)/*templ.go
-	find $(OUTPUT_DIR) -mindepth 1 -not -name "*.png" -exec rm -rf {} +
+	if [ -d "$(OUTPUT_DIR)" ]; then find $(OUTPUT_DIR) -mindepth 1 -not -name "*.png" -exec rm -rf {} +; fi
 
 .PHONY: init
 init:
