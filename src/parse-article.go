@@ -29,8 +29,9 @@ import (
 type ArticleManifest struct {
 	Title        string `json:"title"`
 	Date         string `json:"date"`
-	MarkdownFile string `json:"markdownFile, omitempty"`
-	CssFile      string `json:"cssFile, omitempty"`
+	Draft        bool   `json:"draft,omitempty"`
+	MarkdownFile string `json:"markdownFile,omitempty"`
+	CssFile      string `json:"cssFile,omitempty"`
 	ScriptFile   string `json:"scriptFile"`
 	Description  string `json:"description"`
 	Author       string `json:"author"`
@@ -648,6 +649,7 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 }
 
 func parseArticles(articleDir string) ([]Article, error) {
+	env := os.Getenv("ENV")
 	files, err := os.ReadDir(articleDir)
 	if err != nil {
 		log.Fatalf("Error while opening directory '%s': '%v'", articleDir, err)
@@ -661,6 +663,9 @@ func parseArticles(articleDir string) ([]Article, error) {
 			manifest, err := readArticleManifest(manifestFullPath)
 			if err != nil {
 				return nil, err
+			}
+			if manifest.Draft && env != "development" {
+				continue
 			}
 			htmlFilename := strings.TrimSuffix(manifest.MarkdownFile, ".md") + ".html"
 			date, err := time.Parse(time.DateOnly, manifest.Date)

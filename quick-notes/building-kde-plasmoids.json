@@ -1,6 +1,7 @@
 {
   "title": "Getting started building basic KDE plasmoids",
   "date": "2025-03-25",
+  "draft": false,
   "markdownFile": "building-kde-plasmoids.md",
   "description": "System tray, system clock, launch menu... If you are on KDE Plasma, all of the above are available as 'plasmoids': simple widgets meant to be attached to a desktop or a taskbar. I recently decided to build one, but I got lost along the way and decided to document my learnings for next time.",
   "author": "Adrien DE SEDE",

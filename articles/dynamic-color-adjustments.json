@@ -1,6 +1,7 @@
 {
   "title": "Dynamic color adjustment for images on the web",
   "date": "2025-04-07",
+  "draft": false,
   "markdownFile": "dynamic-color-adjustments.md",
   "scriptFile": "dynamic-color-adjustments.js",
   "cssFile": "dynamic-color-adjustments.css",
