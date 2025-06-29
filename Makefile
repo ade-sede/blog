@@ -10,11 +10,11 @@ export ARTICLE_DIR
 export QUICK_NOTE_DIR
 
 .PHONY: all
-all: prepare
+all: build
 	go run $(SRC_DIR)/*.go
 
-.PHONY: prepare
-prepare: gopath
+.PHONY: build
+build: gopath
 	mkdir -p $(OUTPUT_DIR)
 	mkdir -p $(OUTPUT_DIR)/css
 	mkdir -p $(OUTPUT_DIR)/libs
@@ -39,7 +39,7 @@ prepare: gopath
 .PHONY: clean
 clean:
 	rm -rf $(SRC_DIR)/*templ.go
-	rm -rf $(OUTPUT_DIR)/*
+	find $(OUTPUT_DIR) -mindepth 1 -not -name "*.png" -exec rm -rf {} +
 
 .PHONY: init
 init:
@@ -50,7 +50,7 @@ deploy: clean all
 
 
 .PHONY: pdf
-pdf: prepare
+pdf: build
 	go install github.com/chromedp/chromedp
 	go run $(SRC_DIR)/*.go -pdf
 
