@@ -72,11 +72,11 @@ re: clean all
 .PHONY: serve
 serve: all
 	@if ! command -v entr > /dev/null; then \
-		echo "Error: entr is not installed. Please install it (e.g., 'brew install entr' or 'sudo apt-get install entr')" && exit 1; \
+		echo "Error: entr is not installed" && exit 1; \
 	fi
 	@echo "Starting server and watching for file changes..." >&2
 	@echo "Serving on http://localhost:8080. Press Ctrl+C to exit." >&2
 	@python3 -m http.server 8080 --directory $(OUTPUT_DIR) & \
 	SERVER_PID=$$!; \
 	trap "echo '\\nStopping server...'; kill $$SERVER_PID" INT TERM EXIT; \
-	find $(SRC_DIR) $(ARTICLE_DIR) $(QUICK_NOTE_DIR) -type f | entr -c make all
+	find $(SRC_DIR) $(ARTICLE_DIR) $(QUICK_NOTE_DIR) -type f | entr -c make re
