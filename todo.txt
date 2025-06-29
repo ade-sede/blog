@@ -2,3 +2,4 @@
 - making people feel safe
 - framing your output
 - going diamond shape - defuse jack of all trades master of none
+- in memory implementations
