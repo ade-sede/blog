@@ -12,7 +12,7 @@ Or you can use [Devbox](https://www.jetify.com/devbox) to manage your dependenci
 - [Golang 1.20](https://go.dev/doc/install) or greater
 - Make sure [`GOPATH`](https://go.dev/wiki/GOPATH) environment variable is properly set
 - [GNU Make](https://www.gnu.org/software/make/)
-- [Chromium](https://www.chromium.org/getting-involved/download-chromium/) (used for automated PDF resume generation)
+- [Chromium](https://www.chromium.org/getting-involved/download-chromium/) (used for automated PDF resume generation and screenshots)
 - [pre-commit](https://pre-commit.com/)
 
 ### Managing dependencies through devbox
@@ -21,6 +21,7 @@ Or you can use [Devbox](https://www.jetify.com/devbox) to manage your dependenci
 
 Devbox install dependencies through nix.
 To have devbox installed dependencies available in your shell, you have two options:
+
 - Step into a devbox managed shell using `devbox shell`
 - Run `direnv allow` so that devbox deps are automatically available as soon as you step into this directory
 
@@ -47,6 +48,12 @@ make pdf
 
 # Serve files on :8080, useful when working on a remote machine
 make serve
+
+# Take a screenshot of a page (desktop)
+chromium-browser --headless --window-size=1920,1080 --screenshot=desktop.png web/path/to/file
+
+# Take a screenshot of a page (mobile)
+chromium-browser --headless --window-size=414,896 --screenshot=mobile.png web/path/to/file
 ```
 
 ## General working principle
