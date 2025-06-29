@@ -620,7 +620,7 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 			extension.GFM,
 			extension.NewFootnote(
 				extension.WithFootnoteBacklinkTitle("Return to text"),
-				extension.WithFootnoteLinkTitle("See footnote"),
+				extension.WithFootnoteLinkTitle(""),
 				extension.WithFootnoteBacklinkHTML("↩"),
 			),
 		),
@@ -689,4 +689,21 @@ func parseArticles(articleDir string) ([]Article, error) {
 		return articles[i].Date.After(articles[j].Date)
 	})
 	return articles, nil
+}
+
+func hasFootnotes(html string) bool {
+	return strings.Contains(html, `class="footnotes"`)
+}
+
+func processContentForSidebarFootnotes(html string) string {
+	if !hasFootnotes(html) {
+		return html
+	}
+
+	processedHTML := html
+
+	re := regexp.MustCompile(`<div class="footnotes"([^>]*)>`)
+	processedHTML = re.ReplaceAllString(processedHTML, `<div class="footnotes desktop-hidden"$1>`)
+
+	return processedHTML
 }

@@ -19,7 +19,12 @@ templ article(title string, description string, stringifiedHTML string, formatte
 				</ul>
 			</nav>
 			<div class="article">
-				@templ.Raw(stringifiedHTML)
+				if hasFootnotes(stringifiedHTML) {
+					@templ.Raw(processContentForSidebarFootnotes(stringifiedHTML))
+					<div class="footnotes-sidebar" id="footnotes-sidebar"></div>
+				} else {
+					@templ.Raw(stringifiedHTML)
+				}
 			</div>
 		</div>
 	}
