@@ -188,27 +188,6 @@ code {
 	width: 280px;
 }
 
-.toc-toggle {
-	position: absolute;
-	top: 0.5rem;
-	right: 0.5rem;
-	background: var(--bg);
-	border: 1px solid var(--secondary);
-	border-radius: 4px;
-	color: var(--secondary);
-	cursor: pointer;
-	padding: 0.3rem 0.5rem;
-	font-size: 0.8rem;
-	transition: all 0.2s ease;
-	z-index: 10;
-}
-
-.toc-toggle:hover {
-	background: var(--accent);
-	color: var(--bg);
-	border-color: var(--accent);
-}
-
 .table-of-contents ul {
 	list-style: none;
 	padding: 0;
@@ -248,13 +227,72 @@ code {
 	font-weight: 500;
 }
 
+.toc-toggle-btn {
+	background: none;
+	border: none;
+	color: var(--secondary);
+	cursor: pointer;
+	padding: 0.1rem 0.3rem;
+	margin-right: 0.3rem;
+	border-radius: 3px;
+	font-size: 1rem;
+	transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.2rem;
+	vertical-align: middle;
+}
+
+.toc-toggle-btn:hover {
+	background: rgba(var(--accent-rgb), 0.1);
+	color: var(--accent);
+}
+
+.toc-toggle-btn i {
+	transition: all 0.2s ease;
+}
+
+.toc-children {
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
+
+.toc-tree {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.toc-tree li {
+	display: block;
+	margin: 0;
+	line-height: 1.2;
+}
+
+.toc-tree li > .toc-toggle-btn,
+.toc-tree li > a {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.toc-tree li > .toc-toggle-btn {
+	margin-right: 0.3rem;
+}
+
+.toc-children {
+	width: 100%;
+	padding-left: 0.5rem;
+	margin-top: 0.2rem;
+}
+
 .toc-level-1 a {
 	font-weight: 600;
 	font-size: 0.8rem;
 }
 
 .toc-level-2 {
-	padding-left: 1rem;
+	padding-left: 0.5rem;
 	margin-top: 0.4rem;
 }
 
@@ -263,7 +301,7 @@ code {
 }
 
 .toc-level-3 {
-	padding-left: 2rem;
+	padding-left: 1rem;
 }
 
 .toc-level-3 a {
@@ -271,7 +309,7 @@ code {
 }
 
 .toc-level-4 {
-	padding-left: 3rem;
+	padding-left: 1.5rem;
 }
 
 .toc-level-4 a {

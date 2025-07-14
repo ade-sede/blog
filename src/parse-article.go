@@ -126,7 +126,7 @@ func (toc *tocExtractor) Transform(node *ast.Document, reader text.Reader, pc pa
 				headingID = string(id.([]byte))
 			}
 
-			if headingText.Len() > 0 {
+			if headingText.Len() > 0 && heading.Level > 1 {
 				toc.TOC = append(toc.TOC, TOCEntry{
 					Level: heading.Level,
 					Text:  headingText.String(),

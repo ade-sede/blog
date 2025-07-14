@@ -7,9 +7,6 @@ templ article(title string, description string, stringifiedHTML string, formatte
 	@Base(title, description, styleTags, scriptTags) {
 		<div class="article-container">
 			<nav class="table-of-contents" id="toc">
-				<button class="toc-toggle" id="toc-toggle" aria-label="Toggle table of contents">
-					<i class="fas fa-eye-slash" id="toc-toggle-icon"></i>
-				</button>
 				<ul id="toc-list">
 					for _, entry := range toc {
 						<li class={ "toc-level-" + fmt.Sprintf("%d", entry.Level) }>
