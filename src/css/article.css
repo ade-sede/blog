@@ -188,6 +188,16 @@ code {
 	width: 280px;
 }
 
+@media (min-width: 1800px) {
+	.table-of-contents {
+		left: max(2rem, calc(50% - 760px));
+	}
+	
+	.footnotes-sidebar {
+		left: calc(50% + 450px);
+	}
+}
+
 .table-of-contents ul {
 	list-style: none;
 	padding: 0;
