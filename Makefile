@@ -71,9 +71,6 @@ re: clean all
 
 .PHONY: serve
 serve: all
-	@if ! command -v entr > /dev/null; then \
-		echo "Error: entr is not installed" && exit 1; \
-	fi
 	@echo "Starting server and watching for file changes..." >&2
 	@echo "Serving on http://localhost:8080. Press Ctrl+C to exit." >&2
 	@python3 -m http.server 8080 --directory $(OUTPUT_DIR) & \
