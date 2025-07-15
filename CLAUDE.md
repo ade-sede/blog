@@ -14,9 +14,10 @@
 - **Format:** Pre-commit hook
 - **Serve:** `make serve` (serves on port 8080)
 - **Clean:** `make clean`
+- **Clean + Build in one command:** `make re`
 - **PDF:** `make pdf`
 - **Deploy:** `make deploy`
-- **Test:** When making cosmetic changes test the result by taking a screenshot
+- **Test:** When making cosmetic changes test the result by taking a screenshot. Don't forget you can also inspect the HTML artficats
 - **Screenshot:** Store in `web/` directory. Base command: `chromium-browser --headless --disable-gpu --virtual-time-budget=5000 --screenshot=filename.png web/path/to/file`
   - Desktop: `--window-size=1920,1080`
   - Mobile: `--window-size=414,896`
