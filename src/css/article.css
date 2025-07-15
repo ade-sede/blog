@@ -371,10 +371,16 @@ code {
 	}
 
 	.footnotes-sidebar .footnote-number {
+		display: inline;
 		font-weight: bold;
 		color: var(--accent);
 		margin-right: 0.3rem;
 		font-size: 0.7rem;
+	}
+
+	.footnotes-sidebar .footnote-item p {
+		display: inline;
+		margin: 0;
 	}
 
 	.footnotes-sidebar .footnote-backref {
