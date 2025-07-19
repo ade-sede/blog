@@ -21,10 +21,10 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 			<section class="content-sections">
 				<div class="sections-grid">
 					if len(articles) > 0 {
-						@homeCardWrapper("Most Recent Article", "articles.html", articles[0])
+						@homeCardWrapper("Most Recent Article", "articles.html", "View all articles", articles[0])
 					}
 					if len(quickNotes) > 0 {
-						@homeCardWrapper("Most Recent Quick Note", "quick-notes.html", quickNotes[0])
+						@homeCardWrapper("Most Recent Quick Note", "quick-notes.html", "View all quick notes", quickNotes[0])
 					}
 				</div>
 			</section>
@@ -32,12 +32,12 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 	}
 }
 
-templ homeCardWrapper(title string, viewAllHref string, item Article) {
+templ homeCardWrapper(title string, viewAllHref string, viewAllText string, item Article) {
 	<div class="content-section">
 		<a href={ templ.URL(item.HTMLFilename) } class="home-card-link">
 			<div class="section-header">
 				<h2>{ title }</h2>
-				<span class="view-all-placeholder">View all →</span>
+				<span class="view-all-placeholder">{ viewAllText } →</span>
 			</div>
 			<div class="item-meta">
 				<time class="item-date">{ item.FormatedDate }</time>
@@ -45,6 +45,6 @@ templ homeCardWrapper(title string, viewAllHref string, item Article) {
 			<h3 class="item-title">{ item.Manifest.Title }</h3>
 			<p class="item-description">{ item.Manifest.Description }</p>
 		</a>
-		<a href={ templ.URL(viewAllHref) } class="view-all-overlay">View all →</a>
+		<a href={ templ.URL(viewAllHref) } class="view-all-overlay">{ viewAllText } →</a>
 	</div>
 }
