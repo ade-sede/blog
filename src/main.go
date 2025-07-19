@@ -318,6 +318,10 @@ func main() {
 		templComponent.Render(context.Background(), file)
 	}
 
+	if err := generateSitemap(outputDir, allArticles, allQuickNotes); err != nil {
+		log.Printf("Warning: Failed to generate sitemap: %v", err)
+	}
+
 	if *generatePDFFlag {
 		if err := generatePDF(outputDir, srcDir); err != nil {
 			log.Printf("Warning: Failed to generate PDF: %v", err)

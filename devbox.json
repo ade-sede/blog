@@ -8,7 +8,8 @@
     "pre-commit@latest",
     "gopls@latest",
     "templ@latest",
-    "entr@latest"
+    "entr@latest",
+    "libxml2@latest"
   ],
   "shell": {
     "init_hook": [

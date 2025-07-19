@@ -1,6 +1,6 @@
 # Blog
 
-[blog.ade-sede.dev](https://blog.ade-sede.dev)
+Deployed to [blog.ade-sede.dev](https://blog.ade-sede.dev).
 
 ## Installation
 
