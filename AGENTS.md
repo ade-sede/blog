@@ -7,12 +7,13 @@
 - Build after every change to sources.
 - Never comment code or configuration.
 - After you make changes, update the documentation if applicable.
+- Consider every choice for mobile first - most people read me on mobile
+- Consider we target mobile first, code snippets shouldn't be larger than 35 chars. Format accordingly
 
 ## Build, Lint, and Test
 
 - **Build:** `make all`
 - **Format:** Pre-commit hook
-- **Serve:** `make serve` (serves on port 8080)
 - **Clean:** `make clean`
 - **Clean + Build in one command:** `make re`
 - **PDF:** `make pdf`
