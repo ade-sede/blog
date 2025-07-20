@@ -197,9 +197,9 @@ const (
 )
 
 var (
-	multiLineDisplayRegex  = regexp.MustCompile(`(?s)\\\\?\[\s*\n(.*?)\n\s*\\\\?\]`)
-	singleLineDisplayRegex = regexp.MustCompile(`\\\\?\[(.*?)\\\\?\]`)
-	inlineMathRegex        = regexp.MustCompile(`(?s)\\\\?\((.*?)\\\\?\)`)
+	multiLineDisplayRegex = regexp.MustCompile(`(?s)\\\[\s*\n(.*?)\n\s*\\\]`)
+	singleLineDisplayRegex = regexp.MustCompile(`\\\[([^\n]*?)\\\]`)
+	dollarInlineMathRegex = regexp.MustCompile(`\$([^$\n]+)\$`)
 
 	filenameIcons = map[string]string{
 		"makefile":          "fas fa-cogs",
@@ -569,11 +569,11 @@ func processLatexExpressions(input string) string {
 
 	processed = singleLineDisplayRegex.ReplaceAllStringFunc(processed, func(match string) string {
 		content := singleLineDisplayRegex.FindStringSubmatch(match)[1]
-		return fmt.Sprintf("<span class=\"katex-inline\" data-latex=\"%s\"></span>", content)
+		return fmt.Sprintf("<div class=\"katex-display\" data-latex=\"%s\"></div>", content)
 	})
 
-	processed = inlineMathRegex.ReplaceAllStringFunc(processed, func(match string) string {
-		content := inlineMathRegex.FindStringSubmatch(match)[1]
+	processed = dollarInlineMathRegex.ReplaceAllStringFunc(processed, func(match string) string {
+		content := dollarInlineMathRegex.FindStringSubmatch(match)[1]
 		return fmt.Sprintf("<span class=\"katex-inline\" data-latex=\"%s\"></span>", content)
 	})
 

@@ -63,16 +63,6 @@ code {
 	}
 }
 
-.article .katex-display {
-	overflow-x: auto;
-	padding-bottom: 1rem;
-}
-
-@media (max-width: 480px) {
-	.article .katex-display {
-		font-size: 0.9em;
-	}
-}
 
 @media (max-width: 480px) {
 	.article-container {
@@ -91,7 +81,6 @@ code {
 		font-size: 0.95rem;
 	}
 
-	.article .katex-display,
 	.article .hue-wheel-container,
 	.article .saturation-container,
 	.article .lightness-container,
