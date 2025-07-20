@@ -654,73 +654,11 @@ a[class]::after {
 
 /* Mobile-responsive LaTeX styling */
 .katex-display {
-	padding: 0.5rem 0;
-	margin: 1rem 0;
-	text-align: left;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	display: block;
+	width: 100%;
 }
 
-@media (max-width: 768px) {
-	.katex-display {
-		font-size: 0.95em;
-		margin: 0.8rem 0;
-		padding: 0.6rem 0;
-		max-width: 100%;
-		box-sizing: border-box;
-	}
 
-	.katex-display .katex {
-		display: inline;
-		word-break: break-all;
-		line-height: 1.6;
-	}
-
-	.katex .mfrac {
-		display: inline-flex;
-		flex-direction: column;
-		align-items: center;
-		vertical-align: middle;
-		margin: 0 0.2em;
-	}
-
-	.katex .mbin,
-	.katex .mrel {
-		white-space: nowrap;
-		margin: 0 0.15em;
-	}
-}
-
-@media (max-width: 480px) {
-	.katex-display {
-		font-size: 0.9em;
-		margin: 0.6rem 0;
-		padding: 0.5rem 0;
-		line-height: 1.8;
-	}
-
-	.katex-display .katex {
-		line-height: 1.8;
-	}
-
-	.katex .mbin,
-	.katex .mrel {
-		margin: 0 0.1em;
-	}
-
-	.katex .cases {
-		display: inline-block;
-		vertical-align: middle;
-	}
-}
-
-@media (max-width: 360px) {
-	.katex-display {
-		font-size: 0.85em;
-		margin: 0.5rem 0;
-		padding: 0.4rem 0;
-		line-height: 2;
-	}
-
-	.katex-display .katex {
-		line-height: 2;
-	}
-}

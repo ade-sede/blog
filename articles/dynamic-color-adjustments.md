@@ -53,34 +53,43 @@ To increase the efficiency of our color encoding and make sure we get the most o
 The value 255 is not twice as luminous as 128, but rather 4.5 times more luminous, which would make it roughly 2 times brighter to the human eye[^4] ! 
 
 Gamma encoding and decoding works as follows:
+
+<div class="math-step">
+<strong>Gamma encoding and decoding formulas</strong>
 \[
+V_{encoded} = V_{linear}^{\frac{1}{\gamma}} \\
 V_{linear} = V_{encoded}^{\gamma}
 \]
-\[
-V_{encoded} = V_{linear}^{\frac{1}{\gamma}}
-\]
+</div>
 
 Let's walk through a concrete example: suppose our screen's gamma is _2.2_. Our red channel is at 80 and we want to double the luminance.  
-- Normalise the value of the red channel:
-  \[
-    \frac{80}{255} \approx 0.313
-  \]
-- Convert from gamma to linear representation:
-  \[
-    0.313^{2.2} \approx 0.097
-  \]
-- Double our linear representation which corresponds linearly to luminance:
-  \[
-    0.097 \times 2 = 0.194
-  \]
-- Convert back from linear to a gamma encoded value:
-  \[
-    0.194^{\frac{1}{2.2}} \approx 0.475
-  \]
-- Back to 8 bit representation:
-  \[
-    0.475 * 255 \approx 121
-  \]
+
+<div class="math-step">
+<strong>Step 1: Normalise the value</strong>
+\[
+  \frac{80}{255} \approx 0.313
+\]
+
+<strong>Step 2: Convert from gamma to linear</strong>
+\[
+  0.313^{2.2} \approx 0.097
+\]
+
+<strong>Step 3: Double the linear representation</strong>
+\[
+  0.097 \times 2 = 0.194
+\]
+
+<strong>Step 4: Convert back to gamma encoded</strong>
+\[
+  0.194^{\frac{1}{2.2}} \approx 0.475
+\]
+
+<strong>Step 5: Back to 8-bit representation</strong>
+\[
+  0.475 \times 255 \approx 121
+\]
+</div>
 
 And there we have it: **Using a gamma of 2.2, doubling the luminance from 80 means increasing the channel's value to _121_**
 To double the perceived brightness you would simply need to double the already gamma encoded value.  
@@ -95,13 +104,15 @@ Remember, our immediate goal is to be able to measure and quantify the perceptio
 This is where the sRGB (standard RGB) color space comes in. Developed in the 90s, sRGB establishes a standard gamma curve that all devices should aim to reproduce. While we often approximate it as γ = 2.2, sRGB actually defines a more complex function.
 I copy it here for completeness but don't ask me how this formula works exactly, my understanding does not run that deep.
 
+<div class="math-step">
+<strong>sRGB transfer function</strong>
 \[
-V_{linear} =
 \begin{cases}
-\frac{V_{sRGB}}{12.92} & \text{if } V_{sRGB} \leq 0.04045 \\
-\left(\frac{V_{sRGB} + 0.055}{1.055}\right)^{2.4} & \text{if } V_{sRGB} > 0.04045
+\frac{V_{sRGB}}{12.92} & \text{if } \leq 0.04045 \\
+\left(\frac{V_{sRGB} + 0.055}{1.055}\right)^{2.4} & \text{if } > 0.04045
 \end{cases}
 \]
+</div>
 
 With a standardized way to convert encoded values to linear light, we can now tackle the question of perceived brightness in a device-independent way.
 
@@ -109,36 +120,53 @@ Relative luminance (denoted *L*) is a measure of the perceived brightness of a c
 
 To compute relative luminance, we convert our RGB values to linear light using the sRGB transfer function, then apply a weighted sum:
 
+<div class="math-step">
+<strong>Relative luminance formula</strong>
 \[
-L = 0.2126 \times R_{linear} + 0.7152 \times G_{linear} + 0.0722 \times B_{linear}
+L = \left(\begin{aligned}
+&\phantom{+} 0.2126 \times R_{linear} \\
+&+ 0.7152 \times G_{linear} \\
+&+ 0.0722 \times B_{linear}
+\end{aligned}\right)
 \]
+</div>
 
 These weights reflect that we are most sensitive to green light, less sensitive to red light, and even less sensitive to blue light.
 
 To build an even better understanding, let's compute the relative luminance of a vivid red `rgb(230, 30, 30)`:
 
-- Normalise: 
-   \[
-     R = \frac{230}{255} \approx 0.902, \quad
-     G = \frac{30}{255} \approx 0.118, \quad
-     B = \frac{30}{255} \approx 0.118
-   \]
+<div class="math-step">
+<strong>Step 1: Normalise the RGB values</strong>
+\[ R = \frac{230}{255} \approx 0.902 \]
+\[ G = \frac{30}{255} \approx 0.118 \]
+\[ B = \frac{30}{255} \approx 0.118 \]
 
-- Convert to linear using the sRGB function:
-   \[
-     R_{linear} = \left(\frac{0.902 + 0.055}{1.055}\right)^{2.4} \approx 0.798 \quad \text{(since } 0.902 > 0.04045 \text{)}
-   \]
-   \[
-     G_{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \approx 0.012 \quad \text{(since } 0.118 > 0.04045 \text{)}
-   \]
-   \[
-     B_{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \approx 0.012 \quad \text{(since } 0.118 > 0.04045 \text{)}
-   \]
+<strong>Step 2: Convert to linear using sRGB function</strong>
+\[
+  R_{linear} = \left(\frac{0.902 + 0.055}{1.055}\right)^{2.4} \\
+  R_{linear} \approx 0.798
+\]
+\[
+  G_{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \\
+  G_{linear} \approx 0.012
+\]
+\[
+  B_{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \\
+  B_{linear} \approx 0.012
+\]
 
-- Calculate relative luminance:
-   \[
-     L = 0.2126 \times 0.798 + 0.7152 \times 0.012 + 0.0722 \times 0.012 \approx 0.178
-   \]
+<strong>Step 3: Calculate relative luminance</strong>
+\[
+L = \left(\begin{aligned}
+&\phantom{+} 0.2126 \times 0.798 \\
+&+ 0.7152 \times 0.012 \\
+&+ 0.0722 \times 0.012
+\end{aligned}\right)
+\]
+\[
+L \approx 0.178
+\]
+</div>
 
 This standardized measure of perceived brightness gives us exactly what we need to compute contrast ratios between colors, regardless of what device the colors are displayed on.
 
@@ -149,18 +177,21 @@ We now have all required pieces to compute the _Luminance Contrast Ratio_.
 - We understand what gamma is, how it differs from one device to another and how to make it a non-factor by working in the sRGB space
 - We understand what _relative_ luminance is
 
+<div class="math-step">
+<strong>Luminance Contrast Ratio formula</strong>
 \[
-R = (L_{LighterColor}  + 0.05) / (L_{DarkerColor} + 0.05)
+R = \frac{L_{LighterColor} + 0.05}{L_{DarkerColor} + 0.05}
 \]
+</div>
 
 Interpretation depends on two things: the ratio itself and the font-size it applies too.
 
-| Level | Text Size | Minimum Contrast Ratio |
-|-------|-----------|------------------------|
-| AA (minimum compliance) | Regular text (< 18pt, or < 14pt bold) | 4.5:1 |
-| AA (minimum compliance) | Large text (≥ 18pt, or ≥ 14pt bold) | 3:1 |
-| AAA (enhanced compliance) | Regular text (< 18pt, or < 14pt bold) | 7:1 |
-| AAA (enhanced compliance) | Large text (≥ 18pt, or ≥ 14pt bold) | 4.5:1 |
+| Level                     | Text Size                             | Minimum Contrast Ratio |
+|---------------------------|---------------------------------------|------------------------|
+| AA (minimum compliance)   | Regular text (< 18pt, or < 14pt bold) | 4.5:1                  |
+| AA (minimum compliance)   | Large text (≥ 18pt, or ≥ 14pt bold)   | 3:1                    |
+| AAA (enhanced compliance) | Regular text (< 18pt, or < 14pt bold) | 7:1                    |
+| AAA (enhanced compliance) | Large text (≥ 18pt, or ≥ 14pt bold)   | 4.5:1                  |
 
 Level AA accommodates users with moderate visual impairments, approximately equivalent to 20/40 vision.  
 Level AAA provides enhanced readability for users with more substantial vision loss, up to approximately 20/80 vision.
@@ -293,52 +324,66 @@ Maybe an opportunity for another article...
 
 #### Conversion from 8-bit RGB to HSL
 
-- Normalize the RGB values:
-  \[
-  R' = \frac{R}{255}, \quad G' = \frac{G}{255}, \quad B' = \frac{B}{255}
-  \]
+<div class="math-step">
+<strong>Step 1: Normalize the RGB values</strong>
+\[
+R' = \frac{R}{255}
+\]
+\[
+G' = \frac{G}{255}
+\]
+\[
+B' = \frac{B}{255}
+\]
 
-- Find the minimum and maximum values:
-  \[
-  C_{\text{min}} = \min(R', G', B')
-  \]
-  \[
-  C_{\text{max}} = \max(R', G', B')
-  \]
-  \[
-  \Delta = C_{\text{max}} - C_{\text{min}}
-  \]
+<strong>Step 2: Find min, max, and delta values</strong>
+\[
+C_{\text{min}} = \min(R', G', B')
+\]
+\[
+C_{\text{max}} = \max(R', G', B')
+\]
+\[
+\Delta = C_{\text{max}} - C_{\text{min}}
+\]
 
-- Compute Lightness:
-  \[
-  L^{\prime} = \frac{C_{\text{max}} + C_{\text{min}}}{2}
-  \]
+<strong>Step 3: Compute Lightness</strong>
+\[
+L^{\prime} = \frac{C_{\text{max}} + C_{\text{min}}}{2}
+\]
 
-- Compute Saturation:
-  \[
-  S^{\prime} =
-    \begin{cases}
-    0 & \text{if } \Delta = 0 \\
-    \frac{\Delta}{C_{\text{max}} + C_{\text{min}}} & \text{if } L \leq 0.5 \\
-    \frac{\Delta}{2 - C_{\text{max}} - C_{\text{min}}} & \text{if } L > 0.5
-    \end{cases}
-  \]
+<strong>Step 4: Compute Saturation</strong>
+\[
+S^{\prime} =
+  \begin{cases}
+  0 & \text{if } \Delta = 0 \\
+  \frac{\Delta}{C_{\text{max}} + C_{\text{min}}} & \text{if } L \leq 0.5 \\
+  \frac{\Delta}{2 - C_{\text{max}} - C_{\text{min}}} & \text{if } L > 0.5
+  \end{cases}
+\]
 
-- Compute Hue:
-  \[
-  H^{\prime} =
-    \begin{cases}
-    \text{undefined} & \text{if } \Delta = 0 \\
-    60^\circ \times \left( \frac{G' - B'}{\Delta} + (6 \text{ if } G' < B' \text{ else } 0) \right) & \text{if } C_{\text{max}} = R' \\
-    60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) & \text{if } C_{\text{max}} = G' \\
-    60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) & \text{if } C_{\text{max}} = B'
-    \end{cases}
-  \]
+<strong>Step 5: Compute Hue</strong>
+\[
+H^{\prime} =
+  \begin{cases}
+  \text{undefined} & \text{if } \Delta = 0 \\
+  60^\circ \times \left( \frac{G' - B'}{\Delta} + (6 \text{ if } G' < B' \text{ else } 0) \right) & \text{if } C_{\text{max}} = R' \\
+  60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) & \text{if } C_{\text{max}} = G' \\
+  60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) & \text{if } C_{\text{max}} = B'
+  \end{cases}
+\]
 
-- Express in standard HSL units:
-  \[
-  H = H^{\prime} \times 360, \quad S = S^{\prime} \times 100, \quad L = L^{\prime} \times 100
-  \]
+<strong>Step 6: Express in standard HSL units</strong>
+\[
+H = H^{\prime} \times 360
+\]
+\[
+S = S^{\prime} \times 100
+\]
+\[
+L = L^{\prime} \times 100
+\]
+</div>
 
 ```javascript:color_convert.js
 function rgbToHsl(r, g, b) {
@@ -379,44 +424,64 @@ function rgbToHsl(r, g, b) {
 
 Given HSL values H: 0-360°, S: 0-100%, L: 0-100%:
 
-1. Normalize:
-   \[
-     S' = \frac{S}{100}, \quad L' = \frac{L}{100}
-   \]
+<div class="math-step">
+<strong>Step 1: Normalize</strong>
+\[
+S' = \frac{S}{100}
+\]
+\[
+L' = \frac{L}{100}
+\]
 
-2. Compute intermediate values:
-   \[
-     C = (1 - |2L' - 1|) \times S'
-   \]
-   \[
-     X = C \times (1 - |\frac{(H \bmod 60°)}{60°} - 1|)
-   \]
-   \[
-     m = L' - \frac{C}{2}
-   \]
+<strong>Step 2: Compute intermediate values</strong>
+\[
+  C = (1 - |2L' - 1|) \times S'
+\]
+\[
+h_{temp} = \frac{(H \bmod 60°)}{60°}
+\]
+\[
+X = C \times (1 - |h_{temp} - 1|)
+\]
+\[
+  m = L' - \frac{C}{2}
+\]
 
-3. Based on the hue H, assign RGB values:
-   \[
-     (R', G', B') = 
-     \begin{cases}
-       (C, X, 0) & \text{if } 0° \leq H < 60° \\
-       (X, C, 0) & \text{if } 60° \leq H < 120° \\
-       (0, C, X) & \text{if } 120° \leq H < 180° \\
-       (0, X, C) & \text{if } 180° \leq H < 240° \\
-       (X, 0, C) & \text{if } 240° \leq H < 300° \\
-       (C, 0, X) & \text{if } 300° \leq H < 360°
-     \end{cases}
-   \]
+<strong>Step 3: Based on hue H, assign RGB values</strong>
+\[
+  (R', G', B') = \\
+  \begin{cases}
+    (C, X, 0) & \text{if } 0° \leq H < 60° \\
+    (X, C, 0) & \text{if } 60° \leq H < 120° \\
+    (0, C, X) & \text{if } 120° \leq H < 180° \\
+    (0, X, C) & \text{if } 180° \leq H < 240° \\
+    (X, 0, C) & \text{if } 240° \leq H < 300° \\
+    (C, 0, X) & \text{if } 300° \leq H < 360°
+  \end{cases}
+\]
 
-4. Adjust with the offset m:
-   \[
-     R' = R' + m, \quad G' = G' + m, \quad B' = B' + m
-   \]
+<strong>Step 4: Adjust with the offset m</strong>
+\[
+R' = R' + m
+\]
+\[
+G' = G' + m
+\]
+\[
+B' = B' + m
+\]
 
-5. Convert back to the 0-255 range:
-   \[
-     R = \text{round}(R' \times 255), \quad G = \text{round}(G' \times 255), \quad B = \text{round}(B' \times 255)
-   \]
+<strong>Step 5: Convert back to 0-255 range</strong>
+\[
+R = \text{round}(R' \times 255)
+\]
+\[
+G = \text{round}(G' \times 255)
+\]
+\[
+B = \text{round}(B' \times 255)
+\]
+</div>
 
 ```javascript:color_convert.js
 function hslToRgb(h, s, l) {

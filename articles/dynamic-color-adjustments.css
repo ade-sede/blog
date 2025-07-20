@@ -238,3 +238,39 @@
 	color: var(--fg);
 	font-weight: 500;
 }
+
+/* Math step boxes for mathematical calculations */
+.math-step {
+	background: var(--code-bg);
+	border-left: 4px solid var(--accent);
+	padding: 1rem 1.2rem;
+	margin: 1.5rem 0;
+	border-radius: 0 8px 8px 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.math-step strong {
+	color: var(--accent);
+	font-size: 1.05em;
+}
+
+.math-step .katex-display {
+	margin: 0.5rem 0 0 0;
+	background: rgba(var(--bg-rgb), 0.5);
+	padding: 0.3rem;
+	border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+	.math-step {
+		padding: 0.8rem 1rem;
+		margin: 1.2rem 0;
+	}
+	
+	.math-step .katex-display {
+		margin: 0.3rem 0 0 0;
+		padding: 0.2rem;
+	}
+}
