@@ -3,7 +3,8 @@
 When teams build software, a concept frequently discussed is _simplicity_. The idea that the way we approach problems can be uncomplicated, straightforward.
 - _"This code would be much simpler if we used library Y instead"_
 - _"We should make this function generic, it will be simpler to reuse"_
-- _"Let's get rid of these 5 if statements using pattern X, it's going to make the code simpler"_
+- _"Let's use pattern X, it will be simpler"_
+- _"Let's remove pattern X, it's too complicated"_
 
 These conversations are reoccuring. Why would anyone think these changes make code simpler? Because the resulting code is less verbose? Because the library is popular? Because we can put a name to the pattern and point to the book where it was first introduced?
 
@@ -11,207 +12,16 @@ The actual reason is obvious but often overlooked: because they have seen a simi
 
 This bias is something we as human beings cannot escape. Perception is subjective. We do not have the ability to forget what we know and judge situations objectively.
 
-In this article I want to explore how to write about how to identify this bias in ourselves and in others, as well as how to defuse it.
+In this article I want to write about how to identify this bias and defuse it.
 But first, let's talk about what simplicity is.
 
 ## What is simplicity in software?
 
-Simplicity spans several dimensions[^1]:
+Simplicity is hard to define succintly because it spans several dimensions[^1]:
 - Something simple does not drown us under its _cognitive load_
-- Something simple is _intuitive_ and _self contained_: no specialised knowledge is required to understand it
-- Something simple is _predictable_ and _uniform_: once we understand it we are able to predict how it (and things that resemble it) behave in any given scenario
-- Simple things _scale_ and are _composable_: they can be assembled together and remain simple. In contrast, when we assembled complex thing the complexity compounds and explodes, overloading our cognitive ability for even the smallest of _n_
-
-I realise this definition is incomplete and abstract so let's try to illustrate it with an example.
-
-### Example: illustrating simplicity
-
-The three following implementations are functionally equivalent[^2] and yield the same result:
-
-#### Implementation 1: combinatorial logic
-
-The first implementation combines all attributes of a `User` to decide which dashboard to display.  
-When reading this code, we are forced to track which combinations have been checked. This only gets worse as we add properties to our `User`. We only have 3 properties and I find it hard to carry all the state around in my head[^3].  
-
-```typescript
-type User = {
-  hasAnalytics: boolean,
-  hasReporting: boolean, 
-  isTrialUser: boolean,
-}
-
-function getDashboardConfig(user: User): DashboardConfig {
-  if (user.hasAnalytics && user.hasReporting && !user.isTrialUser) {
-    return fullAnalyticsDashboard();
-  }
-
-  if (user.hasAnalytics && !user.hasReporting && !user.isTrialUser) {
-    return analyticsDashboard();
-  }
-
-  if (!user.hasAnalytics && user.hasReporting && !user.isTrialUser) {
-    return reportingDashboard();
-  }
-
-  if (user.hasAnalytics && user.hasReporting && user.isTrialUser) {
-    return trialReportingDashboard();
-  }
-
-  if (user.hasAnalytics && !user.hasReporting && user.isTrialUser) {
-    return trialAnalyticsDashboard();
-  }
-
-  if (!user.hasAnalytics && !user.hasReporting && user.isTrialUser) {
-    return basicTrialDashboard();
-  }
-
-  return defaultDashboard();
-}
-```
-
-#### Implementation 2: strategy pattern 
-
-This second implementation has a strong OOP feel. Someone reading `getDashboardConfig` has no idea what the function does. We can accept it as a black box, or we can try to traverse the hierarchy of objects to understand how it works. For every attribute that is added the hierarchy grows longer and reading becomes more strenuous. I just wrote this code 30 seconds ago and I can't read it anymore without being overwhelmed...
-
-```typescript
-type User = {
-  hasAnalytics: boolean,
-  hasReporting: boolean, 
-  isTrialUser: boolean
-}
-
-interface DashboardStrategy {
-  execute(): DashboardConfig;
-  withFallback(fallback: DashboardStrategy): DashboardStrategy;
-}
-
-class FullAnalyticsDashboardStrategy implements DashboardStrategy {
-  execute(): DashboardConfig {
-    return fullAnalyticsDashboard();
-  }
-  
-  withFallback(fallback: DashboardStrategy): DashboardStrategy {
-    return this;
-  }
-}
-
-class AnalyticsDashboardStrategy implements DashboardStrategy {
-  execute(): DashboardConfig {
-    return analyticsDashboard();
-  }
-  
-  withFallback(fallback: DashboardStrategy): DashboardStrategy {
-    return this;
-  }
-}
-
-class ReportingDashboardStrategy implements DashboardStrategy {
-  execute(): DashboardConfig {
-    return reportingDashboard();
-  }
-  
-  withFallback(fallback: DashboardStrategy): DashboardStrategy {
-    return this;
-  }
-}
-
-class TrialAnalyticsDashboardStrategy implements DashboardStrategy {
-  execute(): DashboardConfig {
-    return trialAnalyticsDashboard();
-  }
-  
-  withFallback(fallback: DashboardStrategy): DashboardStrategy {
-    return this;
-  }
-}
-
-class DefaultDashboardStrategy implements DashboardStrategy {
-  execute(): DashboardConfig {
-    return defaultDashboard();
-  }
-  
-  withFallback(fallback: DashboardStrategy): DashboardStrategy {
-    return this;
-  }
-}
-
-class NoOpStrategy implements DashboardStrategy {
-  private fallback: DashboardStrategy;
-  
-  constructor(fallback: DashboardStrategy) {
-    this.fallback = fallback;
-  }
-  
-  execute(): DashboardConfig {
-    return this.fallback.execute();
-  }
-  
-  withFallback(fallback: DashboardStrategy): DashboardStrategy {
-    return fallback;
-  }
-}
-
-class DashboardStrategyFactory {
-  createStrategy(user: User): DashboardStrategy {
-    if (user.hasAnalytics && user.hasReporting && !user.isTrialUser) {
-      return new FullAnalyticsDashboardStrategy();
-    }
-    
-    if (user.hasAnalytics && !user.hasReporting && !user.isTrialUser) {
-      return new AnalyticsDashboardStrategy();
-    }
-    
-    if (!user.hasAnalytics && user.hasReporting && !user.isTrialUser) {
-      return new ReportingDashboardStrategy();
-    }
-    
-    if (user.hasAnalytics && !user.hasReporting && user.isTrialUser) {
-      return new TrialAnalyticsDashboardStrategy();
-    }
-    
-    return new NoOpStrategy(new DefaultDashboardStrategy());
-  }
-}
-
-function getDashboardConfig(user: User): DashboardConfig {
-  const dashboardStrategy = new DashboardStrategyFactory()
-    .createStrategy(user)
-    .withFallback(new DefaultDashboardStrategy());
-    
-  return dashboardStrategy.execute();
-}
-```
-#### Implementation 3: linear logic
-
-In this third implementation we have adapted the way we model our `User`.  
-It has enabled us to apply simple, linear logic. Every `archetype` is mapped to one and only one dashboard. There could be an infinity of archetypes, this function would still be as easy to understand[^4].
-
-
-```javascript
-type User = {
-  archetype: 'power-user' | 'analyst' | 'reporter' | 
-             'trial-user' | 'basic-trial'
-}
-
-function getDashboardConfig(user) {
-  switch (user.archetype) {
-    case 'power-user':
-      return fullAnalyticsDashboard();
-    case 'analyst':
-      return analyticsDashboard();
-    case 'reporter':
-      return reportingDashboard();
-    case 'trial-user':
-      return trialAnalyticsDashboard();
-    case 'basic-trial':
-      return basicTrialDashboard();
-    default:
-      return defaultDashboard();
-  }
-}
-```
-
-### Why do these exemples read 
+- Something simple is _intuitive_ and _self contained_: very little specialised knowledge is required and you can understand it simply by looking at it a few times
+- Something simple is _predictable_: once we understand it we are able to predict how it will behave in any given scenario
+- Simple things _scale_ and are _composable_: several simple things can be assembled together and remain simple. In contrast, when we assembled complex thing the complexity compounds and explodes, overloading our cognitive abilities for even the smallest of n
 
 ## DRAFT NOTES (WIP)
 
