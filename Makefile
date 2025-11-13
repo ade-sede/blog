@@ -2,12 +2,10 @@ PWD := $(shell pwd)
 OUTPUT_DIR := $(PWD)/web
 SRC_DIR := $(PWD)/src
 ARTICLE_DIR := $(PWD)/articles
-QUICK_NOTE_DIR := $(PWD)/quick-notes
 
 export OUTPUT_DIR
 export SRC_DIR
 export ARTICLE_DIR
-export QUICK_NOTE_DIR
 
 .PHONY: all
 all: build
@@ -25,8 +23,6 @@ build: gopath
 	cp -r $(SRC_DIR)/pdfs $(OUTPUT_DIR)/.
 	cp -r $(SRC_DIR)/libs/katex $(OUTPUT_DIR)/libs/.
 	cp -r $(SRC_DIR)/libs/color-thief $(OUTPUT_DIR)/libs/.
-	find $(QUICK_NOTE_DIR) -name "*.css" -type f -exec cp {} $(OUTPUT_DIR)/css/. \; 2>/dev/null || true
-	find $(QUICK_NOTE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
 	find $(ARTICLE_DIR) -name "*.css" -type f -exec cp {} $(OUTPUT_DIR)/css/. \; 2>/dev/null || true
 	find $(ARTICLE_DIR) -name "*.js" -type f -exec cp {} $(OUTPUT_DIR)/scripts/. \; 2>/dev/null || true
 	cp $(SRC_DIR)/robots.txt $(OUTPUT_DIR)/.
@@ -76,4 +72,4 @@ serve: all
 	@python3 -m http.server 8080 --directory $(OUTPUT_DIR) & \
 	SERVER_PID=$$!; \
 	trap "echo '\\nStopping server...'; kill $$SERVER_PID" INT TERM EXIT; \
-	find $(SRC_DIR) $(ARTICLE_DIR) $(QUICK_NOTE_DIR) -type f | entr -c make re
+	find $(SRC_DIR) $(ARTICLE_DIR) -type f | entr -c make re

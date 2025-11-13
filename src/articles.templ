@@ -1,10 +1,12 @@
 package main
 
+import "strings"
+
 templ articles(articles []Article, styleTags []string) {
-	@Base("Adrien's articles", "Side projects, hobbies, rants", styleTags, []string{}) {
+	@Base("Adrien's articles", "Essays, notes, and other musings", styleTags, []string{}) {
 		<div class="page-header">
 			<h1>Articles</h1>
-			<p>Side projects, hobbies, rants</p>
+			<p>Essays, notes, and other musings</p>
 		</div>
 		@articleMenu(articles)
 	}
@@ -13,8 +15,8 @@ templ articles(articles []Article, styleTags []string) {
 templ articleMenu(articles []Article) {
 	if len(articles) == 0 {
 		<div class="empty-state">
-			<p>📝 Articles are being carefully crafted in the depths of my mind...</p>
-			<p>Check back soon for some hopefully interesting content!</p>
+			<p>📝 Content is being carefully crafted...</p>
+			<p>Check back soon for some hopefully interesting material!</p>
 		</div>
 	} else {
 		<div class="article-grid">
@@ -28,7 +30,12 @@ templ articleMenu(articles []Article) {
 templ articleCard(article Article) {
 	<article class="article-card">
 		<a href={ templ.URL(article.HTMLFilename) }>
-			<time class="article-date">{ article.FormatedDate }</time>
+			<div class="article-meta">
+				<time class="article-date">{ article.FormatedDate }</time>
+				if len(article.Manifest.Tags) > 0 {
+					<span class="article-tags">{ strings.Join(article.Manifest.Tags, ", ") }</span>
+				}
+			</div>
 			<h3 class="article-title">{ article.Manifest.Title }</h3>
 			<p class="article-description">{ article.Manifest.Description }</p>
 		</a>

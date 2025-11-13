@@ -20,7 +20,7 @@ type URL struct {
 	Priority   float64 `xml:"priority,omitempty"`
 }
 
-func generateSitemap(outputDir string, allArticles, allQuickNotes []Article) error {
+func generateSitemap(outputDir string, allArticles []Article) error {
 	baseURL := os.Getenv("BASE_URL")
 	if baseURL == "" {
 		baseURL = "https://blog.ade-sede.dev"
@@ -48,13 +48,6 @@ func generateSitemap(outputDir string, allArticles, allQuickNotes []Article) err
 	})
 
 	urlset.URLs = append(urlset.URLs, URL{
-		Loc:        baseURL + "/quick-notes.html",
-		LastMod:    now,
-		ChangeFreq: "weekly",
-		Priority:   0.8,
-	})
-
-	urlset.URLs = append(urlset.URLs, URL{
 		Loc:        baseURL + "/resume.html",
 		LastMod:    now,
 		ChangeFreq: "monthly",
@@ -70,18 +63,6 @@ func generateSitemap(outputDir string, allArticles, allQuickNotes []Article) err
 			LastMod:    article.Date.Format("2006-01-02"),
 			ChangeFreq: "monthly",
 			Priority:   0.9,
-		})
-	}
-
-	for _, quickNote := range allQuickNotes {
-		if quickNote.Manifest.Draft {
-			continue
-		}
-		urlset.URLs = append(urlset.URLs, URL{
-			Loc:        baseURL + "/" + quickNote.HTMLFilename,
-			LastMod:    quickNote.Date.Format("2006-01-02"),
-			ChangeFreq: "monthly",
-			Priority:   0.7,
 		})
 	}
 

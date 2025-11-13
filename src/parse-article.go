@@ -27,15 +27,16 @@ import (
 )
 
 type ArticleManifest struct {
-	Title        string `json:"title"`
-	Date         string `json:"date"`
-	Draft        bool   `json:"draft,omitempty"`
-	MarkdownFile string `json:"markdownFile,omitempty"`
-	CssFile      string `json:"cssFile,omitempty"`
-	ScriptFile   string `json:"scriptFile"`
-	Description  string `json:"description"`
-	Author       string `json:"author"`
-	AuthorImage  string `json:"authorImage"`
+	Title        string   `json:"title"`
+	Date         string   `json:"date"`
+	Draft        bool     `json:"draft,omitempty"`
+	Tags         []string `json:"tags,omitempty"`
+	MarkdownFile string   `json:"markdownFile,omitempty"`
+	CssFile      string   `json:"cssFile,omitempty"`
+	ScriptFile   string   `json:"scriptFile"`
+	Description  string   `json:"description"`
+	Author       string   `json:"author"`
+	AuthorImage  string   `json:"authorImage"`
 }
 
 type TOCEntry struct {
@@ -197,9 +198,9 @@ const (
 )
 
 var (
-	multiLineDisplayRegex = regexp.MustCompile(`(?s)\\\[\s*\n(.*?)\n\s*\\\]`)
+	multiLineDisplayRegex  = regexp.MustCompile(`(?s)\\\[\s*\n(.*?)\n\s*\\\]`)
 	singleLineDisplayRegex = regexp.MustCompile(`\\\[([^\n]*?)\\\]`)
-	dollarInlineMathRegex = regexp.MustCompile(`\$([^$\n]+)\$`)
+	dollarInlineMathRegex  = regexp.MustCompile(`\$([^$\n]+)\$`)
 
 	filenameIcons = map[string]string{
 		"makefile":          "fas fa-cogs",

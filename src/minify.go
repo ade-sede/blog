@@ -78,17 +78,3 @@ func loadAndMinifyArticleScript(articleDir, filename string) (string, error) {
 	}
 	return loadAndMinifyFileFromPaths(searchPaths, MinifyJS)
 }
-
-func loadAndMinifyQuickNoteStyle(quickNoteDir, filename string) (string, error) {
-	searchPaths := []string{
-		filepath.Join(quickNoteDir, filename),
-	}
-	return loadAndMinifyFileFromPaths(searchPaths, MinifyCSS)
-}
-
-func loadAndMinifyQuickNoteScript(quickNoteDir, filename string) (string, error) {
-	searchPaths := []string{
-		filepath.Join(quickNoteDir, filename),
-	}
-	return loadAndMinifyFileFromPaths(searchPaths, MinifyJS)
-}

@@ -2,6 +2,7 @@
   "title": "Dynamic color adjustment for images on the web",
   "date": "2025-04-07",
   "draft": false,
+  "tags": ["essay"],
   "author": "Adrien DE SEDE",
   "authorImage": "picture.webp",
   "description": "I recently built a theme picker for my blog. I can seamlessly switch between various dark and light themes for all the text & code blocks ! But what of images ... ?",

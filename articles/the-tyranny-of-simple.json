@@ -2,6 +2,7 @@
     "title": "The tyranny of simple",
     "date": "2025-11-13",
     "draft": false,
+    "tags": ["essay"],
     "author": "Adrien DE SEDE",
     "authorImage": "picture.webp",
     "description": "Simplicity is a mantra of the software industry, yet few organisations define what it actually means. Without shared understanding, debates about complexity devolve into subjective taste arguments. This essay explores how to transform simplicity from a vague ideal into a practical tool.",

@@ -51,8 +51,9 @@ The `metadata.json` file defines the plasmoid's identity and behavior:
 ```
 
 Things that tripped me up:
+
 - `KPackageStructure` dictates the expected file structure
-- `X-Plasma-MainScript` is relative to the `contents/` directory, not the `package/` directory 
+- `X-Plasma-MainScript` is relative to the `contents/` directory, not the `package/` directory
 - The `Id` becomes the installation directory name under `~/.local/share/plasma/plasmoids/`
 
 ## QML Basics
@@ -66,14 +67,14 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: root
-    
+
     property string greeting: "Hello, Plasma!"
-    
+
     Plasmoid.fullRepresentation: Rectangle {
         width: 200
         height: 100
         color: PlasmaCore.Theme.backgroundColor
-        
+
         Text {
             anchors.centerIn: parent
             text: root.greeting
@@ -97,14 +98,14 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: compactRoot
-    
+
     width: 24
     height: 24
-    
+
     Rectangle {
         anchors.fill: parent
         color: PlasmaCore.Theme.highlightColor
-        
+
         Text {
             anchors.centerIn: parent
             text: "HW"
@@ -112,7 +113,7 @@ Item {
             font.pixelSize: parent.height * 0.6
         }
     }
-    
+
     MouseArea {
         anchors.fill: parent
         onClicked: plasmoid.expanded = !plasmoid.expanded
@@ -128,11 +129,11 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Rectangle {
     id: fullRoot
-    
+
     width: 200
     height: 100
     color: PlasmaCore.Theme.backgroundColor
-    
+
     Text {
         anchors.centerIn: parent
         text: plasmoid.rootItem.greeting
@@ -150,9 +151,9 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: root
-    
+
     property string greeting: "Hello, Plasma!"
-    
+
     Plasmoid.compactRepresentation: CompactRepresentation {}
     Plasmoid.fullRepresentation: FullRepresentation {}
 }
@@ -208,17 +209,17 @@ import QtQuick.Layouts 1.12
 
 Item {
     id: configPage
-    
+
     property alias cfg_customGreeting: greetingField.text
-    
+
     ColumnLayout {
         anchors.left: parent.left
         anchors.right: parent.right
-        
+
         Label {
             text: "Custom greeting:"
         }
-        
+
         TextField {
             id: greetingField
             Layout.fillWidth: true
@@ -269,12 +270,14 @@ You'll need to log out and back in before the plasmoid shows up in the widget se
 QML has different types of layout elements:
 
 **Containers** organize and arrange elements:
+
 - `Item`: Invisible container (the basic one)
 - `Rectangle`: Visible container with color, border, etc.
 - `Column`, `Row`, and `Grid`: Simple layout containers
 - `ColumnLayout`, `RowLayout`, and `GridLayout`: More powerful layout containers
 
 **Views** display collections of data:
+
 - `ListView`: Shows items in a list
 - `GridView`: Shows items in a grid
 - `PathView`: Shows items along a path

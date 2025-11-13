@@ -1,6 +1,6 @@
 package main
 
-templ home(articles []Article, quickNotes []Article, styleTags []string) {
+templ home(recentArticles []Article, styleTags []string) {
 	@Base("Adrien's blog", "Hobbies, maybe even rants and opinions", styleTags, []string{}) {
 		<div class="home">
 			<section class="hero">
@@ -20,11 +20,8 @@ templ home(articles []Article, quickNotes []Article, styleTags []string) {
 			</section>
 			<section class="content-sections">
 				<div class="sections-grid">
-					if len(articles) > 0 {
-						@homeCardWrapper("Most Recent Article", "articles.html", "View all articles", articles[0])
-					}
-					if len(quickNotes) > 0 {
-						@homeCardWrapper("Most Recent Quick Note", "quick-notes.html", "View all quick notes", quickNotes[0])
+					for _, article := range recentArticles {
+						@homeCardWrapper("Recent Content", "articles.html", "View all", article)
 					}
 				</div>
 			</section>
