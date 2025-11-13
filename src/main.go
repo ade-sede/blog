@@ -147,12 +147,12 @@ func main() {
 		allArticles, _ := args[0].([]Article)
 		styleTags, _ := args[1].([]string)
 
-		recentArticles := allArticles
-		if len(recentArticles) > 4 {
-			recentArticles = recentArticles[:4]
+		var mostRecent []Article
+		if len(allArticles) > 0 {
+			mostRecent = allArticles[:1]
 		}
 
-		return home(recentArticles, styleTags)
+		return home(mostRecent, styleTags)
 	}
 
 	articleHTMLGenerator := func(args ...interface{}) templ.Component {

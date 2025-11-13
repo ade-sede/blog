@@ -20,8 +20,8 @@ templ home(recentArticles []Article, styleTags []string) {
 			</section>
 			<section class="content-sections">
 				<div class="sections-grid">
-					for _, article := range recentArticles {
-						@homeCardWrapper("Recent Content", "articles.html", "View all", article)
+					if len(recentArticles) > 0 {
+						@homeCardWrapper("Recent Article", "articles.html", "View all articles", recentArticles[0])
 					}
 				</div>
 			</section>
