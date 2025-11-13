@@ -39,17 +39,17 @@ Once we have already invested time and effort into understanding something it fe
 Simplicity is much harder than most people expect, and considering how subtle the nuances are I do not think it is reasonable to expect every individual to share the same exact perception of simplicity.
 This alignment is something that must be crafted intentionally and weaved into the culture of the organisation.
 
-## Creating the right culture to bridge these gaps
+## How to create the right culture
 
 Building the culture of an organisation is as much about stating your convictions as it is about embodying them. If either aspect is missing the culture does not take hold and is quickly forgotten.
 
-### Stating your convictions out loud
+### State your convictions out loud
 
 The first thing any org striving for simplicity should do is to publish a manifesto clearly laying out their view of simplicity. It's important for this manifesto to go beyond guidelines and get into why this view emerged in the first place.
 Performant orgs need contributors to be able to make their own calls, and they can only do so if they have a deep understanding of the drivers behind the philosophy.
 The manifesto should be updated every time the org crosses a major milestone. With new challenges come a different set of requirements and it is only natural for the philosophy to evolve.
 
-### Creating an environment where contributors can embody simplicity
+### The contributors protect the bar
 
 With the convictions now in the open for everyone to see, the next priority is ensuring the entire organisation lives up to them. I believe the only sustainable way to achieve this is to distribute the responsibility amongst all contributors. Everyone must feel empowered to speak up whenever they feel a change does not meet the bar, or the bar is being misused.
 To make this work in practice, the organisation needs to establish a simple but powerful norm: whoever invokes simplicity as an argument bears the burden of proof. This is a forcing function, a structural mechanism baked into the culture. Saying "this is too complex" or "my approach is simpler" is not the end of a discussion, it's the beginning. The person making the claim must articulate specifically what makes something complex or simple, referencing the shared principles. Is it the cognitive load? The amount of specialized knowledge required? The unpredictability of edge cases? The way complexity compounds when combined with other parts of the system? Without this burden of proof, "too complex" remains a gut feeling that people genuinely experience but cannot examine. By requiring concrete reasoning, you help people distinguish between legitimate complexity concerns and the discomfort of unfamiliarity. The goal is to move beyond instinct to articulate what specific property of simplicity is being violated.
@@ -58,7 +58,7 @@ This might sound overly formal, but there's a good reason for it: conversations 
 
 Building this culture means making these structured, constructive conversations the norm. It's not enough to simply tell people "pushback is allowed". The organisation needs to model what productive pushback looks like. So what does good pushback actually look like? When someone feels a solution is too complex, they should ask themselves a series of clarifying questions. Is the complexity in the artifact itself (verbose code, many moving parts, unclear flow) or is it in the underlying concept? This maps back to essential versus incidental complexity. If the concept itself is inherently complex because of the problem domain, then some amount of implementation complexity might be unavoidable. The question becomes: is this the minimum complexity required, or are we adding incidental complexity on top? Another useful lens: what knowledge would make this feel simple? If the answer is "I'd need to understand X pattern" or "I'd need to learn Y library", that's not necessarily a mark against the solution. It's identifying a knowledge gap. The question then becomes whether that knowledge investment is justified by the problem we're solving. Finally, when advocating for a different approach based on your own experience, be explicit about the connection: which aspects of your past experience actually apply here, and which aspects of this problem are genuinely different?
 
-### Baking resilience into the culture
+### Resilience to change
 
 Essential complexity grows as organizations mature. Early stage teams optimize for speed, but as products scale new constraints emerge: uptime requirements, data consistency, regulatory compliance, etc... The problems become more complex and solutions must grow with them.
 
