@@ -1,11 +1,11 @@
 # The tyranny of simple
 
-When building software products, a concept frequently brought up is _simplicity_. The idea that the way we approach any and all topics should be uncomplicated, straightforward.
-Simplicity has become a mantra, initially chanted by some very successful people in the software industry and later echoed by anyone trying to imitate their success.
+When building software products, a concept frequently brought up is _simplicity_. The idea that the way we approach any and all topics should be straightforward.
+Simplicity has become a mantra repeated by successful people in the software industry and those trying to imitate them.
 Everyone agrees simple is best. No one sets out to build something overly complex on purpose.
 Yet it keeps coming up: _"This is over-engineered"_, _"I don't know, looks complicated"_.
 I believe the root cause comes from a fundamental misalignment: although modern software organisations expect simplicity, few of them actually spend time establishing what _simple_ means.
-Without shared understanding it is an obsession for an arbitrary standard no one can meet reliably.
+Without shared understanding, simplicity becomes an arbitrary standard no one can meet reliably.
 If we truly believe simplicity is something to strive for, we need to develop the necessary vocabulary and culture for productive conversations to occur.
 Invoking the _it's too complex_ argument should never be a conversation ender but rather a signal we need to start talking and find out where our mutual expectations started diverging.
 
@@ -53,7 +53,9 @@ The manifesto should be updated every time the org crosses a major milestone. Wi
 
 With the convictions now in the open for everyone to see, the next priority is ensuring the entire organisation lives up to them. I believe the only sustainable way to achieve this is to distribute the responsibility amongst all contributors. Everyone must feel empowered to speak up whenever they feel a change does not meet the bar, or the bar is being misused.
 
-To make this work in practice, the organisation needs to establish a simple but powerful norm: whoever invokes simplicity as an argument bears the burden of proof. This is a forcing function, a structural mechanism baked into the culture. Saying "this is too complex" or "my approach is simpler" is not the end of a discussion, it's the beginning.
+To make this work in practice, the organisation needs to establish a simple but powerful norm: whoever invokes simplicity as an argument bears the burden of proof. This is a forcing function, a pit of success baked into the culture.
+
+Saying "this is too complex" or "my approach is simpler" is not the end of a discussion, it's the beginning.
 
 The person making the claim must articulate specifically what makes something complex or simple, referencing the shared principles. Is it the cognitive load? The amount of specialized knowledge required? The unpredictability of edge cases? The way complexity compounds when combined with other parts of the system? Without this burden of proof, "too complex" remains a gut feeling that people genuinely experience but cannot examine. By requiring concrete reasoning, it helps contributors distinguish between legitimate complexity concerns and the discomfort of unfamiliarity. The goal is to move beyond instinct to articulate what specific property of simplicity is being violated.
 
@@ -71,21 +73,23 @@ Finally, when advocating for a different approach based on their own experience,
 
 ### Resilience to change
 
-Essential complexity grows as organizations mature. Early stage teams optimize for speed, but as products scale new constraints emerge: uptime requirements, data consistency, regulatory compliance, etc... The problems become more complex and solutions must grow with them.
+Essential complexity grows as organizations mature. Early stage teams optimize for speed, but as products scale new constraints emerge: uptime requirements, data consistency, regulatory compliance. The problems become more complex and solutions must grow with them.
 
 The challenge is knowing which complexity to accept and which to reject. This is where the burden of proof and shared vocabulary become essential. By articulating which property of simplicity is being violated and referencing the manifesto, teams can separate incidental from essential complexity.
 
 Without this discipline, familiarity bias creeps back in: teams reject unfamiliar but necessary complexity while accepting familiar but avoidable complexity. The manifesto must evolve as the organization crosses major milestones. What worked for an early-stage startup won't necessarily work at scale.
 
-To make this manageable, organizations must invest in building pits of success: structural mechanisms that make coping with new, increased requirements feel as simple as the previous ones. The goal is to lower the floor and raise the bar simultaneously, making it clearer what's expected while expanding what the team can handle.
+To make this manageable, organizations must invest in building pits of success that make coping with new, increased requirements feel as simple as the previous ones. The goal is to lower the floor and raise the bar simultaneously, making it clearer what's expected while expanding what the team can handle.
 
-One example of such a pit of success is curating two lists alongside the manifesto: necessary domain knowledge and active constraints. The knowledge list captures patterns, libraries, and domain concepts contributors need to be effective. The constraints list documents non-negotiables: performance targets, uptime requirements, regulatory obligations, etc... Both lists should be maintained with the same rigor as the manifesto. This transparency transforms subjective debates into concrete tradeoff discussions.
+One example of such a pit of success is curating two lists alongside the manifesto: necessary domain knowledge and active constraints. The knowledge list captures patterns, libraries, and domain concepts contributors need to be effective. The constraints list documents non-negotiables: performance targets, uptime requirements, regulatory obligations. Both lists should be maintained with the same rigor as the manifesto. This transparency transforms subjective debates into concrete tradeoff discussions.
 
 Diverse experiences become invaluable here. Contributors who have worked at different scales and in different domains bring varied mental models that help the entire organization recognize when complexity is justified and when it's merely unfamiliar. Valuing diverse experiences builds resilience against familiarity bias while increasing the threshold for essential complexity.
 
 ## Conclusion
 
-Organizations must define what simplicity means for their context. They should build forcing functions into their culture to ensure simplicity always comes on top. They should maintain explicit lists of necessary knowledge and constraints. They should value diverse experiences. These aren't revolutionary ideas, but they require consistent effort. Writing and maintaining a manifesto takes time. Articulating why something feels wrong instead of relying on instinct is uncomfortable. Recognizing that familiarity bias might be misleading requires humility.
+The tyranny of simplicity emerges when organizations treat it as an obvious standard everyone should meet without defining what it means. Breaking this tyranny requires deliberate cultural work: publishing a manifesto that defines simplicity for your context, establishing forcing functions like the burden of proof, maintaining explicit lists of necessary knowledge and constraints, and valuing diverse experiences.
+
+These aren't revolutionary ideas, but they require consistent effort. Writing and maintaining a manifesto takes time. Articulating why something feels wrong instead of relying on instinct is uncomfortable. Recognizing that familiarity bias might be misleading requires humility.
 
 When organizations do this work well, debates about complexity become learning opportunities. Contributors develop shared intuition. Teams move faster because they're aligned on principles, not arguing about taste. And simplicity becomes what it should be: a tool that accelerates teams and helps them scale.
 

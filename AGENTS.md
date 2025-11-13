@@ -8,9 +8,9 @@
 - Never comment code or configuration.
 - After you make changes, update the documentation if applicable.
 - Consider every choice for mobile first - most people read me on mobile
-- Consider we target mobile first, code snippets shouldn't be larger than 35 chars. Format accordingly
+- Considering we target mobile first, code snippets shouldn't be larger than 35 chars. Format accordingly
 
-## Build, Lint, and Test
+## Command cheat sheet
 
 - **Build:** `make all`
 - **Format:** Pre-commit hook
@@ -39,5 +39,4 @@
 - **Error Handling:** Use `if err != nil`.
 - **Imports:** Organized by Go toolchain.
 - **Dependencies:** Go modules (`go.mod`, `go.sum`).
-- **Structure:** Logic in `src/`, articles in `articles/`, notes in `quick-notes/`, output in `web/`.
-- Never comment code or configuration
+- **Structure:** Logic in `src/`, articles in `articles/`, output in `web/`.
