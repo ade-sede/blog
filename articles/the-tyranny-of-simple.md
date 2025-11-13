@@ -19,7 +19,7 @@ Simplicity is the opposite of complexity.
 Simplicity is not a binary property.
 Simplicity is a tool: the simpler something is, the easier it becomes to evolve, verify, debug, and reason about.
 Something simple does not drown us under its _cognitive load_.
-Something simple is _intuitive_ and _self contained_: very little specialized knowledge is required and you can understand it simply by looking at it a few times.
+Something simple is _intuitive_ and _self contained_: very little specialized knowledge is required and it can be understood simply by looking at it a few times.
 Something simple is _predictable_: once we understand it we are able to predict how it will behave in different scenarios.
 Simple things _scale_ and are _composable_: they can be assembled together and remain simple. In contrast, when assembling complex things the complexity compounds and explodes, overloading our cognitive abilities.
 Simplicity is a property any concept or artifact[^2] can have.
@@ -41,9 +41,9 @@ This alignment is something that must be crafted intentionally and weaved into t
 
 ## How to create the right culture
 
-Building the culture of an organisation is as much about stating your convictions as it is about embodying them. If either aspect is missing the culture does not take hold and is quickly forgotten.
+Building the culture of an organisation is as much about stating convictions as it is about embodying them. If either aspect is missing the culture does not take hold and is quickly forgotten.
 
-### State your convictions out loud
+### State convictions out loud
 
 The first thing any org striving for simplicity should do is to publish a manifesto clearly laying out their view of simplicity. It's important for this manifesto to go beyond guidelines and get into why this view emerged in the first place.
 Performant orgs need contributors to be able to make their own calls, and they can only do so if they have a deep understanding of the drivers behind the philosophy.
@@ -55,7 +55,7 @@ With the convictions now in the open for everyone to see, the next priority is e
 
 To make this work in practice, the organisation needs to establish a simple but powerful norm: whoever invokes simplicity as an argument bears the burden of proof. This is a forcing function, a structural mechanism baked into the culture. Saying "this is too complex" or "my approach is simpler" is not the end of a discussion, it's the beginning.
 
-The person making the claim must articulate specifically what makes something complex or simple, referencing the shared principles. Is it the cognitive load? The amount of specialized knowledge required? The unpredictability of edge cases? The way complexity compounds when combined with other parts of the system? Without this burden of proof, "too complex" remains a gut feeling that people genuinely experience but cannot examine. By requiring concrete reasoning, you help people distinguish between legitimate complexity concerns and the discomfort of unfamiliarity. The goal is to move beyond instinct to articulate what specific property of simplicity is being violated.
+The person making the claim must articulate specifically what makes something complex or simple, referencing the shared principles. Is it the cognitive load? The amount of specialized knowledge required? The unpredictability of edge cases? The way complexity compounds when combined with other parts of the system? Without this burden of proof, "too complex" remains a gut feeling that people genuinely experience but cannot examine. By requiring concrete reasoning, it helps contributors distinguish between legitimate complexity concerns and the discomfort of unfamiliarity. The goal is to move beyond instinct to articulate what specific property of simplicity is being violated.
 
 This might sound overly formal, but there's a good reason for it: conversations about simplicity can easily become personal.
 
@@ -65,9 +65,9 @@ Without a shared vocabulary and explicit principles to reference, these discussi
 
 Building this culture means making these structured, constructive conversations the norm. It's not enough to simply tell people "pushback is allowed". The organisation needs to model what productive pushback looks like. So what does good pushback actually look like? When someone feels a solution is too complex, they should ask themselves a series of clarifying questions. Is the complexity in the artifact itself (verbose code, many moving parts, unclear flow) or is it in the underlying concept? This maps back to essential versus incidental complexity. If the concept itself is inherently complex because of the problem domain, then some amount of implementation complexity might be unavoidable. The question becomes: is this the minimum complexity required, or are we adding incidental complexity on top?
 
-Another useful lens: what knowledge would make this feel simple? If the answer is "I'd need to understand X pattern" or "I'd need to learn Y library", that's not necessarily a mark against the solution. It's identifying a knowledge gap. The question then becomes whether that knowledge investment is justified by the problem we're solving.
+Another useful lens: what piece of knowledge would make this feel simple? If the answer is "I'd need to understand X pattern" or "I'd need to learn Y library", that's not necessarily a mark against the solution. It's identifying a knowledge gap. The question then becomes whether that knowledge investment is justified by the problem we're solving.
 
-Finally, when advocating for a different approach based on your own experience, be explicit about the connection: which aspects of your past experience actually apply here, and which aspects of this problem are genuinely different?
+Finally, when advocating for a different approach based on their own experience, contributors should be explicit about the connection: which aspects of their past experience actually apply here, and which aspects of this problem are genuinely different?
 
 ### Resilience to change
 
@@ -85,7 +85,7 @@ Diverse experiences become invaluable here. Contributors who have worked at diff
 
 ## Conclusion
 
-Define what simplicity means for your context. Build forcing functions into your culture to ensure simplicity always comes on top. Maintain explicit lists of knowledge and constraints. Value diverse experiences. These aren't revolutionary ideas, but they require consistent effort. Writing and maintaining a manifesto takes time. Articulating why something feels wrong instead of relying on instinct is uncomfortable. Recognizing that your familiarity bias might be misleading requires humility.
+Organizations must define what simplicity means for their context. They should build forcing functions into their culture to ensure simplicity always comes on top. They should maintain explicit lists of necessary knowledge and constraints. They should value diverse experiences. These aren't revolutionary ideas, but they require consistent effort. Writing and maintaining a manifesto takes time. Articulating why something feels wrong instead of relying on instinct is uncomfortable. Recognizing that familiarity bias might be misleading requires humility.
 
 When organizations do this work well, debates about complexity become learning opportunities. Contributors develop shared intuition. Teams move faster because they're aligned on principles, not arguing about taste. And simplicity becomes what it should be: a tool that accelerates teams and helps them scale.
 
