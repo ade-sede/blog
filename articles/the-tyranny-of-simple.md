@@ -15,15 +15,15 @@ In this essay I want to explore what simplicity is and how organisations can cre
 
 Counter-intuitively, simplicity is not so easy to define. Mainly because it spans several dimensions[^1]:
 
-- Simplicity is the opposite of complexity
-- Simplicity is a property any concept or artifact[^2] can have
-- Simplicity is not a binary property
-- Simplicity is a tool: the simpler something is, the easier it becomes to evolve, verify, debug, and reason about
-- Something simple does not drown us under its _cognitive load_
-- Something simple is _intuitive_ and _self contained_: very little specialized knowledge is required and you can understand it simply by looking at it a few times
-- Something simple is _predictable_: once we understand it we are able to predict how it will behave in different scenarios
-- Simple things _scale_ and are _composable_: they can be assembled together and remain simple. In contrast, when assembling complex things the complexity compounds and explodes, overloading our cognitive abilities
-- It is also important to make the distinction between _essential complexity_, unavoidable because it stems directly from the problem we are working on and _incidental complexity_, which is entirely avoidable and always self-inflicted.
+Simplicity is the opposite of complexity.
+Simplicity is not a binary property.
+Simplicity is a tool: the simpler something is, the easier it becomes to evolve, verify, debug, and reason about.
+Something simple does not drown us under its _cognitive load_.
+Something simple is _intuitive_ and _self contained_: very little specialized knowledge is required and you can understand it simply by looking at it a few times.
+Something simple is _predictable_: once we understand it we are able to predict how it will behave in different scenarios.
+Simple things _scale_ and are _composable_: they can be assembled together and remain simple. In contrast, when assembling complex things the complexity compounds and explodes, overloading our cognitive abilities.
+Simplicity is a property any concept or artifact[^2] can have.
+It is also important to make the distinction between _essential complexity_, unavoidable because it stems directly from the problem we are working on and _incidental complexity_, which is entirely avoidable and always self-inflicted.
 
 Every bit of nuance in this definition is a gap where misalignment can grow.
 
