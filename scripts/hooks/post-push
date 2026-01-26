@@ -1,0 +1,11 @@
+#!/bin/bash
+
+while read local_ref local_sha remote_ref remote_sha
+do
+	if [[ "$remote_ref" == "refs/heads/main" ]] || [[ "$remote_ref" == "refs/heads/master" ]]; then
+		echo ""
+		echo "🚀 Cloudflare Pages deployment triggered!"
+		echo "   View build status: https://dash.cloudflare.com/7e5906214a76a802d864beebdc8b0d61/pages/view/blog"
+		echo ""
+	fi
+done

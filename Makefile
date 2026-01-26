@@ -40,6 +40,8 @@ clean:
 .PHONY: init
 init:
 	pre-commit install
+	cp scripts/hooks/post-push .git/hooks/post-push
+	chmod +x .git/hooks/post-push
 
 .PHONY: deploy
 deploy: clean all
