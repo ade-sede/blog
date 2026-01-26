@@ -649,8 +649,7 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 	return processedHTML, tocExtractor.TOC, nil
 }
 
-func parseArticles(articleDir string) ([]Article, error) {
-	env := os.Getenv("ENV")
+func parseArticles(articleDir, env string) ([]Article, error) {
 	files, err := os.ReadDir(articleDir)
 	if err != nil {
 		log.Fatalf("Error while opening directory '%s': '%v'", articleDir, err)

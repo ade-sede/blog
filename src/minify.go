@@ -12,7 +12,7 @@ import (
 
 var m *minify.M
 
-func init() {
+func InitMinifier() {
 	m = minify.New()
 	m.AddFunc("text/css", cssminifier.Minify)
 	m.AddFunc("application/javascript", jsminifier.Minify)

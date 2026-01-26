@@ -20,11 +20,7 @@ type URL struct {
 	Priority   float64 `xml:"priority,omitempty"`
 }
 
-func generateSitemap(outputDir string, allArticles []Article) error {
-	baseURL := os.Getenv("BASE_URL")
-	if baseURL == "" {
-		baseURL = "https://blog.ade-sede.dev"
-	}
+func generateSitemap(outputDir, baseURL string, allArticles []Article) error {
 
 	urlset := URLSet{
 		Xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9",

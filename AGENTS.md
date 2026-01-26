@@ -26,6 +26,14 @@
   - Scroll to position: Add `--evaluate-on-load="setTimeout(() => window.scrollTo(0, PIXELS), 3000)"`
 - **Full page PDF:** `chromium-browser --headless --disable-gpu --print-to-pdf=output.pdf web/path/to/file`
 
+## Environment Variables
+
+- **ENV:** Controls draft article filtering. Set to `development` to include draft articles in the build, any other value (or unset) will exclude drafts. Default: `production`
+- **BASE_URL:** Base URL for sitemap generation. Default: `https://blog.ade-sede.dev`
+- **ARTICLE_DIR:** Directory containing article source files (required)
+- **OUTPUT_DIR:** Directory where generated site will be written (required)
+- **SRC_DIR:** Directory containing source code and templates (required)
+
 ## Verifying your work
 
 - You can inspect generated files in the `web/` directory

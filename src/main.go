@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/a-h/templ"
-	"io/fs"
 	"log"
 	"os"
 )
@@ -27,20 +26,6 @@ type PageGenerator struct {
 	articleSpecificScriptFiles []string
 	arguments                  []interface{}
 }
-
-// List of 'global' css files that need to be minified and shipped.
-// If not in the list, it will not be included.
-// For page specific CSS prefer inline CSS.
-var CSSFiles []string = []string{
-	"global.css",
-	"footer.css",
-	"icons.css",
-	"navbar.css",
-	"syntax-highlighting.css",
-}
-
-var FLAGS = os.O_RDWR | os.O_CREATE
-var MODE fs.FileMode = 0644
 
 func createContentPageGenerator(article Article, pageType PageType, htmlGenerator func(args ...interface{}) templ.Component) PageGenerator {
 	generator := PageGenerator{
@@ -108,41 +93,34 @@ func createInlineStyleAndScriptTags(page PageGenerator, srcDir, articleDir strin
 	return allStyleTags, allScriptTags, nil
 }
 
-func main() {
-	generatePDFFlag := flag.Bool("pdf", false, "Generate PDF after building site")
-	flag.Parse()
-
-	articleDir := os.Getenv("ARTICLE_DIR")
-	outputDir := os.Getenv("OUTPUT_DIR")
-	srcDir := os.Getenv("SRC_DIR")
-
-	if articleDir == "" || outputDir == "" || srcDir == "" {
-		log.Fatal("ARTICLE_DIR, OUTPUT_DIR and SRC_DIR must be set")
-	}
-
-	experiences, err := loadExperiencesFromJSON(srcDir + "/experiences.json")
-	if err != nil {
-		log.Fatalf("Error while generating experiences: %v", err)
-	}
-
-	workExperiences := experiences.WorkExperiences
-	schoolExperiences := experiences.SchoolExperiences
-
-	for _, filename := range CSSFiles {
-		minifiedCSS, err := MinifyCSS(srcDir + "/css/" + filename)
+func initializeAssets(config Config) error {
+	for _, filename := range config.CSSFiles {
+		minifiedCSS, err := MinifyCSS(config.SrcDir + "/css/" + filename)
 		if err != nil {
-			log.Fatalf("%v", err)
+			return fmt.Errorf("failed to minify %s: %v", filename, err)
 		}
 
-		newFilename := outputDir + "/css/" + filename
-		os.WriteFile(newFilename, []byte(minifiedCSS), MODE)
+		newFilename := config.OutputDir + "/css/" + filename
+		if err := os.WriteFile(newFilename, []byte(minifiedCSS), config.FileMode); err != nil {
+			return fmt.Errorf("failed to write %s: %v", newFilename, err)
+		}
 	}
+	return nil
+}
 
-	allArticles, err := parseArticles(articleDir)
+func loadArticles(config Config) ([]Article, error) {
+	return parseArticles(config.ArticleDir, config.Env)
+}
+
+func loadExperiences(config Config) (ExperiencesData, error) {
+	exp, err := loadExperiencesFromJSON(config.SrcDir + "/experiences.json")
 	if err != nil {
-		log.Fatalf("Error while parsing articles: %v", err)
+		return ExperiencesData{}, err
 	}
+	return *exp, nil
+}
 
+func generateAllPages(config Config, allArticles []Article, experiences ExperiencesData) error {
 	homeHTMLGenerator := func(args ...interface{}) templ.Component {
 		allArticles, _ := args[0].([]Article)
 		styleTags, _ := args[1].([]string)
@@ -212,7 +190,7 @@ func main() {
 			globalScriptFiles:          []string{},
 			articleSpecificCssFiles:    []string{},
 			articleSpecificScriptFiles: []string{},
-			arguments:                  []interface{}{workExperiences, schoolExperiences},
+			arguments:                  []interface{}{experiences.WorkExperiences, experiences.SchoolExperiences},
 		},
 		{
 			filename:                   "articles.html",
@@ -232,22 +210,22 @@ func main() {
 			globalScriptFiles:          []string{},
 			articleSpecificCssFiles:    []string{},
 			articleSpecificScriptFiles: []string{},
-			arguments:                  []interface{}{workExperiences, schoolExperiences},
+			arguments:                  []interface{}{experiences.WorkExperiences, experiences.SchoolExperiences},
 		},
 	}
 
 	pages = append(pages, allArticleGenerators...)
 
 	for _, page := range pages {
-		filename := outputDir + "/" + page.filename
-		file, err := os.OpenFile(filename, FLAGS, MODE)
+		filename := config.OutputDir + "/" + page.filename
+		file, err := os.OpenFile(filename, config.FileFlags, config.FileMode)
 		if err != nil {
-			log.Fatalf("Could not open file: %v", err)
+			return fmt.Errorf("could not open file %s: %v", filename, err)
 		}
 
-		allStyleTags, allScriptTags, err := createInlineStyleAndScriptTags(page, srcDir, articleDir)
+		allStyleTags, allScriptTags, err := createInlineStyleAndScriptTags(page, config.SrcDir, config.ArticleDir)
 		if err != nil {
-			log.Fatalf("Failed to create inline style and script tags for page %s: %v", page.filename, err)
+			return fmt.Errorf("failed to create inline style and script tags for page %s: %v", page.filename, err)
 		}
 
 		page.arguments = append(page.arguments, allStyleTags)
@@ -257,13 +235,49 @@ func main() {
 		templComponent.Render(context.Background(), file)
 	}
 
-	if err := generateSitemap(outputDir, allArticles); err != nil {
+	return nil
+}
+
+func postProcessing(config Config, allArticles []Article) error {
+	if err := generateSitemap(config.OutputDir, config.BaseURL, allArticles); err != nil {
 		log.Printf("Warning: Failed to generate sitemap: %v", err)
 	}
 
-	if *generatePDFFlag {
-		if err := generatePDF(outputDir, srcDir); err != nil {
+	if config.GeneratePDF {
+		if err := generatePDF(config.OutputDir, config.SrcDir); err != nil {
 			log.Printf("Warning: Failed to generate PDF: %v", err)
 		}
+	}
+
+	return nil
+}
+
+func main() {
+	generatePDFFlag := flag.Bool("pdf", false, "Generate PDF after building site")
+	flag.Parse()
+
+	config := LoadConfig(*generatePDFFlag)
+	InitMinifier()
+
+	if err := initializeAssets(config); err != nil {
+		log.Fatalf("Error initializing assets: %v", err)
+	}
+
+	experiences, err := loadExperiences(config)
+	if err != nil {
+		log.Fatalf("Error loading experiences: %v", err)
+	}
+
+	allArticles, err := loadArticles(config)
+	if err != nil {
+		log.Fatalf("Error loading articles: %v", err)
+	}
+
+	if err := generateAllPages(config, allArticles, experiences); err != nil {
+		log.Fatalf("Error generating pages: %v", err)
+	}
+
+	if err := postProcessing(config, allArticles); err != nil {
+		log.Fatalf("Error in post-processing: %v", err)
 	}
 }
