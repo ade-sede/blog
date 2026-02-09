@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -26,6 +25,7 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
+// ArticleManifest represents the JSON metadata for a blog article.
 type ArticleManifest struct {
 	Title        string   `json:"title"`
 	Date         string   `json:"date"`
@@ -39,12 +39,16 @@ type ArticleManifest struct {
 	AuthorImage  string   `json:"authorImage"`
 }
 
+// TOCEntry represents a single entry in the table of contents,
+// extracted from markdown headings.
 type TOCEntry struct {
 	Level int
 	Text  string
 	ID    string
 }
 
+// Article represents a fully parsed blog article with its HTML content,
+// metadata, and table of contents.
 type Article struct {
 	ManifestFilename string
 	HTMLFilename     string
@@ -62,6 +66,8 @@ type Article struct {
 //   - language:filename:diff
 type filenameTitleTransformer struct{}
 
+// tocExtractor is a Goldmark AST transformer that walks the document
+// and collects heading nodes into a table of contents.
 type tocExtractor struct {
 	TOC []TOCEntry
 }
@@ -76,26 +82,24 @@ func (t *filenameTitleTransformer) Transform(node *ast.Document, reader text.Rea
 			language := string(cb.Language(reader.Source()))
 			parts := strings.Split(language, ":")
 
-			if len(parts) == 1 {
+			switch len(parts) {
+			case 1:
 				cb.SetAttribute([]byte("language"), []byte(parts[0]))
 				cb.SetAttribute([]byte("isDiff"), []byte("false"))
-			}
-
-			if len(parts) == 2 && parts[1] == "diff" {
+			case 2:
 				cb.SetAttribute([]byte("language"), []byte(parts[0]))
-				cb.SetAttribute([]byte("isDiff"), []byte("true"))
-			}
-
-			if len(parts) == 2 && parts[1] != "diff" {
-				cb.SetAttribute([]byte("language"), []byte(parts[0]))
-				cb.SetAttribute([]byte("filename"), []byte(parts[1]))
-				cb.SetAttribute([]byte("isDiff"), []byte("false"))
-			}
-
-			if len(parts) == 3 && parts[2] == "diff" {
+				if parts[1] == "diff" {
+					cb.SetAttribute([]byte("isDiff"), []byte("true"))
+				} else {
+					cb.SetAttribute([]byte("filename"), []byte(parts[1]))
+					cb.SetAttribute([]byte("isDiff"), []byte("false"))
+				}
+			case 3:
 				cb.SetAttribute([]byte("language"), []byte(parts[0]))
 				cb.SetAttribute([]byte("filename"), []byte(parts[1]))
-				cb.SetAttribute([]byte("isDiff"), []byte("true"))
+				if parts[2] == "diff" {
+					cb.SetAttribute([]byte("isDiff"), []byte("true"))
+				}
 			}
 		}
 		return ast.WalkContinue, nil
@@ -111,7 +115,6 @@ func (toc *tocExtractor) Transform(node *ast.Document, reader text.Reader, pc pa
 		if heading, ok := n.(*ast.Heading); ok {
 			var headingText strings.Builder
 
-			// Extract text content recursively from all child nodes
 			ast.Walk(heading, func(child ast.Node, childEntering bool) (ast.WalkStatus, error) {
 				if !childEntering {
 					return ast.WalkContinue, nil
@@ -139,6 +142,9 @@ func (toc *tocExtractor) Transform(node *ast.Document, reader text.Reader, pc pa
 	})
 }
 
+// codeBlockRenderer is a custom Goldmark renderer for fenced code blocks.
+// It handles syntax highlighting via Chroma, diff annotations, filename
+// headers, and directory-structure rendering.
 type codeBlockRenderer struct {
 	html.Config
 }
@@ -147,6 +153,8 @@ func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegistere
 	reg.Register(ast.KindFencedCodeBlock, r.renderCodeBlock)
 }
 
+// headingRenderer is a custom Goldmark renderer for headings. It adds
+// anchor links and id attributes for linkable section headers.
 type headingRenderer struct {
 	html.Config
 }
@@ -157,33 +165,24 @@ func (r *headingRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer)
 
 func (r *headingRenderer) renderHeading(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	n := node.(*ast.Heading)
+	tag := fmt.Sprintf("h%d", n.Level)
+
+	headingID := ""
+	if id, exists := n.AttributeString("id"); exists {
+		headingID = string(id.([]byte))
+	}
 
 	if entering {
-		tag := fmt.Sprintf("h%d", n.Level)
-
-		headingID := ""
-		if id, exists := n.AttributeString("id"); exists {
-			headingID = string(id.([]byte))
-		}
-
 		if headingID != "" {
-			w.WriteString(fmt.Sprintf("<%s id=\"%s\" class=\"heading-with-anchor\">", tag, headingID))
+			fmt.Fprintf(w, "<%s id=\"%s\" class=\"heading-with-anchor\">", tag, headingID)
 		} else {
-			w.WriteString(fmt.Sprintf("<%s>", tag))
+			fmt.Fprintf(w, "<%s>", tag)
 		}
 	} else {
-		tag := fmt.Sprintf("h%d", n.Level)
-
-		headingID := ""
-		if id, exists := n.AttributeString("id"); exists {
-			headingID = string(id.([]byte))
-		}
-
 		if headingID != "" {
-			w.WriteString(fmt.Sprintf("<a href=\"#%s\" class=\"header-anchor\" title=\"Link to this section\"><i class=\"fas fa-link\"></i></a>", headingID))
+			fmt.Fprintf(w, "<a href=\"#%s\" class=\"header-anchor\" title=\"Link to this section\"><i class=\"fas fa-link\"></i></a>", headingID)
 		}
-
-		w.WriteString(fmt.Sprintf("</%s>", tag))
+		fmt.Fprintf(w, "</%s>", tag)
 	}
 
 	return ast.WalkContinue, nil
@@ -275,6 +274,8 @@ var (
 	}
 )
 
+// getFileIcon returns a Font Awesome CSS class for the given filename,
+// matching first by exact basename then by file extension.
 func getFileIcon(filename string) string {
 	basename := strings.ToLower(filepath.Base(filename))
 	if icon, exists := filenameIcons[basename]; exists {
@@ -289,6 +290,8 @@ func getFileIcon(filename string) string {
 	return ""
 }
 
+// DirectoryNode represents a file or folder in a parsed directory tree
+// used for rendering directory-structure code blocks.
 type DirectoryNode struct {
 	Name     string
 	IsFolder bool
@@ -296,6 +299,8 @@ type DirectoryNode struct {
 	Children []*DirectoryNode
 }
 
+// buildDirectoryTree parses indented text into a tree of DirectoryNode,
+// using indentation levels to determine parent-child relationships.
 func buildDirectoryTree(content string) *DirectoryNode {
 	var lines []string
 	for _, line := range strings.Split(content, "\n") {
@@ -309,9 +314,13 @@ func buildDirectoryTree(content string) *DirectoryNode {
 		return root
 	}
 
+	type stackEntry struct {
+		node   *DirectoryNode
+		indent int
+	}
+
 	currentParent := root
-	stack := []*DirectoryNode{root}
-	prevIndent := 0
+	stack := []stackEntry{{node: root, indent: -1}}
 
 	for i, line := range lines {
 		trimmedLine := strings.TrimLeft(line, " \t")
@@ -325,25 +334,26 @@ func buildDirectoryTree(content string) *DirectoryNode {
 		}
 
 		if i > 0 {
-			if currentIndent > prevIndent {
-				stack = append(stack, currentParent)
-				currentParent = stack[len(stack)-1].Children[len(stack[len(stack)-1].Children)-1]
-			} else if currentIndent < prevIndent {
-				for currentIndent < prevIndent && len(stack) > 1 {
+			if currentIndent > stack[len(stack)-1].indent {
+				lastChild := currentParent.Children[len(currentParent.Children)-1]
+				stack = append(stack, stackEntry{node: currentParent, indent: currentParent.Indent})
+				currentParent = lastChild
+			} else if currentIndent < stack[len(stack)-1].indent {
+				for len(stack) > 1 && stack[len(stack)-1].indent >= currentIndent {
 					stack = stack[:len(stack)-1]
-					currentParent = stack[len(stack)-1]
-					prevIndent -= 2
+					currentParent = stack[len(stack)-1].node
 				}
 			}
 		}
 
 		currentParent.Children = append(currentParent.Children, entry)
-		prevIndent = currentIndent
 	}
 
 	return root
 }
 
+// renderDirectoryTreeRecursive writes HTML for a DirectoryNode and its
+// children, nesting folders within dir-children divs.
 func renderDirectoryTreeRecursive(w util.BufWriter, entry *DirectoryNode) {
 	for _, child := range entry.Children {
 		if child.IsFolder {
@@ -361,6 +371,8 @@ func renderDirectoryTreeRecursive(w util.BufWriter, entry *DirectoryNode) {
 	}
 }
 
+// renderDirectoryStructure parses indented text into a directory tree
+// and writes the complete HTML representation to w.
 func renderDirectoryStructure(w util.BufWriter, content string) {
 	root := buildDirectoryTree(content)
 	w.WriteString("<div class=\"directory-tree\">")
@@ -368,6 +380,8 @@ func renderDirectoryStructure(w util.BufWriter, content string) {
 	w.WriteString("</div>")
 }
 
+// processDiffContent strips leading +/- markers from diff-formatted code,
+// returning the cleaned content and a per-line type classification.
 func processDiffContent(content string) (string, []DiffLineType) {
 	lines := strings.Split(content, "\n")
 	var cleanedLines []string
@@ -395,6 +409,8 @@ func processDiffContent(content string) (string, []DiffLineType) {
 	return strings.Join(cleanedLines, "\n"), lineTypes
 }
 
+// postProcessDiffHTML wraps Chroma-highlighted HTML lines with diff CSS
+// classes (gi for additions, gd for deletions) based on line types.
 func postProcessDiffHTML(html string, lineTypes []DiffLineType) string {
 	lines := strings.Split(html, "\n")
 	var processedLines []string
@@ -508,11 +524,15 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 			w.WriteString("<div class=\"highlight code-content-wrapper\">")
 			if isDiff {
 				var buf strings.Builder
-				err = formatter.Format(&buf, style, iterator)
+				if err = formatter.Format(&buf, style, iterator); err != nil {
+					return ast.WalkStop, err
+				}
 				processedHTML := postProcessDiffHTML(buf.String(), diffLineTypes)
 				w.WriteString(processedHTML)
 			} else {
-				err = formatter.Format(w, style, iterator)
+				if err = formatter.Format(w, style, iterator); err != nil {
+					return ast.WalkStop, err
+				}
 			}
 			w.WriteString("<div class=\"code-copy-button\" title=\"Copy code\"><i class=\"fas fa-copy\"></i></div>")
 			w.WriteString("</div>")
@@ -526,6 +546,8 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 	return ast.WalkContinue, nil
 }
 
+// getDateSuffix returns the English ordinal suffix for a day number
+// (e.g. "st", "nd", "rd", "th").
 func getDateSuffix(day int) string {
 	if day >= 11 && day <= 13 {
 		return "th"
@@ -542,6 +564,8 @@ func getDateSuffix(day int) string {
 	}
 }
 
+// formatDate formats a time.Time into a human-readable string
+// like "January 2nd 2025".
 func formatDate(date time.Time) string {
 	day := date.Day()
 	month := date.Format("January")
@@ -549,6 +573,8 @@ func formatDate(date time.Time) string {
 	return fmt.Sprintf("%s %d%s %d", month, day, getDateSuffix(day), year)
 }
 
+// readArticleManifest reads and unmarshals a JSON manifest file into
+// an ArticleManifest.
 func readArticleManifest(filename string) (*ArticleManifest, error) {
 	var manifest ArticleManifest
 	content, err := os.ReadFile(filename)
@@ -562,8 +588,21 @@ func readArticleManifest(filename string) (*ArticleManifest, error) {
 	return &manifest, nil
 }
 
+// processLatexExpressions converts LaTeX math notation in markdown to
+// HTML elements for client-side KaTeX rendering. Fenced code blocks
+// are excluded from processing.
 func processLatexExpressions(input string) string {
-	processed := multiLineDisplayRegex.ReplaceAllStringFunc(input, func(match string) string {
+	codeBlockRegex := regexp.MustCompile("(?s)```.*?```")
+	var blocks []string
+	placeholder := "\x00CODEBLOCK%d\x00"
+
+	stripped := codeBlockRegex.ReplaceAllStringFunc(input, func(match string) string {
+		idx := len(blocks)
+		blocks = append(blocks, match)
+		return fmt.Sprintf(placeholder, idx)
+	})
+
+	processed := multiLineDisplayRegex.ReplaceAllStringFunc(stripped, func(match string) string {
 		content := multiLineDisplayRegex.FindStringSubmatch(match)[1]
 		return fmt.Sprintf("<div class=\"katex-display\" data-latex=\"%s\"></div>", content)
 	})
@@ -578,21 +617,31 @@ func processLatexExpressions(input string) string {
 		return fmt.Sprintf("<span class=\"katex-inline\" data-latex=\"%s\"></span>", content)
 	})
 
+	for i, block := range blocks {
+		processed = strings.Replace(processed, fmt.Sprintf(placeholder, i), block, 1)
+	}
+
 	return processed
 }
 
-func injectBylineBeforeFirstH1(html string, formattedDate string, author string, authorImage string) (string, error) {
+// injectBylineBeforeFirstH1 inserts an author byline div immediately
+// before the first <h1> tag in the HTML.
+func injectBylineBeforeFirstH1(rawHTML string, formattedDate string, author string, authorImage string) (string, error) {
 	h1Regex := regexp.MustCompile(`(<h1[^>]*>.*?</h1>)`)
-	if !h1Regex.MatchString(html) {
+	loc := h1Regex.FindStringIndex(rawHTML)
+	if loc == nil {
 		return "", fmt.Errorf("no h1 tag found in article HTML")
 	}
 
 	bylineHTML := fmt.Sprintf(`<div class="article-byline"><img src="images/%s" alt="%s" class="author-avatar"><div class="byline-content"><div class="date-line"><i class="far fa-calendar-alt"></i> %s</div><div class="author-line">by %s</div></div></div>`, authorImage, author, formattedDate, author)
-	result := h1Regex.ReplaceAllString(html, bylineHTML+`$1`)
+	result := rawHTML[:loc[0]] + bylineHTML + rawHTML[loc[0]:]
 
 	return result, nil
 }
 
+// parseArticleMarkdown converts a markdown file to HTML using Goldmark with
+// custom renderers for code blocks and headings. Returns the processed HTML,
+// extracted table of contents, and any error.
 func parseArticleMarkdown(filename string, formattedDate string, author string, authorImage string) (string, []TOCEntry, error) {
 	var buf bytes.Buffer
 	input, err := os.ReadFile(filename)
@@ -640,8 +689,8 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 		return "", nil, err
 	}
 
-	html := buf.String()
-	processedHTML, err := injectBylineBeforeFirstH1(html, formattedDate, author, authorImage)
+	rawHTML := buf.String()
+	processedHTML, err := injectBylineBeforeFirstH1(rawHTML, formattedDate, author, authorImage)
 	if err != nil {
 		return "", nil, err
 	}
@@ -649,17 +698,20 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 	return processedHTML, tocExtractor.TOC, nil
 }
 
+// parseArticles reads all JSON manifests from articleDir, parses their
+// corresponding markdown files, and returns the articles sorted by date
+// descending. Draft articles are excluded unless env is "development".
 func parseArticles(articleDir, env string) ([]Article, error) {
 	files, err := os.ReadDir(articleDir)
 	if err != nil {
-		log.Fatalf("Error while opening directory '%s': '%v'", articleDir, err)
+		return nil, fmt.Errorf("error while opening directory '%s': '%w'", articleDir, err)
 	}
 	articles := make([]Article, 0)
 	for _, file := range files {
 		filename := file.Name()
 		if strings.HasSuffix(filename, ".json") {
 			manifestFilename := filename
-			manifestFullPath := articleDir + "/" + manifestFilename
+			manifestFullPath := filepath.Join(articleDir, manifestFilename)
 			manifest, err := readArticleManifest(manifestFullPath)
 			if err != nil {
 				return nil, err
@@ -672,7 +724,7 @@ func parseArticles(articleDir, env string) ([]Article, error) {
 			if err != nil {
 				return nil, err
 			}
-			markdownFullPath := articleDir + "/" + manifest.MarkdownFile
+			markdownFullPath := filepath.Join(articleDir, manifest.MarkdownFile)
 			formattedDate := formatDate(date)
 			stringifiedHTML, toc, err := parseArticleMarkdown(markdownFullPath, formattedDate, manifest.Author, manifest.AuthorImage)
 			if err != nil {
@@ -682,7 +734,7 @@ func parseArticles(articleDir, env string) ([]Article, error) {
 				ManifestFilename: manifestFilename,
 				HTMLFilename:     htmlFilename,
 				Date:             date,
-				FormatedDate:     formatDate(date),
+				FormatedDate:     formattedDate,
 				Manifest:         manifest,
 				StringifiedHTML:  stringifiedHTML,
 				TOC:              toc,
@@ -696,10 +748,14 @@ func parseArticles(articleDir, env string) ([]Article, error) {
 	return articles, nil
 }
 
+// hasFootnotes returns true if the HTML contains a footnotes section.
 func hasFootnotes(html string) bool {
 	return strings.Contains(html, `class="footnotes"`)
 }
 
+// processContentForSidebarFootnotes adds the "desktop-hidden" class to
+// the inline footnotes div so they are hidden on desktop where the
+// sidebar footnotes are shown instead.
 func processContentForSidebarFootnotes(html string) string {
 	if !hasFootnotes(html) {
 		return html
