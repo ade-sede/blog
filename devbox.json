@@ -3,13 +3,12 @@
   "packages": [
     "go@latest",
     "gnumake@latest",
-    "chromium@latest",
     "python3@latest",
+    "python312Packages.weasyprint@latest",
     "pre-commit@latest",
     "gopls@latest",
     "templ@latest",
-    "entr@latest",
-    "libxml2@latest"
+    "entr@latest"
   ],
   "shell": {
     "init_hook": [

@@ -48,9 +48,8 @@ deploy: clean all
 
 
 .PHONY: pdf
-pdf: build
-	go install github.com/chromedp/chromedp
-	go run $(SRC_DIR)/*.go -pdf
+pdf: all
+	python3 scripts/generate-pdf.py
 
 # Deploying via cloudflare pages
 # GOPATH is not set by default, had to set it myself

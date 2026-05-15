@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -226,26 +225,17 @@ func generateAllPages(config Config, allArticles []Article, experiences Experien
 }
 
 // postProcessing runs tasks that depend on all pages already being written:
-// sitemap generation and optional PDF rendering of the resume.
+// sitemap generation.
 func postProcessing(config Config, allArticles []Article) error {
 	if err := generateSitemap(config.OutputDir, config.BaseURL, allArticles); err != nil {
 		log.Printf("Warning: Failed to generate sitemap: %v", err)
-	}
-
-	if config.GeneratePDF {
-		if err := generatePDF(config.OutputDir, config.SrcDir); err != nil {
-			log.Printf("Warning: Failed to generate PDF: %v", err)
-		}
 	}
 
 	return nil
 }
 
 func main() {
-	generatePDFFlag := flag.Bool("pdf", false, "Generate PDF after building site")
-	flag.Parse()
-
-	config := LoadConfig(*generatePDFFlag)
+	config := LoadConfig()
 	InitMinifier()
 
 	if err := publishGlobalCSS(config); err != nil {

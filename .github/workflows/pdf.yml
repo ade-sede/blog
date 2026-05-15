@@ -1,0 +1,40 @@
+name: Generate resume PDF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/resume.templ
+      - src/experiences.json
+      - src/css/resume.css
+      - scripts/generate-pdf.py
+      - .github/workflows/pdf.yml
+  workflow_dispatch:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: jetify-com/devbox-action@v0.11.0
+        with:
+          enable-cache: true
+
+      - name: Build site
+        run: devbox run -- make build
+        env:
+          GOPATH: /root/go
+
+      - name: Generate PDF
+        run: devbox run -- python3 scripts/generate-pdf.py
+
+      - name: Upload PDF as release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: resume-pdf
+          name: Resume PDF
+          files: src/pdfs/ade-sede.pdf

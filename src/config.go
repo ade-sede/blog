@@ -7,22 +7,21 @@ import (
 )
 
 // Config holds all runtime configuration for the site generator,
-// derived from environment variables and CLI flags.
+// derived from environment variables.
 type Config struct {
-	ArticleDir  string
-	OutputDir   string
-	SrcDir      string
-	Env         string
-	BaseURL     string
-	GeneratePDF bool
-	CSSFiles    []string
-	FileFlags   int
-	FileMode    fs.FileMode
+	ArticleDir string
+	OutputDir  string
+	SrcDir     string
+	Env        string
+	BaseURL    string
+	CSSFiles   []string
+	FileFlags  int
+	FileMode   fs.FileMode
 }
 
-// LoadConfig reads environment variables and the generatePDF flag to
-// produce a Config. Exits fatally if required variables are missing.
-func LoadConfig(generatePDF bool) Config {
+// LoadConfig reads environment variables to produce a Config.
+// Exits fatally if required variables are missing.
+func LoadConfig() Config {
 	articleDir := os.Getenv("ARTICLE_DIR")
 	outputDir := os.Getenv("OUTPUT_DIR")
 	srcDir := os.Getenv("SRC_DIR")
@@ -50,14 +49,13 @@ func LoadConfig(generatePDF bool) Config {
 	}
 
 	return Config{
-		ArticleDir:  articleDir,
-		OutputDir:   outputDir,
-		SrcDir:      srcDir,
-		Env:         env,
-		BaseURL:     baseURL,
-		GeneratePDF: generatePDF,
-		CSSFiles:    cssFiles,
-		FileFlags:   os.O_RDWR | os.O_CREATE,
-		FileMode:    0644,
+		ArticleDir: articleDir,
+		OutputDir:  outputDir,
+		SrcDir:     srcDir,
+		Env:        env,
+		BaseURL:    baseURL,
+		CSSFiles:   cssFiles,
+		FileFlags:  os.O_RDWR | os.O_CREATE,
+		FileMode:   0644,
 	}
 }

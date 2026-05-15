@@ -1,42 +1,6 @@
 {
   "lockfile_version": "1",
   "packages": {
-    "chromium@latest": {
-      "last_modified": "2025-05-16T20:19:48Z",
-      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#chromium",
-      "source": "devbox-search",
-      "version": "136.0.7103.113",
-      "systems": {
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/m3h8caljj7rwdpi76558kfjab913kdzc-chromium-136.0.7103.113",
-              "default": true
-            },
-            {
-              "name": "sandbox",
-              "path": "/nix/store/2n3p2xrrkl5zwb1yb6lrkqfsb274kvv5-chromium-136.0.7103.113-sandbox"
-            }
-          ],
-          "store_path": "/nix/store/m3h8caljj7rwdpi76558kfjab913kdzc-chromium-136.0.7103.113"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/2gkjkdqykhy45vc7pnsvplrxcg2s1swx-chromium-136.0.7103.113",
-              "default": true
-            },
-            {
-              "name": "sandbox",
-              "path": "/nix/store/sndmqszm3j8m6g57lp48bvn40qy49l6s-chromium-136.0.7103.113-sandbox"
-            }
-          ],
-          "store_path": "/nix/store/2gkjkdqykhy45vc7pnsvplrxcg2s1swx-chromium-136.0.7103.113"
-        }
-      }
-    },
     "entr@latest": {
       "last_modified": "2025-06-20T02:24:11Z",
       "resolved": "github:NixOS/nixpkgs/076e8c6678d8c54204abcb4b1b14c366835a58bb#entr",
@@ -276,110 +240,6 @@
         }
       }
     },
-    "libxml2@latest": {
-      "last_modified": "2025-07-18T03:30:42Z",
-      "resolved": "github:NixOS/nixpkgs/e821e03193486359aa942372be2d9c1f377b7a18#libxml2",
-      "source": "devbox-search",
-      "version": "2.14.4-unstable-2025-06-20",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "bin",
-              "path": "/nix/store/2jcaqvklfyr5vabpgjpphr7df6mr704k-libxml2-2.14.4-unstable-2025-06-20-bin",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/by2kkbs9k6wvw3q243ncwcmcv46hhcl4-libxml2-2.14.4-unstable-2025-06-20-dev"
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/n9fza1d6i1nh9xyr8k5bp0jn948zjdy9-libxml2-2.14.4-unstable-2025-06-20-devdoc"
-            },
-            {
-              "name": "out",
-              "path": "/nix/store/m04ilxj4vbf1sq2xv55fdpjy5xds1d8g-libxml2-2.14.4-unstable-2025-06-20"
-            }
-          ],
-          "store_path": "/nix/store/2jcaqvklfyr5vabpgjpphr7df6mr704k-libxml2-2.14.4-unstable-2025-06-20-bin"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "bin",
-              "path": "/nix/store/x67alrcdys4zlb32w8a4496akmf37v6q-libxml2-2.14.4-unstable-2025-06-20-bin",
-              "default": true
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/dch642i26rxd40lsmyvyjzdkxrl2gl1j-libxml2-2.14.4-unstable-2025-06-20-devdoc"
-            },
-            {
-              "name": "out",
-              "path": "/nix/store/2jhmx556pr3ry69y133sj3f9y00fkgjn-libxml2-2.14.4-unstable-2025-06-20"
-            },
-            {
-              "name": "py",
-              "path": "/nix/store/r391yc1szmrznbr99zxiqjb84n7mcc93-libxml2-2.14.4-unstable-2025-06-20-py"
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/akn69gyr1nvgmsd24wakjncfxv2jjbcd-libxml2-2.14.4-unstable-2025-06-20-dev"
-            }
-          ],
-          "store_path": "/nix/store/x67alrcdys4zlb32w8a4496akmf37v6q-libxml2-2.14.4-unstable-2025-06-20-bin"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "bin",
-              "path": "/nix/store/7f5sry3lk8i8kph5a1rw4638fma01v69-libxml2-2.14.4-unstable-2025-06-20-bin",
-              "default": true
-            },
-            {
-              "name": "out",
-              "path": "/nix/store/p7n6v40b35riklzn65jy9q5y73cd0vag-libxml2-2.14.4-unstable-2025-06-20"
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/pzpiji69jnvj729gnzlmcsccxm0rws7m-libxml2-2.14.4-unstable-2025-06-20-dev"
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/k7d18mq43ii5di9vkf9ml9zwyg6n2276-libxml2-2.14.4-unstable-2025-06-20-devdoc"
-            }
-          ],
-          "store_path": "/nix/store/7f5sry3lk8i8kph5a1rw4638fma01v69-libxml2-2.14.4-unstable-2025-06-20-bin"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "bin",
-              "path": "/nix/store/6nkpkcyklsx37vvanr73dnw0qbs97xry-libxml2-2.14.4-unstable-2025-06-20-bin",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/j2gi38k4h3hr2mrqaqisv774p2kypyqm-libxml2-2.14.4-unstable-2025-06-20-dev"
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/3nab4jg9h9ydc4dm5sz40l8z0gibid9j-libxml2-2.14.4-unstable-2025-06-20-devdoc"
-            },
-            {
-              "name": "out",
-              "path": "/nix/store/ii6cjlj3fjbz4zvygf0f3c4yvi37h56x-libxml2-2.14.4-unstable-2025-06-20"
-            },
-            {
-              "name": "py",
-              "path": "/nix/store/20gvzlgis666bjvsp11ham8imdlrd8l4-libxml2-2.14.4-unstable-2025-06-20-py"
-            }
-          ],
-          "store_path": "/nix/store/6nkpkcyklsx37vvanr73dnw0qbs97xry-libxml2-2.14.4-unstable-2025-06-20-bin"
-        }
-      }
-    },
     "pre-commit@latest": {
       "last_modified": "2025-06-17T01:11:27Z",
       "resolved": "github:NixOS/nixpkgs/c539ae8d21e49776966d714f82fba33b1fca78bc#pre-commit",
@@ -441,6 +301,70 @@
             }
           ],
           "store_path": "/nix/store/25kxqy9ykackhfx11zn5fyjiczpjgw4r-pre-commit-4.2.0"
+        }
+      }
+    },
+    "python312Packages.weasyprint@latest": {
+      "last_modified": "2025-11-23T21:50:36Z",
+      "resolved": "github:NixOS/nixpkgs/ee09932cedcef15aaf476f9343d1dea2cb77e261#python312Packages.weasyprint",
+      "source": "devbox-search",
+      "version": "66.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2sbpvhkw8m5z0rz4sfn27g09ydm02kx4-python3.12-weasyprint-66.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/4vwbsckryykbakaxzv3sy9k8qn3hzafz-python3.12-weasyprint-66.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/2sbpvhkw8m5z0rz4sfn27g09ydm02kx4-python3.12-weasyprint-66.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cnc4m689vwrs5md6f3amvgmw1gx026c8-python3.12-weasyprint-66.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/r2fbm2dhp24q3a4gx3hhng6r3sgkw92h-python3.12-weasyprint-66.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/cnc4m689vwrs5md6f3amvgmw1gx026c8-python3.12-weasyprint-66.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xd2p5xv04kwyqf4ms2mig8jl7l74bp6n-python3.12-weasyprint-66.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/rpnqzl4g93hm4rarxpfbq8hh99q9h840-python3.12-weasyprint-66.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/xd2p5xv04kwyqf4ms2mig8jl7l74bp6n-python3.12-weasyprint-66.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/y3xgg1kjdzvjd2bxq8z7ma5kr40j9kpm-python3.12-weasyprint-66.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/dvc4sqajzcvfbypv790alm20cx2j187y-python3.12-weasyprint-66.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/y3xgg1kjdzvjd2bxq8z7ma5kr40j9kpm-python3.12-weasyprint-66.0"
         }
       }
     },

@@ -12,7 +12,7 @@ Or you can use [Devbox](https://www.jetify.com/devbox) to manage your dependenci
 - [Golang 1.20](https://go.dev/doc/install) or greater
 - Make sure [`GOPATH`](https://go.dev/wiki/GOPATH) environment variable is properly set
 - [GNU Make](https://www.gnu.org/software/make/)
-- [Chromium](https://www.chromium.org/getting-involved/download-chromium/) (used for automated PDF resume generation and screenshots)
+- [weasyprint](https://weasyprint.org/) (used for PDF resume generation)
 - [pre-commit](https://pre-commit.com/)
 
 ### Managing dependencies through devbox
@@ -43,18 +43,54 @@ make clean
 # Remove all artifacts and re-generate files
 make re
 
-# Generates HTML files and a PDF version of the resume (available at src/pdfs/ade-sede.pdf)
+# Generate HTML files and a PDF version of the resume
 make pdf
 
 # Serve files on :8080, useful when working on a remote machine
 make serve
-
-# Take a screenshot of a page (desktop)
-chromium-browser --headless --window-size=1920,1080 --screenshot=desktop.png web/path/to/file
-
-# Take a screenshot of a page (mobile)
-chromium-browser --headless --window-size=414,896 --screenshot=mobile.png web/path/to/file
 ```
+
+## Resume PDF
+
+The resume PDF is generated from `web/resume-printable.html` using [weasyprint](https://weasyprint.org/) (managed automatically by devbox).
+
+### Generate locally
+
+```bash
+make pdf
+```
+
+Output: `src/pdfs/ade-sede.pdf`
+
+### Publish via GitHub Actions
+
+The workflow at `.github/workflows/pdf.yml` runs automatically on push to `main` when any of these files change:
+
+- `src/resume.templ`
+- `src/experiences.json`
+- `src/css/resume.css`
+- `scripts/generate-pdf.py`
+- `.github/workflows/pdf.yml`
+
+To force a new run without pushing a change:
+
+```bash
+gh workflow run pdf.yml --ref main
+```
+
+To check the status of the latest run:
+
+```bash
+gh run list --workflow=pdf.yml --limit=1
+```
+
+Once the workflow completes, the PDF is published as a release asset at:
+
+```
+https://github.com/ade-sede/blog/releases/latest/download/ade-sede.pdf
+```
+
+This is also the URL used by the Download button on the resume page.
 
 ## Architecture
 
@@ -114,22 +150,21 @@ the full HTML to disk.
 Runs after all HTML files exist:
 
 - `generateSitemap` (`sitemap.go`) — walks the article list and emits `sitemap.xml`.
-- `generatePDF` (`pdf-generator.go`) — optionally launches headless Chromium, navigates to `resume-printable.html`, and prints it to `src/pdfs/ade-sede.pdf`.
 
 ### Source file layout
 
-| File               | Responsibility                                                                                                             |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `main.go`          | Orchestration; `Page` and `Asset` types; build pipeline                                                                    |
-| `config.go`        | `Config` struct and `LoadConfig`                                                                                           |
-| `article.go`       | `Article`, `ArticleManifest`, `TOCEntry` types; manifest reading; article collection parsing                               |
-| `markdown.go`      | Goldmark pipeline; custom AST transformers and renderers; LaTeX pre-processing; byline injection; footnote post-processing |
-| `directorytree.go` | Directory-tree HTML rendering; diff annotation helpers; file-icon lookup tables                                            |
-| `minify.go`        | CSS/JS minification wrappers                                                                                               |
-| `experiences.go`   | `ExperienceEntry`, `ExperiencesData` types; JSON loading                                                                   |
-| `sitemap.go`       | `sitemap.xml` generation                                                                                                   |
-| `pdf-generator.go` | Headless-Chromium PDF rendering of the resume                                                                              |
-| `*.templ`          | HTML templates (layout, home, articles, article, resume)                                                                   |
+| File                      | Responsibility                                                                                                             |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `main.go`                 | Orchestration; `Page` and `Asset` types; build pipeline                                                                    |
+| `config.go`               | `Config` struct and `LoadConfig`                                                                                           |
+| `article.go`              | `Article`, `ArticleManifest`, `TOCEntry` types; manifest reading; article collection parsing                               |
+| `markdown.go`             | Goldmark pipeline; custom AST transformers and renderers; LaTeX pre-processing; byline injection; footnote post-processing |
+| `directorytree.go`        | Directory-tree HTML rendering; diff annotation helpers; file-icon lookup tables                                            |
+| `minify.go`               | CSS/JS minification wrappers                                                                                               |
+| `experiences.go`          | `ExperienceEntry`, `ExperiencesData` types; JSON loading                                                                   |
+| `sitemap.go`              | `sitemap.xml` generation                                                                                                   |
+| `*.templ`                 | HTML templates (layout, home, articles, article, resume)                                                                   |
+| `scripts/generate-pdf.py` | weasyprint-based PDF generation from `web/resume-printable.html`                                                           |
 
 ### Inline asset strategy
 
