@@ -297,6 +297,33 @@ Display math:
 \]
 ```
 
+**Dynamic color images**
+
+Images can be marked for automatic hue-shifting so they remain readable against
+any theme background. At runtime, the dominant color of the image is extracted
+and a hue shift is applied if the contrast against the current background is
+insufficient.
+
+Markdown syntax (preferred):
+
+```markdown
+![alt text](./images/foo.png){.dynamic-colors}
+```
+
+Raw HTML (also supported):
+
+```html
+<img
+  src="./images/foo.png"
+  alt="alt text"
+  class="dynamic-colors"
+  crossorigin="anonymous"
+/>
+```
+
+No extra JS or manifest configuration is needed — the behavior is automatic for
+any article containing these images.
+
 ### 4. Preview as a draft
 
 Set `"draft": true` in the manifest, then build with `ENV=development`:

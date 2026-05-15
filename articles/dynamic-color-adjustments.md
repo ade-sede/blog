@@ -1,8 +1,9 @@
 # Some colors just don't fit together...
+
 I recently built a theme picker for my blog and I am very happy with it. Readers can pick from a selection of various themes, some light, some dark. It is simple, it is light, and it instantly applies to all styling elements of the page ... except images.
 
-An image with dominating tones of a pale yellow, easily readable on black background could be impossible to read on a white background.  
-Don't trust me ? Look at the following image and play around with the theme picker.  
+An image with dominating tones of a pale yellow, easily readable on black background could be impossible to read on a white background.
+Don't trust me ? Look at the following image and play around with the theme picker.
 You can see the text clear as day when using _Nord_ or _Dracula_ but it is almost invisible when using _Solarized_.
 
 <div style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
@@ -10,47 +11,46 @@ You can see the text clear as day when using _Nord_ or _Dracula_ but it is almos
   <img src="./images/unreadable-on-white.png" width="300px">
 </div>
 
-The thing is, I plan on writing articles containing various images or schematics containing text.  
+The thing is, I plan on writing articles containing various images or schematics containing text.
 And even if they are readable, I simply think it would be cool to be able to make sure images always match the general theme of the blog.
 Considering I have no knowledge of how any of this works, let's start from the beginning and work our way up !
 
-
 ## Contrast is key
 
-Contrast is one of the ways our brain identifies the boundaries between objects.  
+Contrast is one of the ways our brain identifies the boundaries between objects.
 Without it, we simply don't know where things start and where they end. This is particularly true for people with vision impairment. That is what makes contrast such an important aspect of _accessibility_.
 
 And because contrast is so important, we have introduced standards to measure & enforce: meet [WCAG's Luminance Contrast Ratio](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html).
-The idea is simple: two colors with a similar luminance do not have enough contrast and will blend together. In order to guarantee the average person, and even some visually impaired individuals can see properly, the luminance of both colors must respect a certain ratio.  
-Using this standard we should be able to compute whether or not two colors properly contrast with each other.  
-But before we can do that, we need to build some fundamentals!  
+The idea is simple: two colors with a similar luminance do not have enough contrast and will blend together. In order to guarantee the average person, and even some visually impaired individuals can see properly, the luminance of both colors must respect a certain ratio.
+Using this standard we should be able to compute whether or not two colors properly contrast with each other.
+But before we can do that, we need to build some fundamentals!
 
 ### Luminance & Brightness
 
-Light is a wave. It has an amplitude and a wavelength.  
-The wavelength dictates the perceived color of the light.  
-The amplitude dictates its intensity.  
+Light is a wave. It has an amplitude and a wavelength.
+The wavelength dictates the perceived color of the light.
+The amplitude dictates its intensity.
 _Luminance_ is an objective measurement of how intense a light is, measured in candela per square meter (cd/m²).[^1]
-_Brightness_ is the subjective perception of that intensity by a given person.  
+_Brightness_ is the subjective perception of that intensity by a given person.
 
-In digital systems, a pixel has three color channels: red, green, blue (RGB).  
-Each channel is represented by an 8 bit value, ranging from 0 to 255.  
-A common misconception is to think that changing the level of a color channel means changing the color that is emitted. But that is not actually what is going on.  
-On OLED and AMOLED displays, a pixel is comprised of 3 LEDs: 1 green, 1 red, 1 blue.[^2]  
-Each of these diodes emits light at a constant wavelength: changing the color of the light is impossible!  
-When we increase the value of a color channel, we are in fact increasing the light's amplitude: we are increasing the brightness.[^3]  
-Our eyes can interpet the mix of intensity of these 3 lights as a color.  
+In digital systems, a pixel has three color channels: red, green, blue (RGB).
+Each channel is represented by an 8 bit value, ranging from 0 to 255.
+A common misconception is to think that changing the level of a color channel means changing the color that is emitted. But that is not actually what is going on.
+On OLED and AMOLED displays, a pixel is comprised of 3 LEDs: 1 green, 1 red, 1 blue.[^2]
+Each of these diodes emits light at a constant wavelength: changing the color of the light is impossible!
+When we increase the value of a color channel, we are in fact increasing the light's amplitude: we are increasing the brightness.[^3]
+Our eyes can interpet the mix of intensity of these 3 lights as a color.
 
-### Gamma 
+### Gamma
 
-But there is one important caveat: our eyes do not perceive a light twice as intense as twice as bright.  
-The relationship between the intensity of a light that is emitted (_luminance_) and the intensity as perceived by the human eye (_brightness_) is exponential.  
-On top of that, our eyes are better at spotting changes in darker tones than brigther ones.  
-If we were to use our 8 bits to encode the luminance linearly, half of the range would be dedicated to the brightest 10%. Giving us the other half of the range for the 90% of darker tones where our eyes actualy perform much better.  
-That is where _gamma_ (denoted as _γ_) and more generally the _gamma encoding_ function (denoted as _Γ_) come in.  
-This _gamma encoding_ is meant to be an approximiation of the non-linear relationship between luminance and brightness.  
-To increase the efficiency of our color encoding and make sure we get the most out of our 8 bits, the color channel is already gamma encoded!  
-The value 255 is not twice as luminous as 128, but rather 4.5 times more luminous, which would make it roughly 2 times brighter to the human eye[^4] ! 
+But there is one important caveat: our eyes do not perceive a light twice as intense as twice as bright.
+The relationship between the intensity of a light that is emitted (_luminance_) and the intensity as perceived by the human eye (_brightness_) is exponential.
+On top of that, our eyes are better at spotting changes in darker tones than brigther ones.
+If we were to use our 8 bits to encode the luminance linearly, half of the range would be dedicated to the brightest 10%. Giving us the other half of the range for the 90% of darker tones where our eyes actualy perform much better.
+That is where _gamma_ (denoted as _γ_) and more generally the _gamma encoding_ function (denoted as _Γ_) come in.
+This _gamma encoding_ is meant to be an approximiation of the non-linear relationship between luminance and brightness.
+To increase the efficiency of our color encoding and make sure we get the most out of our 8 bits, the color channel is already gamma encoded!
+The value 255 is not twice as luminous as 128, but rather 4.5 times more luminous, which would make it roughly 2 times brighter to the human eye[^4] !
 
 Gamma encoding and decoding works as follows:
 
@@ -62,7 +62,7 @@ V_{linear} = V_{encoded}^{\gamma}
 \]
 </div>
 
-Let's walk through a concrete example: suppose our screen's gamma is _2.2_. Our red channel is at 80 and we want to double the luminance.  
+Let's walk through a concrete example: suppose our screen's gamma is _2.2_. Our red channel is at 80 and we want to double the luminance.
 
 <div class="math-step">
 <strong>Step 1: Normalise the value</strong>
@@ -72,34 +72,35 @@ Let's walk through a concrete example: suppose our screen's gamma is _2.2_. Our 
 
 <strong>Step 2: Convert from gamma to linear</strong>
 \[
-  0.313^{2.2} \approx 0.097
+0.313^{2.2} \approx 0.097
 \]
 
 <strong>Step 3: Double the linear representation</strong>
 \[
-  0.097 \times 2 = 0.194
+0.097 \times 2 = 0.194
 \]
 
 <strong>Step 4: Convert back to gamma encoded</strong>
 \[
-  0.194^{\frac{1}{2.2}} \approx 0.475
+0.194^{\frac{1}{2.2}} \approx 0.475
 \]
 
 <strong>Step 5: Back to 8-bit representation</strong>
 \[
-  0.475 \times 255 \approx 121
+0.475 \times 255 \approx 121
 \]
+
 </div>
 
 And there we have it: **Using a gamma of 2.2, doubling the luminance from 80 means increasing the channel's value to _121_**
-To double the perceived brightness you would simply need to double the already gamma encoded value.  
+To double the perceived brightness you would simply need to double the already gamma encoded value.
 That's the whole point of gamma: it helps us work with values that feel linear to humans.
 
 ### Relative luminance
 
-We have built some understanding of what luminance is and how digital systems deal with it, but we still have one practical problem: gamma values can vary from one device to another. The gamma curve of an old CRT monitor is different from a modern OLED display.  
+We have built some understanding of what luminance is and how digital systems deal with it, but we still have one practical problem: gamma values can vary from one device to another. The gamma curve of an old CRT monitor is different from a modern OLED display.
 
-Remember, our immediate goal is to be able to measure and quantify the perception of an average human being. Variations between different type of screens is noise in our model.  
+Remember, our immediate goal is to be able to measure and quantify the perception of an average human being. Variations between different type of screens is noise in our model.
 
 This is where the sRGB (standard RGB) color space comes in. Developed in the 90s, sRGB establishes a standard gamma curve that all devices should aim to reproduce. While we often approximate it as γ = 2.2, sRGB actually defines a more complex function.
 I copy it here for completeness but don't ask me how this formula works exactly, my understanding does not run that deep.
@@ -116,7 +117,7 @@ I copy it here for completeness but don't ask me how this formula works exactly,
 
 With a standardized way to convert encoded values to linear light, we can now tackle the question of perceived brightness in a device-independent way.
 
-Relative luminance (denoted *L*) is a measure of the perceived brightness of a color to the human eye. It is "relative" because it accounts for the fact that human vision is more sensitive to certain wavelengths of light than others.
+Relative luminance (denoted _L_) is a measure of the perceived brightness of a color to the human eye. It is "relative" because it accounts for the fact that human vision is more sensitive to certain wavelengths of light than others.
 
 To compute relative luminance, we convert our RGB values to linear light using the sRGB transfer function, then apply a weighted sum:
 
@@ -143,16 +144,16 @@ To build an even better understanding, let's compute the relative luminance of a
 
 <strong>Step 2: Convert to linear using sRGB function</strong>
 \[
-  R_{linear} = \left(\frac{0.902 + 0.055}{1.055}\right)^{2.4} \\
-  R_{linear} \approx 0.798
+R*{linear} = \left(\frac{0.902 + 0.055}{1.055}\right)^{2.4} \\
+R*{linear} \approx 0.798
 \]
 \[
-  G_{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \\
-  G_{linear} \approx 0.012
+G*{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \\
+G*{linear} \approx 0.012
 \]
 \[
-  B_{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \\
-  B_{linear} \approx 0.012
+B*{linear} = \left(\frac{0.118 + 0.055}{1.055}\right)^{2.4} \\
+B*{linear} \approx 0.012
 \]
 
 <strong>Step 3: Calculate relative luminance</strong>
@@ -166,6 +167,7 @@ L = \left(\begin{aligned}
 \[
 L \approx 0.178
 \]
+
 </div>
 
 This standardized measure of perceived brightness gives us exactly what we need to compute contrast ratios between colors, regardless of what device the colors are displayed on.
@@ -173,6 +175,7 @@ This standardized measure of perceived brightness gives us exactly what we need 
 ### Computing the luminance contrast ratio
 
 We now have all required pieces to compute the _Luminance Contrast Ratio_.
+
 - We understand what luminance & brightness are
 - We understand what gamma is, how it differs from one device to another and how to make it a non-factor by working in the sRGB space
 - We understand what _relative_ luminance is
@@ -187,20 +190,18 @@ R = \frac{L_{LighterColor} + 0.05}{L_{DarkerColor} + 0.05}
 Interpretation depends on two things: the ratio itself and the font-size it applies too.
 
 | Level                     | Text Size                             | Minimum Contrast Ratio |
-|---------------------------|---------------------------------------|------------------------|
+| ------------------------- | ------------------------------------- | ---------------------- |
 | AA (minimum compliance)   | Regular text (< 18pt, or < 14pt bold) | 4.5:1                  |
 | AA (minimum compliance)   | Large text (≥ 18pt, or ≥ 14pt bold)   | 3:1                    |
 | AAA (enhanced compliance) | Regular text (< 18pt, or < 14pt bold) | 7:1                    |
 | AAA (enhanced compliance) | Large text (≥ 18pt, or ≥ 14pt bold)   | 4.5:1                  |
 
-Level AA accommodates users with moderate visual impairments, approximately equivalent to 20/40 vision.  
+Level AA accommodates users with moderate visual impairments, approximately equivalent to 20/40 vision.
 Level AAA provides enhanced readability for users with more substantial vision loss, up to approximately 20/80 vision.
-
 
 ### Let's put it in practice !
 
 Once you understand the model it simply comes down to applying the formulas!
-
 
 ```javascript:color_convert.js
 function computeLuminance(rgb) {
@@ -241,11 +242,11 @@ Just sprinkle a bit of UI on top, and you have an evaluator ready to experiment 
       <input type="color" id="bg-color" value="#ffffff">
     </div>
   </div>
-  
+
   <div id="sample-text" class="sample">
     Pick the colors of your choice, the color pickers are fully interactive 🎉 !
   </div>
-  
+
   <div class="calculation">
     <div id="contrast-value">Contrast: <span></span></div>
     <div id="calculation-steps" class="steps">
@@ -256,15 +257,16 @@ Just sprinkle a bit of UI on top, and you have an evaluator ready to experiment 
 
 ## Dynamic color adjustments
 
-Now that we are able to quantify contrast and understand what it actually is, we can work on modifying our images to make sure they properly contrast with our blog.  
+Now that we are able to quantify contrast and understand what it actually is, we can work on modifying our images to make sure they properly contrast with our blog.
 The plan is as follows:
+
 - Detect the dominant color in an image
 - Detect whether or not it contrasts properly with our background
 - If it does not, pick a color yielding a good contrast ratio and use it to replace the dominant color
 - Replace other colors accordingly
 
 That last step is definitely the hardest !
-We want to shift the color tone of the image to have better contrast, but we want the image as a whole to remain coherent.  
+We want to shift the color tone of the image to have better contrast, but we want the image as a whole to remain coherent.
 And the most straightforward way to achieve that is most likely to use the _HSL Color Model_
 
 ### HSL Color Model
@@ -272,6 +274,7 @@ And the most straightforward way to achieve that is most likely to use the _HSL 
 _**H**ue, **S**aturation, and **L**ightness_ is a color model that represents colors in a way that's more intuitive to how humans think about color than RGB.
 
 _Hue_ represents the color type: red, green, blue, etc..
+
 - it is measured as an angle around a color wheel (0-360°)
 - 0° or 360° = red
 - 120° = green
@@ -286,6 +289,7 @@ _Hue_ represents the color type: red, green, blue, etc..
 </div>
 
 _Saturation_ represents the purity of the color:
+
 - it is measured as a percentage (0-100%).
 - 0% = grayscale (no color)
 - 100% = fully saturated (pure color)
@@ -301,6 +305,7 @@ _Saturation_ represents the purity of the color:
 </div>
 
 _Lightness_ represents how light or dark the color is:
+
 - it is measured as a percentage (0-100%)
 - 0% = black (no light)
 - 50% = pure color
@@ -318,8 +323,8 @@ _Lightness_ represents how light or dark the color is:
 But this nothing more than a model. Everything we have discussed regarding the _Luminance Contrast Ratio_ and _brightness_ still applies. The _amplitude_ of the light remains the only thing our digital systems are able to act on !
 But by using the HSL model, we have a much simpler paradigm. Once we've found a dominant color with better contrast to our background, we can compute that it's X° off our initial color. Therefore, we should shift all other colors in the image by X° as well!
 
-Naturally, there are established ways to convert between RGB and HSL.  
-I have copied them below, but I am unable to explain them in details and I accept them without fully understanding them.  
+Naturally, there are established ways to convert between RGB and HSL.
+I have copied them below, but I am unable to explain them in details and I accept them without fully understanding them.
 Maybe an opportunity for another article...
 
 #### Conversion from 8-bit RGB to HSL
@@ -338,39 +343,39 @@ B' = \frac{B}{255}
 
 <strong>Step 2: Find min, max, and delta values</strong>
 \[
-C_{\text{min}} = \min(R', G', B')
+C*{\text{min}} = \min(R', G', B')
 \]
 \[
-C_{\text{max}} = \max(R', G', B')
+C*{\text{max}} = \max(R', G', B')
 \]
 \[
-\Delta = C_{\text{max}} - C_{\text{min}}
+\Delta = C*{\text{max}} - C*{\text{min}}
 \]
 
 <strong>Step 3: Compute Lightness</strong>
 \[
-L^{\prime} = \frac{C_{\text{max}} + C_{\text{min}}}{2}
+L^{\prime} = \frac{C*{\text{max}} + C*{\text{min}}}{2}
 \]
 
 <strong>Step 4: Compute Saturation</strong>
 \[
 S^{\prime} =
-  \begin{cases}
-  0 & \text{if } \Delta = 0 \\
-  \frac{\Delta}{C_{\text{max}} + C_{\text{min}}} & \text{if } L \leq 0.5 \\
-  \frac{\Delta}{2 - C_{\text{max}} - C_{\text{min}}} & \text{if } L > 0.5
-  \end{cases}
+\begin{cases}
+0 & \text{if } \Delta = 0 \\
+\frac{\Delta}{C*{\text{max}} + C*{\text{min}}} & \text{if } L \leq 0.5 \\
+\frac{\Delta}{2 - C*{\text{max}} - C*{\text{min}}} & \text{if } L > 0.5
+\end{cases}
 \]
 
 <strong>Step 5: Compute Hue</strong>
 \[
 H^{\prime} =
-  \begin{cases}
-  \text{undefined} & \text{if } \Delta = 0 \\
-  60^\circ \times \left( \frac{G' - B'}{\Delta} + (6 \text{ if } G' < B' \text{ else } 0) \right) & \text{if } C_{\text{max}} = R' \\
-  60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) & \text{if } C_{\text{max}} = G' \\
-  60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) & \text{if } C_{\text{max}} = B'
-  \end{cases}
+\begin{cases}
+\text{undefined} & \text{if } \Delta = 0 \\
+60^\circ \times \left( \frac{G' - B'}{\Delta} + (6 \text{ if } G' < B' \text{ else } 0) \right) & \text{if } C*{\text{max}} = R' \\
+60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) & \text{if } C*{\text{max}} = G' \\
+60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) & \text{if } C\_{\text{max}} = B'
+\end{cases}
 \]
 
 <strong>Step 6: Express in standard HSL units</strong>
@@ -383,6 +388,7 @@ S = S^{\prime} \times 100
 \[
 L = L^{\prime} \times 100
 \]
+
 </div>
 
 ```javascript:color_convert.js
@@ -420,7 +426,7 @@ function rgbToHsl(r, g, b) {
 }
 ```
 
-#### Conversion from HSL to 8-bit RGB 
+#### Conversion from HSL to 8-bit RGB
 
 Given HSL values H: 0-360°, S: 0-100%, L: 0-100%:
 
@@ -435,29 +441,29 @@ L' = \frac{L}{100}
 
 <strong>Step 2: Compute intermediate values</strong>
 \[
-  C = (1 - |2L' - 1|) \times S'
+C = (1 - |2L' - 1|) \times S'
 \]
 \[
-h_{temp} = \frac{(H \bmod 60°)}{60°}
+h*{temp} = \frac{(H \bmod 60°)}{60°}
 \]
 \[
-X = C \times (1 - |h_{temp} - 1|)
+X = C \times (1 - |h*{temp} - 1|)
 \]
 \[
-  m = L' - \frac{C}{2}
+m = L' - \frac{C}{2}
 \]
 
 <strong>Step 3: Based on hue H, assign RGB values</strong>
 \[
-  (R', G', B') = \\
-  \begin{cases}
-    (C, X, 0) & \text{if } 0° \leq H < 60° \\
-    (X, C, 0) & \text{if } 60° \leq H < 120° \\
-    (0, C, X) & \text{if } 120° \leq H < 180° \\
-    (0, X, C) & \text{if } 180° \leq H < 240° \\
-    (X, 0, C) & \text{if } 240° \leq H < 300° \\
-    (C, 0, X) & \text{if } 300° \leq H < 360°
-  \end{cases}
+(R', G', B') = \\
+\begin{cases}
+(C, X, 0) & \text{if } 0° \leq H < 60° \\
+(X, C, 0) & \text{if } 60° \leq H < 120° \\
+(0, C, X) & \text{if } 120° \leq H < 180° \\
+(0, X, C) & \text{if } 180° \leq H < 240° \\
+(X, 0, C) & \text{if } 240° \leq H < 300° \\
+(C, 0, X) & \text{if } 300° \leq H < 360°
+\end{cases}
 \]
 
 <strong>Step 4: Adjust with the offset m</strong>
@@ -481,6 +487,7 @@ G = \text{round}(G' \times 255)
 \[
 B = \text{round}(B' \times 255)
 \]
+
 </div>
 
 ```javascript:color_convert.js
@@ -547,7 +554,7 @@ const rootStyles = window.getComputedStyle(document.documentElement);
 const bgColor = rootStyles.getPropertyValue("--bg").trim();
 ```
 
-This either returns a string in the hex format: `#RRGGBB` or the name of the color such as `white`.  
+This either returns a string in the hex format: `#RRGGBB` or the name of the color such as `white`.
 We need a simple parsing function to have them available in the same format as what _Color Thief_ returns.
 
 ```javascript:color_convert.js
@@ -633,6 +640,7 @@ function adjustImagesColors() {
 We know we need to find a color with a better contrast.
 One of the simplest solution is to probe various colors around the color wheel.
 We can do this using a gradient ascent:
+
 - pick a starting point on the color wheel
 - try colors in both clockwise and counterclockwise directions of the wheel
 - follow which ever direction yields the best improvements
@@ -802,26 +810,28 @@ function applyHueShiftToImage(image, hueShift) {
 All that is left is hooking our function to events emitted by the theme picker and we are done !
 We have a simple algorithm to adjust the colors in an image to make sure the dominant color of the image contrasts properly with a given background.
 
-
 ## The end...
 
-I learned a lot writing this article but I am not entirely satisfied.  
+I learned a lot writing this article but I am not entirely satisfied.
 There are too many formulas that I am unable to breakdown and understand.
 There are many rabbit holes that I have not crawled.
-- How do we apply it to GIFs ?  
+
+- How do we apply it to GIFs ?
 - Can we force the color shift to better match secondary and accent colors of theme ?
 - We only shift hue, but what about shifting lightness and saturation ?
 - Can we optimize performance by memoizing color shifts and building some kind of lookup table ?
 
 This implementation is naive, amateurish and shows just how ignorant I am. But it is mine, and it will be good enough to adjust the colors of diagrams and schematics or even silly thank you notes written on a color that should be unreadable on a white background !
 
-
 <div style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
   <div id="conclusion-theme-toggle" style="flex-shrink: 0;"></div>
-  <img crossorigin="anonymous" class="dynamic-colors" src="./images/thank-you-for-reading.png" width="300px">
+  ![Thank you for reading](./images/thank-you-for-reading.png){.dynamic-colors}
 </div>
 
 [^1]: In physics, intensity is proportional to the square of the amplitude of a wave. Luminance is a measure of this intensity per unit area, so higher intensity light results in higher luminance.
+
 [^2]: I chose to illustrate the concept using OLED & AMOLED because they are probably the easiest to gloss over. Other types of screens work very differently.
+
 [^3]: Bit of an oversimplification. Amplitude is linked to intensity which in turn is linked to brightness but saying 'we are increasing brightness' is representative enough for the sake of this article.
+
 [^4]: Using a standard gamma of about 2.2 which is often used as an approximation of the of sRGB

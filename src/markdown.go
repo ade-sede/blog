@@ -25,6 +25,7 @@ var (
 	multiLineDisplayRegex  = regexp.MustCompile(`(?s)\\\[\s*\n(.*?)\n\s*\\\]`)
 	singleLineDisplayRegex = regexp.MustCompile(`\\\[([^\n]*?)\\\]`)
 	dollarInlineMathRegex  = regexp.MustCompile(`\$([^$\n]+)\$`)
+	dynamicColorImageRegex = regexp.MustCompile(`!\[([^\]]*)\]\(([^)]+)\)\{\.dynamic-colors\}`)
 )
 
 // filenameTitleTransformer is a Goldmark AST transformer that parses the
@@ -264,6 +265,20 @@ func (r *codeBlockRenderer) renderCodeBlock(w util.BufWriter, source []byte, nod
 	return ast.WalkContinue, nil
 }
 
+// preprocessDynamicColorImages rewrites markdown image syntax with a
+// {.dynamic-colors} attribute suffix into raw HTML img tags, adding the
+// required class and crossorigin attributes for the color-shifting mechanism.
+//
+// Example input:  ![alt text](./images/foo.png){.dynamic-colors}
+// Example output: <img src="./images/foo.png" alt="alt text" class="dynamic-colors" crossorigin="anonymous">
+func preprocessDynamicColorImages(input string) string {
+	return dynamicColorImageRegex.ReplaceAllStringFunc(input, func(match string) string {
+		parts := dynamicColorImageRegex.FindStringSubmatch(match)
+		alt, src := parts[1], parts[2]
+		return fmt.Sprintf(`<img src="%s" alt="%s" class="dynamic-colors" crossorigin="anonymous">`, src, alt)
+	})
+}
+
 // processLatexExpressions converts LaTeX math notation in markdown to
 // HTML elements for client-side KaTeX rendering. Fenced code blocks
 // are excluded from processing.
@@ -327,7 +342,8 @@ func parseArticleMarkdown(filename string, formattedDate string, author string, 
 
 	tocExtractor := &tocExtractor{TOC: []TOCEntry{}}
 
-	processedInput := processLatexExpressions(string(input))
+	processedInput := preprocessDynamicColorImages(string(input))
+	processedInput = processLatexExpressions(processedInput)
 
 	htmlRenderer := renderer.NewRenderer(
 		renderer.WithNodeRenderers(

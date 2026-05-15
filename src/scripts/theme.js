@@ -58,14 +58,20 @@ function loadThemeFromLocalStorage() {
   if (themeString) {
     try {
       const themeObject = JSON.parse(themeString);
-      if (themeObject && themeObject.name && availableThemes[themeObject.name]) {
+      if (
+        themeObject &&
+        themeObject.name &&
+        availableThemes[themeObject.name]
+      ) {
         themeName = themeObject.name;
       }
     } catch (err) {
       console.warn("Failed to parse stored theme, using default");
     }
   } else {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
     themeName = prefersDark ? "nord" : "github";
   }
 
@@ -80,7 +86,7 @@ function loadThemeFromLocalStorage() {
 function toggleTheme() {
   const themeString = safeStorage.getItem("theme");
   let currentTheme = "github";
-  
+
   if (themeString) {
     try {
       const themeObject = JSON.parse(themeString);
@@ -138,7 +144,7 @@ function setTheme(themeName) {
 
   try {
     const root = document.documentElement;
-    
+
     root.style.removeProperty("--bg");
     root.style.removeProperty("--fg");
     root.style.removeProperty("--primary");
@@ -149,16 +155,19 @@ function setTheme(themeName) {
     root.style.removeProperty("--code-fg");
     root.style.removeProperty("--code-border");
     root.style.removeProperty("--link-hover");
-    
+
     root.setAttribute("data-theme", themeName);
   } catch (err) {
     console.warn("Failed to set theme:", err);
   }
 
-  safeStorage.setItem("theme", JSON.stringify({ 
-    name: themeName, 
-    displayName: availableThemes[themeName].displayName 
-  }));
+  safeStorage.setItem(
+    "theme",
+    JSON.stringify({
+      name: themeName,
+      displayName: availableThemes[themeName].displayName,
+    }),
+  );
 
   return themeName;
 }
@@ -188,7 +197,7 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
     const themeButton = document.createElement("button");
     themeButton.id = `theme-button-${instanceId}`;
     themeButton.className = "theme-button";
-    
+
     if (useSimpleToggle) {
       themeButton.innerHTML = '<i class="fas fa-sun"></i>';
       themeButton.setAttribute("aria-label", "Toggle theme");
@@ -204,7 +213,7 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
       themeButton.addEventListener("click", function () {
         const currentTheme = safeStorage.getItem("theme");
         let currentThemeName = "github";
-        
+
         if (currentTheme) {
           try {
             const themeObject = JSON.parse(currentTheme);
@@ -213,17 +222,17 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
             }
           } catch (err) {}
         }
-        
+
         // Toggle between github (light) and nord (dark)
-        const newTheme = (currentThemeName === "nord") ? "github" : "nord";
+        const newTheme = currentThemeName === "nord" ? "github" : "nord";
         setThemeByName(newTheme);
         updateThemeIcon(themeButton, newTheme);
         const event = new CustomEvent("themeLoaded", { themeName: newTheme });
         document.dispatchEvent(event);
       });
-      
+
       container.appendChild(themeButton);
-      
+
       // Set initial icon
       const currentTheme = safeStorage.getItem("theme");
       if (currentTheme) {
@@ -249,12 +258,14 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
         themeOption.className = "theme-option";
         themeOption.setAttribute("data-theme", themeName);
         themeOption.setAttribute("title", theme.displayName);
-        
+
         themeOption.classList.add(`theme-preview-${themeName}`);
 
         const themeTitleSpan = document.createElement("span");
         themeTitleSpan.className = "theme-option-name";
-        const simpleName = theme.displayName.replace(" (High Contrast)", "").replace("GitHub", "Github");
+        const simpleName = theme.displayName
+          .replace(" (High Contrast)", "")
+          .replace("GitHub", "Github");
         themeTitleSpan.textContent = simpleName;
         themeOption.appendChild(themeTitleSpan);
 
@@ -262,7 +273,9 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
           setThemeByName(themeName);
           updateActiveTheme(themeName);
           toggleThemeMenu(instanceId);
-          const event = new CustomEvent("themeLoaded", { themeName: themeName });
+          const event = new CustomEvent("themeLoaded", {
+            themeName: themeName,
+          });
           document.dispatchEvent(event);
         });
 
@@ -272,25 +285,24 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
       themeButton.addEventListener("click", function () {
         toggleThemeMenu(instanceId);
       });
-      
+
       container.appendChild(themeButton);
       container.appendChild(themeMenu);
-      
+
       const currentTheme = safeStorage.getItem("theme");
       if (currentTheme) {
         const parsedTheme = JSON.parse(currentTheme);
         updateActiveTheme(parsedTheme.name);
       }
     }
-
   });
-  
+
   // Add click outside listener for full theme menus (only once globally)
   if (!useSimpleToggle && !window.themePickerClickListenerAdded) {
     window.themePickerClickListenerAdded = true;
     document.addEventListener("click", function (event) {
       // Find all theme containers on the page
-      const allContainers = document.querySelectorAll('[data-theme-instance]');
+      const allContainers = document.querySelectorAll("[data-theme-instance]");
       allContainers.forEach((container) => {
         const instanceId = container.dataset.themeInstance;
         const themeMenu = document.getElementById(`theme-menu-${instanceId}`);
@@ -309,7 +321,9 @@ function initThemePicker(selector = ".theme-toggle", useSimpleToggle = true) {
  */
 function updateThemeIcon(button, themeName) {
   const isDark = themeName === "nord";
-  button.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+  button.innerHTML = isDark
+    ? '<i class="fas fa-moon"></i>'
+    : '<i class="fas fa-sun"></i>';
 }
 
 /**
@@ -400,6 +414,11 @@ function computeContrastRatio(rgb1, rgb2) {
 
 document.addEventListener("DOMContentLoaded", function () {
   initThemePicker();
+  adjustImagesColors();
+});
+
+document.addEventListener("themeLoaded", function () {
+  adjustImagesColors();
 });
 
 function hexToRgb(hex) {

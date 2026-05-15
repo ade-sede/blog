@@ -376,16 +376,10 @@ function initLightnessSlider() {
   });
 }
 
-document.addEventListener("themeLoaded", function () {
-  try {
-    adjustImagesColors();
-  } catch {}
-});
-
 document.addEventListener("DOMContentLoaded", function () {
   initThemePicker("#demo-theme-toggle", false);
   initThemePicker("#conclusion-theme-toggle", false);
-  
+
   if (document.getElementById("fg-color")) {
     initContrastDemo();
   }
@@ -401,8 +395,4 @@ document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("lightness-gradient")) {
     initLightnessSlider();
   }
-
-  try {
-    adjustImagesColors();
-  } catch {}
 });
