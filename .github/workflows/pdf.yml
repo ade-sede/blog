@@ -27,7 +27,7 @@ jobs:
       - name: Build site
         run: devbox run -- make all
         env:
-          GOPATH: /root/go
+          GOPATH: /home/runner/go
           OUTPUT_DIR: ${{ github.workspace }}/web
           SRC_DIR: ${{ github.workspace }}/src
           ARTICLE_DIR: ${{ github.workspace }}/articles
