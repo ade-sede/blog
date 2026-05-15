@@ -31,6 +31,9 @@ jobs:
 
       - name: Generate PDF
         run: devbox run -- python3 scripts/generate-pdf.py
+        env:
+          OUTPUT_DIR: ${{ github.workspace }}/web
+          SRC_DIR: ${{ github.workspace }}/src
 
       - name: Upload PDF as release asset
         uses: softprops/action-gh-release@v2
