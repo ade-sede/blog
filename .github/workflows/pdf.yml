@@ -25,9 +25,12 @@ jobs:
           enable-cache: true
 
       - name: Build site
-        run: devbox run -- make build
+        run: devbox run -- make all
         env:
           GOPATH: /root/go
+          OUTPUT_DIR: ${{ github.workspace }}/web
+          SRC_DIR: ${{ github.workspace }}/src
+          ARTICLE_DIR: ${{ github.workspace }}/articles
 
       - name: Generate PDF
         run: devbox run -- python3 scripts/generate-pdf.py
