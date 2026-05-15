@@ -48,7 +48,7 @@ deploy: clean all
 
 
 .PHONY: pdf
-pdf: all
+pdf:
 	python3 scripts/generate-pdf.py
 
 # Deploying via cloudflare pages
