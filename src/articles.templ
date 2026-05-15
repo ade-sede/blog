@@ -31,7 +31,7 @@ templ articleCard(article Article) {
 	<article class="article-card">
 		<a href={ templ.URL(article.HTMLFilename) }>
 			<div class="article-meta">
-				<time class="article-date">{ article.FormatedDate }</time>
+				<time class="article-date">{ article.FormattedDate }</time>
 				if len(article.Manifest.Tags) > 0 {
 					<span class="article-tags">{ strings.Join(article.Manifest.Tags, ", ") }</span>
 				}

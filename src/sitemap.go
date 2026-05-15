@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
+// URLSet is the root element of a sitemap XML document.
 type URLSet struct {
 	XMLName xml.Name `xml:"urlset"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	URLs    []URL    `xml:"url"`
 }
 
+// URL represents a single entry in the sitemap.
 type URL struct {
 	Loc        string  `xml:"loc"`
 	LastMod    string  `xml:"lastmod,omitempty"`
@@ -20,6 +22,8 @@ type URL struct {
 	Priority   float64 `xml:"priority,omitempty"`
 }
 
+// generateSitemap writes a sitemap.xml to outputDir covering all static pages
+// and published articles. Draft articles are excluded.
 func generateSitemap(outputDir, baseURL string, allArticles []Article) error {
 
 	urlset := URLSet{

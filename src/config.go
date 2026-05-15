@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+// Config holds all runtime configuration for the site generator,
+// derived from environment variables and CLI flags.
 type Config struct {
 	ArticleDir  string
 	OutputDir   string
@@ -18,6 +20,8 @@ type Config struct {
 	FileMode    fs.FileMode
 }
 
+// LoadConfig reads environment variables and the generatePDF flag to
+// produce a Config. Exits fatally if required variables are missing.
 func LoadConfig(generatePDF bool) Config {
 	articleDir := os.Getenv("ARTICLE_DIR")
 	outputDir := os.Getenv("OUTPUT_DIR")

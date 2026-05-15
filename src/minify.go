@@ -12,12 +12,15 @@ import (
 
 var m *minify.M
 
+// InitMinifier initialises the package-level minifier with CSS and JS handlers.
+// Must be called before any MinifyCSS or MinifyJS calls.
 func InitMinifier() {
 	m = minify.New()
 	m.AddFunc("text/css", cssminifier.Minify)
 	m.AddFunc("application/javascript", jsminifier.Minify)
 }
 
+// MinifyCSS reads the file at filepath and returns its minified CSS content.
 func MinifyCSS(filepath string) (string, error) {
 	content, err := os.ReadFile(filepath)
 	if err != nil {
@@ -30,6 +33,7 @@ func MinifyCSS(filepath string) (string, error) {
 	return minified, nil
 }
 
+// MinifyJS reads the file at filepath and returns its minified JavaScript content.
 func MinifyJS(filepath string) (string, error) {
 	content, err := os.ReadFile(filepath)
 	if err != nil {
@@ -42,6 +46,8 @@ func MinifyJS(filepath string) (string, error) {
 	return minified, nil
 }
 
+// loadAndMinifyFileFromPaths tries each path in order, returning the minified
+// content of the first file found. Returns an error if none exist.
 func loadAndMinifyFileFromPaths(searchPaths []string, minifyFunc func(string) (string, error)) (string, error) {
 	for _, path := range searchPaths {
 		result, err := minifyFunc(path)
@@ -55,16 +61,19 @@ func loadAndMinifyFileFromPaths(searchPaths []string, minifyFunc func(string) (s
 	return "", fmt.Errorf("file not found in any of the provided locations")
 }
 
+// loadAndMinifyGlobalStyle minifies a CSS file from the srcDir/css directory.
 func loadAndMinifyGlobalStyle(srcDir, filename string) (string, error) {
 	path := filepath.Join(srcDir, "css", filename)
 	return MinifyCSS(path)
 }
 
+// loadAndMinifyGlobalScript minifies a JS file from the srcDir/scripts directory.
 func loadAndMinifyGlobalScript(srcDir, filename string) (string, error) {
 	path := filepath.Join(srcDir, "scripts", filename)
 	return MinifyJS(path)
 }
 
+// loadAndMinifyArticleStyle minifies a CSS file from the article directory.
 func loadAndMinifyArticleStyle(articleDir, filename string) (string, error) {
 	searchPaths := []string{
 		filepath.Join(articleDir, filename),
@@ -72,6 +81,7 @@ func loadAndMinifyArticleStyle(articleDir, filename string) (string, error) {
 	return loadAndMinifyFileFromPaths(searchPaths, MinifyCSS)
 }
 
+// loadAndMinifyArticleScript minifies a JS file from the article directory.
 func loadAndMinifyArticleScript(articleDir, filename string) (string, error) {
 	searchPaths := []string{
 		filepath.Join(articleDir, filename),

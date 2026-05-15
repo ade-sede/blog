@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// ExperienceEntry represents a single work or education entry on the resume.
 type ExperienceEntry struct {
 	Title             string   `json:"title"`
 	Company           string   `json:"company"`
@@ -16,11 +17,14 @@ type ExperienceEntry struct {
 	BulletPoints      []string `json:"bulletPoints"`
 }
 
+// ExperiencesData holds all resume experience entries, separated by category.
 type ExperiencesData struct {
 	WorkExperiences   []ExperienceEntry `json:"workExperiences"`
 	SchoolExperiences []ExperienceEntry `json:"schoolExperiences"`
 }
 
+// loadExperiencesFromJSON reads and unmarshals the experiences JSON file
+// at filename into an ExperiencesData.
 func loadExperiencesFromJSON(filename string) (*ExperiencesData, error) {
 	jsonBytes, err := os.ReadFile(filename)
 	if err != nil {

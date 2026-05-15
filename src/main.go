@@ -4,96 +4,137 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/a-h/templ"
 	"log"
 	"os"
+
+	"github.com/a-h/templ"
 )
 
-type PageType string
+// AssetKind identifies the type of an inlined asset.
+type AssetKind string
 
 const (
-	PageTypeGlobal  PageType = "global"
-	PageTypeArticle PageType = "article"
+	AssetCSS AssetKind = "css"
+	AssetJS  AssetKind = "js"
 )
 
-type PageGenerator struct {
-	filename                   string
-	pageType                   PageType
-	HTMLgenerator              func(args ...interface{}) templ.Component
-	globalCssFiles             []string
-	globalScriptFiles          []string
-	articleSpecificCssFiles    []string
-	articleSpecificScriptFiles []string
-	arguments                  []interface{}
+// AssetScope determines which directory to load the asset from.
+type AssetScope string
+
+const (
+	AssetScopeGlobal  AssetScope = "global"  // loaded from srcDir
+	AssetScopeArticle AssetScope = "article" // loaded from articleDir
+)
+
+// Asset describes a CSS or JS file that will be minified and inlined
+// into the <head> of a page.
+type Asset struct {
+	Filename string
+	Kind     AssetKind
+	Scope    AssetScope
 }
 
-func createContentPageGenerator(article Article, pageType PageType, htmlGenerator func(args ...interface{}) templ.Component) PageGenerator {
-	generator := PageGenerator{
-		filename:                   article.HTMLFilename,
-		pageType:                   pageType,
-		HTMLgenerator:              htmlGenerator,
-		globalCssFiles:             []string{"article.css", "syntax-highlighting.css"},
-		globalScriptFiles:          []string{"toc.js", "anchors.js", "footnotes.js"},
-		articleSpecificCssFiles:    []string{},
-		articleSpecificScriptFiles: []string{},
-		arguments:                  []interface{}{article.Manifest.Title, article.Manifest.Description, article.StringifiedHTML, article.FormatedDate, article.TOC},
-	}
-
-	if article.Manifest.CssFile != "" {
-		generator.articleSpecificCssFiles = append(generator.articleSpecificCssFiles, article.Manifest.CssFile)
-	}
-
-	if article.Manifest.ScriptFile != "" {
-		generator.articleSpecificScriptFiles = append(generator.articleSpecificScriptFiles, article.Manifest.ScriptFile)
-	}
-
-	return generator
+// Page describes a single HTML page to be generated: its output filename,
+// the assets to inline, and a Render function that produces the templ component.
+//
+// Render receives the resolved inline style and script tags so that each
+// page template can embed them directly in the <head>.
+type Page struct {
+	Filename string
+	Assets   []Asset
+	Render   func(styleTags, scriptTags []string) templ.Component
 }
 
-func createInlineStyleAndScriptTags(page PageGenerator, srcDir, articleDir string) ([]string, []string, error) {
-	allStyleTags := make([]string, 0)
-	allScriptTags := make([]string, 0)
+// inlineAssets minifies all assets declared on a page and returns
+// the resulting <style> and <script> tag strings for inline embedding.
+func inlineAssets(page Page, srcDir, articleDir string) ([]string, []string, error) {
+	var styleTags []string
+	var scriptTags []string
 
-	for _, jsFile := range page.globalScriptFiles {
-		minifiedJS, err := loadAndMinifyGlobalScript(srcDir, jsFile)
-		if err != nil {
-			return nil, nil, fmt.Errorf("failed to load global JS file %s: %v", jsFile, err)
+	for _, asset := range page.Assets {
+		var content string
+		var err error
+
+		switch asset.Scope {
+		case AssetScopeGlobal:
+			switch asset.Kind {
+			case AssetCSS:
+				content, err = loadAndMinifyGlobalStyle(srcDir, asset.Filename)
+			case AssetJS:
+				content, err = loadAndMinifyGlobalScript(srcDir, asset.Filename)
+			}
+		case AssetScopeArticle:
+			switch asset.Kind {
+			case AssetCSS:
+				content, err = loadAndMinifyArticleStyle(articleDir, asset.Filename)
+			case AssetJS:
+				content, err = loadAndMinifyArticleScript(articleDir, asset.Filename)
+			}
 		}
-		scriptTag := fmt.Sprintf("<script>%s</script>", minifiedJS)
-		allScriptTags = append(allScriptTags, scriptTag)
+
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to inline asset %s: %w", asset.Filename, err)
+		}
+
+		switch asset.Kind {
+		case AssetCSS:
+			styleTags = append(styleTags, fmt.Sprintf("<style type='text/css'>%s</style>", content))
+		case AssetJS:
+			scriptTags = append(scriptTags, fmt.Sprintf("<script>%s</script>", content))
+		}
 	}
 
-	for _, jsFile := range page.articleSpecificScriptFiles {
-		minifiedJS, err := loadAndMinifyArticleScript(articleDir, jsFile)
-		if err != nil {
-			return nil, nil, fmt.Errorf("failed to load article-specific JS file %s: %v", jsFile, err)
-		}
-		scriptTag := fmt.Sprintf("<script>%s</script>", minifiedJS)
-		allScriptTags = append(allScriptTags, scriptTag)
-	}
-
-	for _, cssFile := range page.globalCssFiles {
-		minifiedCSS, err := loadAndMinifyGlobalStyle(srcDir, cssFile)
-		if err != nil {
-			return nil, nil, fmt.Errorf("failed to load global CSS file %s: %v", cssFile, err)
-		}
-		styleTag := fmt.Sprintf("<style type='text/css'>%s</style>", minifiedCSS)
-		allStyleTags = append(allStyleTags, styleTag)
-	}
-
-	for _, cssFile := range page.articleSpecificCssFiles {
-		minifiedCSS, err := loadAndMinifyArticleStyle(articleDir, cssFile)
-		if err != nil {
-			return nil, nil, fmt.Errorf("failed to load article-specific CSS file %s: %v", cssFile, err)
-		}
-		styleTag := fmt.Sprintf("<style type='text/css'>%s</style>", minifiedCSS)
-		allStyleTags = append(allStyleTags, styleTag)
-	}
-
-	return allStyleTags, allScriptTags, nil
+	return styleTags, scriptTags, nil
 }
 
-func initializeAssets(config Config) error {
+// globalCSS returns an Asset for a CSS file loaded from srcDir.
+func globalCSS(filename string) Asset {
+	return Asset{Filename: filename, Kind: AssetCSS, Scope: AssetScopeGlobal}
+}
+
+// globalJS returns an Asset for a JS file loaded from srcDir.
+func globalJS(filename string) Asset {
+	return Asset{Filename: filename, Kind: AssetJS, Scope: AssetScopeGlobal}
+}
+
+// articleCSS returns an Asset for a CSS file loaded from articleDir.
+func articleCSS(filename string) Asset {
+	return Asset{Filename: filename, Kind: AssetCSS, Scope: AssetScopeArticle}
+}
+
+// articleJS returns an Asset for a JS file loaded from articleDir.
+func articleJS(filename string) Asset {
+	return Asset{Filename: filename, Kind: AssetJS, Scope: AssetScopeArticle}
+}
+
+// articlePage builds a Page for a single blog article.
+func articlePage(a Article) Page {
+	assets := []Asset{
+		globalCSS("article.css"),
+		globalCSS("syntax-highlighting.css"),
+		globalJS("toc.js"),
+		globalJS("anchors.js"),
+		globalJS("footnotes.js"),
+	}
+	if a.Manifest.CssFile != "" {
+		assets = append(assets, articleCSS(a.Manifest.CssFile))
+	}
+	if a.Manifest.ScriptFile != "" {
+		assets = append(assets, articleJS(a.Manifest.ScriptFile))
+	}
+
+	return Page{
+		Filename: a.HTMLFilename,
+		Assets:   assets,
+		Render: func(styleTags, scriptTags []string) templ.Component {
+			return article(a.Manifest.Title, a.Manifest.Description, a.StringifiedHTML, a.FormattedDate, scriptTags, styleTags, a.TOC)
+		},
+	}
+}
+
+// publishGlobalCSS minifies each CSS file listed in config.CSSFiles and
+// writes the result to the output CSS directory.
+func publishGlobalCSS(config Config) error {
 	for _, filename := range config.CSSFiles {
 		minifiedCSS, err := MinifyCSS(config.SrcDir + "/css/" + filename)
 		if err != nil {
@@ -108,136 +149,84 @@ func initializeAssets(config Config) error {
 	return nil
 }
 
-func loadArticles(config Config) ([]Article, error) {
-	return parseArticles(config.ArticleDir, config.Env)
-}
-
-func loadExperiences(config Config) (ExperiencesData, error) {
-	exp, err := loadExperiencesFromJSON(config.SrcDir + "/experiences.json")
-	if err != nil {
-		return ExperiencesData{}, err
+// buildPages constructs all Page descriptors for the site: the four static
+// pages (home, articles, resume, resume-printable) plus one page per article.
+func buildPages(allArticles []Article, experiences ExperiencesData) []Page {
+	pages := []Page{
+		{
+			Filename: "index.html",
+			Assets: []Asset{
+				globalCSS("home.css"),
+				globalCSS("articles.css"),
+			},
+			Render: func(styleTags, scriptTags []string) templ.Component {
+				var mostRecent []Article
+				if len(allArticles) > 0 {
+					mostRecent = allArticles[:1]
+				}
+				return home(mostRecent, styleTags)
+			},
+		},
+		{
+			Filename: "articles.html",
+			Assets: []Asset{
+				globalCSS("articles.css"),
+			},
+			Render: func(styleTags, scriptTags []string) templ.Component {
+				return articles(allArticles, styleTags)
+			},
+		},
+		{
+			Filename: "resume.html",
+			Assets: []Asset{
+				globalCSS("resume.css"),
+			},
+			Render: func(styleTags, scriptTags []string) templ.Component {
+				return resumePage(experiences.WorkExperiences, experiences.SchoolExperiences, styleTags)
+			},
+		},
+		{
+			Filename: "resume-printable.html",
+			Assets: []Asset{
+				globalCSS("resume.css"),
+			},
+			Render: func(styleTags, scriptTags []string) templ.Component {
+				return resumePrintReady(experiences.WorkExperiences, experiences.SchoolExperiences, styleTags)
+			},
+		},
 	}
-	return *exp, nil
-}
-
-func generateAllPages(config Config, allArticles []Article, experiences ExperiencesData) error {
-	homeHTMLGenerator := func(args ...interface{}) templ.Component {
-		allArticles, _ := args[0].([]Article)
-		styleTags, _ := args[1].([]string)
-
-		var mostRecent []Article
-		if len(allArticles) > 0 {
-			mostRecent = allArticles[:1]
-		}
-
-		return home(mostRecent, styleTags)
-	}
-
-	articleHTMLGenerator := func(args ...interface{}) templ.Component {
-		title, _ := args[0].(string)
-		description, _ := args[1].(string)
-		stringifiedHTML, _ := args[2].(string)
-		formattedDate, _ := args[3].(string)
-		toc, _ := args[4].([]TOCEntry)
-		styleTags, _ := args[5].([]string)
-		scriptTags, _ := args[6].([]string)
-		return article(title, description, stringifiedHTML, formattedDate, scriptTags, styleTags, toc)
-	}
-
-	articlesHTMLGenerator := func(args ...interface{}) templ.Component {
-		allArticles, _ := args[0].([]Article)
-		styleTags, _ := args[1].([]string)
-		return articles(allArticles, styleTags)
-	}
-
-	resumePageHTMLGenerator := func(args ...interface{}) templ.Component {
-		workExperience, _ := args[0].([]ExperienceEntry)
-		schoolExperience, _ := args[1].([]ExperienceEntry)
-		styleTags, _ := args[2].([]string)
-		return resumePage(workExperience, schoolExperience, styleTags)
-	}
-
-	resumePrintReadyHTMLGenerator := func(args ...interface{}) templ.Component {
-		workExperience, _ := args[0].([]ExperienceEntry)
-		schoolExperience, _ := args[1].([]ExperienceEntry)
-		styleTags, _ := args[2].([]string)
-		return resumePrintReady(workExperience, schoolExperience, styleTags)
-	}
-
-	allArticleGenerators := make([]PageGenerator, 0)
 
 	for _, a := range allArticles {
-		generator := createContentPageGenerator(a, PageTypeArticle, articleHTMLGenerator)
-		allArticleGenerators = append(allArticleGenerators, generator)
+		pages = append(pages, articlePage(a))
 	}
 
-	pages := []PageGenerator{
-		{
-			filename:                   "index.html",
-			pageType:                   PageTypeGlobal,
-			HTMLgenerator:              homeHTMLGenerator,
-			globalCssFiles:             []string{"home.css", "articles.css"},
-			globalScriptFiles:          []string{},
-			articleSpecificCssFiles:    []string{},
-			articleSpecificScriptFiles: []string{},
-			arguments:                  []interface{}{allArticles},
-		},
-		{
-			filename:                   "resume.html",
-			pageType:                   PageTypeGlobal,
-			HTMLgenerator:              resumePageHTMLGenerator,
-			globalCssFiles:             []string{"resume.css"},
-			globalScriptFiles:          []string{},
-			articleSpecificCssFiles:    []string{},
-			articleSpecificScriptFiles: []string{},
-			arguments:                  []interface{}{experiences.WorkExperiences, experiences.SchoolExperiences},
-		},
-		{
-			filename:                   "articles.html",
-			pageType:                   PageTypeGlobal,
-			HTMLgenerator:              articlesHTMLGenerator,
-			globalCssFiles:             []string{"articles.css"},
-			globalScriptFiles:          []string{},
-			articleSpecificCssFiles:    []string{},
-			articleSpecificScriptFiles: []string{},
-			arguments:                  []interface{}{allArticles},
-		},
-		{
-			filename:                   "resume-printable.html",
-			pageType:                   PageTypeGlobal,
-			HTMLgenerator:              resumePrintReadyHTMLGenerator,
-			globalCssFiles:             []string{"resume.css"},
-			globalScriptFiles:          []string{},
-			articleSpecificCssFiles:    []string{},
-			articleSpecificScriptFiles: []string{},
-			arguments:                  []interface{}{experiences.WorkExperiences, experiences.SchoolExperiences},
-		},
-	}
+	return pages
+}
 
-	pages = append(pages, allArticleGenerators...)
+// generateAllPages renders each Page to an HTML file in the output directory.
+func generateAllPages(config Config, allArticles []Article, experiences ExperiencesData) error {
+	pages := buildPages(allArticles, experiences)
 
 	for _, page := range pages {
-		filename := config.OutputDir + "/" + page.filename
+		filename := config.OutputDir + "/" + page.Filename
 		file, err := os.OpenFile(filename, config.FileFlags, config.FileMode)
 		if err != nil {
 			return fmt.Errorf("could not open file %s: %v", filename, err)
 		}
 
-		allStyleTags, allScriptTags, err := createInlineStyleAndScriptTags(page, config.SrcDir, config.ArticleDir)
+		styleTags, scriptTags, err := inlineAssets(page, config.SrcDir, config.ArticleDir)
 		if err != nil {
-			return fmt.Errorf("failed to create inline style and script tags for page %s: %v", page.filename, err)
+			return fmt.Errorf("failed to inline assets for page %s: %v", page.Filename, err)
 		}
 
-		page.arguments = append(page.arguments, allStyleTags)
-		page.arguments = append(page.arguments, allScriptTags)
-
-		templComponent := page.HTMLgenerator(page.arguments...)
-		templComponent.Render(context.Background(), file)
+		page.Render(styleTags, scriptTags).Render(context.Background(), file)
 	}
 
 	return nil
 }
 
+// postProcessing runs tasks that depend on all pages already being written:
+// sitemap generation and optional PDF rendering of the resume.
 func postProcessing(config Config, allArticles []Article) error {
 	if err := generateSitemap(config.OutputDir, config.BaseURL, allArticles); err != nil {
 		log.Printf("Warning: Failed to generate sitemap: %v", err)
@@ -259,21 +248,21 @@ func main() {
 	config := LoadConfig(*generatePDFFlag)
 	InitMinifier()
 
-	if err := initializeAssets(config); err != nil {
-		log.Fatalf("Error initializing assets: %v", err)
+	if err := publishGlobalCSS(config); err != nil {
+		log.Fatalf("Error publishing global CSS: %v", err)
 	}
 
-	experiences, err := loadExperiences(config)
+	experiences, err := loadExperiencesFromJSON(config.SrcDir + "/experiences.json")
 	if err != nil {
 		log.Fatalf("Error loading experiences: %v", err)
 	}
 
-	allArticles, err := loadArticles(config)
+	allArticles, err := parseArticles(config.ArticleDir, config.Env)
 	if err != nil {
 		log.Fatalf("Error loading articles: %v", err)
 	}
 
-	if err := generateAllPages(config, allArticles, experiences); err != nil {
+	if err := generateAllPages(config, allArticles, *experiences); err != nil {
 		log.Fatalf("Error generating pages: %v", err)
 	}
 

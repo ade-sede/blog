@@ -12,6 +12,8 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
+// generatePDF renders resume-printable.html to a PDF using headless Chromium
+// and writes the result to srcDir/pdfs/ade-sede.pdf.
 func generatePDF(outputDir, srcDir string) error {
 	resumeHTMLPath := filepath.Join(outputDir, "resume-printable.html")
 	pdfOutputPath := filepath.Join(srcDir, "pdfs", "ade-sede.pdf")
