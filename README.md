@@ -142,6 +142,38 @@ This means each HTML file is fully self-contained: one HTTP request, zero round-
 
 ## Writing a new article
 
+### Scaffolding with the script
+
+`scripts/new-article.py` creates the manifest and the markdown stub for you,
+with validation so the output is always well-formed.
+
+**Interactive mode** — prompts for each field in sequence:
+
+```bash
+make new-article
+# or
+python3 scripts/new-article.py
+```
+
+**CLI mode** — all fields passed as flags, no prompts (used by the AI agent):
+
+```bash
+python3 scripts/new-article.py \
+  --slug my-article \
+  --title "My Article Title" \
+  --description "A short summary." \
+  --tags essay
+```
+
+Both modes validate the slug format, tag values, and check for file collisions
+before writing anything. Valid tags are: `essay`, `quick note`.
+
+The script auto-fills `date` (today), `draft: true`, `author`, `authorImage`,
+and `markdownFile`. After it runs, open `articles/<slug>.json` to fill in
+anything the script could not infer, such as `cssFile` or `scriptFile`.
+
+---
+
 ### 1. Create the files
 
 All articles live in `articles/`. Each article needs at minimum two files with

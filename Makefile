@@ -64,6 +64,10 @@ else
 	@echo "GOPATH is $(GOPATH)"
 endif
 
+.PHONY: new-article
+new-article:
+	@python3 scripts/new-article.py
+
 .PHONY: re
 re: clean all
 
