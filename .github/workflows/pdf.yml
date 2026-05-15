@@ -3,7 +3,7 @@ name: Generate PDF resume
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - src/experiences.json
       - scripts/generate-pdf.py
