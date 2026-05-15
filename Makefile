@@ -29,7 +29,7 @@ build: gopath
 	if command -v templ >/dev/null 2>&1; then \
 		templ generate -path $(SRC_DIR); \
 	else \
-		go run github.com/a-h/templ/cmd/templ@latest generate -path $(SRC_DIR); \
+		go run github.com/a-h/templ/cmd/templ@v0.3.1020 generate -path $(SRC_DIR); \
 	fi
 
 .PHONY: clean
