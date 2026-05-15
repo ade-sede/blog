@@ -1,10 +1,10 @@
 {
     "title": "The tyranny of simple",
-    "date": "2025-11-13",
-    "draft": true,
+    "date": "2026-05-15",
+    "draft": false,
     "tags": ["essay"],
     "author": "Adrien DE SEDE",
     "authorImage": "picture.webp",
-    "description": "Simplicity is a mantra of the software industry, yet few organisations define what it actually means. Without shared understanding, debates about complexity devolve into subjective taste arguments. This essay explores how to transform simplicity from a vague ideal into a practical tool.",
+    "description": "Everyone agrees simple is best. So why do debates about complexity keep ending in a stalemate? This essay explores why simplicity is subjective, how familiarity distorts our perception, and how teams can turn disagreements into opportunities to build a shared mental model.",
     "markdownFile": "the-tyranny-of-simple.md"
 }
