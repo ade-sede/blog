@@ -71,3 +71,69 @@ Never add new external asset references (`<link href="...">` or `<script src="..
 ### Mobile-first
 
 Most readers are on mobile. Every layout and styling decision should work on mobile first. Code snippets in articles must be no wider than 35 characters — break lines accordingly.
+
+## Cloudflare Pages (MCP)
+
+The Cloudflare API MCP server is configured in `.opencode/opencode.json` and is always available as a tool. Use it to check deployment status, inspect build logs, and manage Pages configuration without leaving the agent session.
+
+Key identifiers:
+
+- **Pages project name:** `blog`
+- **Production domain:** `blog.ade-sede.dev`
+
+### Authentication
+
+The MCP server uses a Cloudflare API token via the `CLOUDFLARE_API_TOKEN` environment variable. OAuth is disabled — the dev environment is a remote headless server.
+
+If a tool call returns a 401 or auth error, tell the user:
+
+```
+The CLOUDFLARE_API_TOKEN environment variable is not set or has expired.
+Create a token at https://dash.cloudflare.com/profile/api-tokens and export it:
+  export CLOUDFLARE_API_TOKEN="your-token-here"
+```
+
+Do not attempt to read or use the token value itself.
+
+### Checking deployment status
+
+To check the latest production deployment:
+
+```
+use the cloudflare tool to get the latest deployment for Pages project "blog"
+```
+
+The response will include deployment ID, status (`success`, `failure`, `in-progress`), timestamp, and a link to the build log.
+
+### Checking build logs
+
+If a deployment failed, fetch the build log for the deployment ID returned above:
+
+```
+use the cloudflare tool to get the build log for deployment <id> in Pages project "blog"
+```
+
+Look for the failing step and surface the relevant error lines to the user.
+
+### Managing environment variables
+
+To list current environment variables for the Pages project:
+
+```
+use the cloudflare tool to list environment variables for Pages project "blog"
+```
+
+To add or update a variable (production environment):
+
+```
+use the cloudflare tool to set environment variable <KEY>=<VALUE>
+for Pages project "blog", environment "production"
+```
+
+Never set or read variables whose names suggest secrets (e.g. contain `TOKEN`, `SECRET`, `KEY`, `PASSWORD`) without explicit user confirmation.
+
+### General guidance
+
+- Always confirm with the user before making any write operations (adding/updating env vars, triggering deployments, changing configuration).
+- For read-only checks (status, logs, listing) no confirmation is needed.
+- If unsure which Cloudflare API endpoint to use, the MCP server's `search()` tool can locate the right one.

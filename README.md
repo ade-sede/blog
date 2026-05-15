@@ -383,3 +383,32 @@ make re
 
 The GUI on the Cloudflare console is pretty self explanatory.
 ⚠️ Cloudflare Pages runners do not set the `GOPATH` variable by default, don't forget to set it in the pages settings.
+
+## Cloudflare MCP (AI agent access)
+
+The project is configured to use the [Cloudflare API MCP server](https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/), which gives AI agents (OpenCode, Claude Code, etc.) access to the full Cloudflare API — including Pages deployments, environment variables, and build logs.
+
+The MCP server is configured in `.opencode/opencode.json`. It uses OAuth; no credentials are stored in the repo.
+
+### Authentication
+
+The MCP server uses a Cloudflare API token passed as an environment variable. OAuth is disabled because the dev environment is a remote headless server with no browser.
+
+1. On any machine with a browser, go to [Cloudflare dashboard → API tokens](https://dash.cloudflare.com/profile/api-tokens) and create a token with the permissions you need (at minimum: `Cloudflare Pages: Edit` and `Account: Read`).
+
+2. On the server, export the token in your shell profile (e.g. `~/.bashrc` or `~/.zshrc`):
+
+```bash
+export CLOUDFLARE_API_TOKEN="your-token-here"
+```
+
+The token is never committed — it is read at runtime via `{env:CLOUDFLARE_API_TOKEN}` in `.opencode/opencode.json`.
+
+### What agents can do
+
+- Check the status of the latest Pages deployment
+- List recent deployments and their build logs
+- Manage Pages environment variables
+- Trigger deployments or inspect configuration
+
+See `AGENTS.md` for the agent-facing workflow.
