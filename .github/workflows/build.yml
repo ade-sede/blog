@@ -1,4 +1,4 @@
-name: Build
+name: Build & Deploy
 
 on:
   push:
@@ -16,8 +16,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - uses: actions/checkout@v4
 
@@ -32,3 +35,12 @@ jobs:
 
       - name: Verify output
         run: test -f web/index.html
+
+      - name: Deploy to Cloudflare Pages
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy web --project-name=blog --branch=${{ github.head_ref || 'main' }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
